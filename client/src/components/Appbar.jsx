@@ -1,5 +1,4 @@
-import { Typography } from "@mui/material";
-import Button from "@mui/material/Button";
+import { Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function Appbar({}) {
@@ -20,7 +19,49 @@ function Appbar({}) {
           navigate("/");
         }}
       >
-        <Typography variant={"h6"}>Shivam Public School</Typography>
+        <Typography variant={"h5"}> Univ Website</Typography>
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+        <Button
+          variant={"inherit"}
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          Home
+        </Button>
+        <Button
+          variant={"inherit"}
+          onClick={() => {
+            navigate("/about");
+          }}
+        >
+          About Us
+        </Button>
+        <Button
+          variant={"inherit"}
+          onClick={() => {
+            navigate("/academics");
+          }}
+        >
+          Academics
+        </Button>
+        <Button
+          variant={"inherit"}
+          onClick={() => {
+            navigate("/admissions");
+          }}
+        >
+          Admissions
+        </Button>
+        <Button
+          variant={"inherit"}
+          onClick={() => {
+            navigate("/contact");
+          }}
+        >
+          Contact
+        </Button>
       </div>
 
       <div style={{ display: "flex" }}>
@@ -28,17 +69,17 @@ function Appbar({}) {
           <Button
             variant={"contained"}
             onClick={() => {
-              navigate("/register");
+              navigate("/student/register");
             }}
           >
             Register
           </Button>
         </div>
-        <div>
+        <div style={{ marginRight: 18 }}>
           <Button
             variant={"contained"}
             onClick={() => {
-              navigate("/login");
+              navigate("/student/login");
             }}
             style={{ backgroundColor: "#00008B" }}
           >

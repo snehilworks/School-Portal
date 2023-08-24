@@ -2,13 +2,17 @@ import { Card, Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useState } from "react";
-import { BASE_URL } from "../config";
+import { useSetRecoilState } from "recoil";
+import { BASE_URL } from "../../../config";
 import { useNavigate } from "react-router-dom";
+import { userState } from "../../../store/atoms/user";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const setUser = useSetRecoilState(userState);
+
   return (
     <div>
       <div
@@ -56,6 +60,8 @@ function Register() {
               });
               let data = response.data;
               localStorage.setItem("token", data.token);
+              setUser({ userEmail: email, isLoading: false });
+              navigate("/dashboard");
             }}
           >
             {" "}
@@ -71,7 +77,7 @@ function Register() {
             size="small"
             style={{ backgroundColor: "#00008B", margin: 10 }}
             onClick={() => {
-              navigate("/login");
+              navigate("/student/login");
             }}
           >
             Login
