@@ -10,8 +10,11 @@ import Academics from "./pages/academics/Academics";
 import About from "./pages/about/About";
 import Contact from "./pages/contact/Contact";
 import { Landing } from "./components/Landing.jsx";
+import StudentProfile from "./pages/Student/studentProfile/studentProfile";
+import TProfile from "./pages/Teacher/teacherProfile/teacherProfile";
 // import about from "./pages/About/About";
 
+import NotFoundPage from "./components/NotFoundPage";
 import AdminDash from "./pages/Teacher/teacherDashboard/adminDash";
 import StudentDash from "./pages/Student/studentDashboard/studentDashboard";
 
@@ -33,13 +36,26 @@ function App() {
           <Route path={"/student/login"} element={<Login />} />
           <Route path={"/student/register"} element={<Register />} />
           <Route path={"/student/dashboard"} element={<StudentDash />} />
-          {/* <Route path="/students" component={StudentList} /> */}
-          {/* <Route path="/students/:id" component={StudentProfile} /> */}
+          <Route
+            path="/student/:id"
+            element={
+              <StudentProfile
+                name="One"
+                rollNo="1"
+                classTeacher="john"
+                classNo="X"
+                section="A"
+              />
+            }
+          />
 
           {/* admin Routes */}
           <Route path={"/teacher/login"} element={<TLogin />} />
           <Route path={"/teacher/register"} element={<TRegister />} />
           <Route path={"/teacher/dashboard"} element={<AdminDash />} />
+          <Route path={"/teacher/profile"} element={<TProfile />} />
+
+          <Route component={NotFoundPage} />
         </Routes>
       </Router>
     </div>

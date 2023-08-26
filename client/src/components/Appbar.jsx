@@ -1,10 +1,11 @@
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function Appbar({}) {
   const navigate = useNavigate();
 
   return (
+    // <Grid item xs={12} md={6}>
     <div
       style={{
         display: "flex",
@@ -88,6 +89,7 @@ function Appbar({}) {
         </div>
       </div>
     </div>
+    // </Grid>
   );
 }
 

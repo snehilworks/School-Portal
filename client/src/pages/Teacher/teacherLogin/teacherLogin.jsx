@@ -77,7 +77,7 @@ function Register() {
             size="small"
             style={{ backgroundColor: "#00008B", margin: 10 }}
             onClick={() => {
-              navigate("/student/register");
+              navigate("/teacher/register");
             }}
           >
             Register

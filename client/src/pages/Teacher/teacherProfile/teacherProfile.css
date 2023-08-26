@@ -1,0 +1,66 @@
+/* TeacherProfile.css */
+
+/* Container styles */
+.container {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Teacher name style */
+.teacher-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Teacher info style */
+.teacher-info {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+/* Subjects taught style */
+.subjects-taught {
+  font-size: 18px;
+  margin-top: 10px;
+  color: #007bff;
+}
+
+/* Class Teacher style */
+.class-teacher {
+  font-size: 18px;
+  margin-top: 10px;
+  color: #28a745;
+}
+
+/* Button style */
+.show-hide-button {
+  margin-top: 20px;
+}
+
+/* Student list style */
+.student-list {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Number of students style */
+.number-of-students {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.avatar-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
