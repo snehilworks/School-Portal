@@ -15,6 +15,16 @@ const TeacherDashboard = () => {
     navigate("/teacher/studentMarks");
   };
 
+  const handleStudentRosterClick = () => {
+    // Navigate to the student roster page
+    navigate("/teacher/studentRoster");
+  };
+
+  const handleGradebookClick = () => {
+    // Navigate to the gradebook page
+    navigate("/teacher/gradebook");
+  };
+
   return (
     <Container>
       <Typography variant="h4">Teacher Dashboard</Typography>
@@ -41,6 +51,30 @@ const TeacherDashboard = () => {
             onClick={handleUpdateMarksClick}
           >
             Update Marks
+          </Button>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            fullWidth
+            onClick={handleStudentRosterClick}
+          >
+            Student Roster
+          </Button>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            fullWidth
+            onClick={handleGradebookClick}
+          >
+            Gradebook
           </Button>
         </Grid>
       </Grid>
