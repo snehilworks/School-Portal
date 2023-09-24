@@ -59,6 +59,11 @@ const studentSchema = new mongoose.Schema({
       date: Date,
     },
   ],
+  paymentStatus: {
+    type: String,
+    enum: ["pending", "success", "failed"],
+    default: "pending", // Default status when a user is created
+  },
 });
 
 // Define the Teacher Schema
