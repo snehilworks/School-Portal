@@ -1,116 +1,103 @@
 import React from "react";
-import { Container, Typography, Grid, Paper, Button, Box } from "@mui/material";
+import { Container, Typography, Paper, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import "./studentDashboard.css"; // Import the CSS file
 
-// import StudentPay from "../studentPay/StudentPay";
+function StudentDash() {
+  const pageStyles = {
+    backgroundColor: "#00FFFF", // Set the background color here
+    minHeight: "100vh", // Ensure the page covers the full viewport height
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  };
 
-function studentDash() {
   return (
-    <Container maxWidth="lg" className="student-dashboard">
-      <Typography variant="h4" align="center" gutterBottom>
-        Welcome to Your Student Dashboard
-      </Typography>
+    <div style={pageStyles}>
+      <Container maxWidth="lg" className="student-dashboard">
+        <Typography variant="h4" align="center" gutterBottom>
+          Welcome to Your Student Dashboard
+        </Typography>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3}>
-            <Typography variant="h6" gutterBottom>
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <Paper elevation={3} className="dashboard-section">
+            <Typography variant="h6" gutterBottom className="section-heading">
               Grades
             </Typography>
-            <Box display="flex" justifyContent="flex-end">
-              <Link to="/student/grades">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  style={{ margin: 8 }}
-                >
-                  View Grades
-                </Button>
-              </Link>
-            </Box>
+            <Link to="/student/grades">
+              <Button
+                variant="contained"
+                color="primary"
+                className="dashboard-button"
+              >
+                View Grades
+              </Button>
+            </Link>
           </Paper>
-        </Grid>
 
-        <Grid item xs={12} md={6} lg={6}>
-          <Paper elevation={3}>
-            <Typography variant="h6" gutterBottom>
+          <Paper elevation={3} className="dashboard-section">
+            <Typography variant="h6" gutterBottom className="section-heading">
               Attendance
             </Typography>
-            <Box display="flex" justifyContent="flex-end">
-              <Link to="/student/attendance">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  style={{ margin: 8 }}
-                >
-                  View Attendance
-                </Button>
-              </Link>
-            </Box>
+            <Link to="/student/attendance">
+              <Button
+                variant="contained"
+                color="primary"
+                className="dashboard-button"
+              >
+                View Attendance
+              </Button>
+            </Link>
           </Paper>
-        </Grid>
 
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3}>
-            <Typography variant="h6" gutterBottom>
+          <Paper elevation={3} className="dashboard-section">
+            <Typography variant="h6" gutterBottom className="section-heading">
               Events
             </Typography>
-            <Box display="flex" justifyContent="flex-end">
-              <Link to="/student/events">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  style={{ margin: 8 }}
-                >
-                  View Events
-                </Button>
-              </Link>
-            </Box>
+            <Link to="/student/events">
+              <Button
+                variant="contained"
+                color="primary"
+                className="dashboard-button"
+              >
+                View Events
+              </Button>
+            </Link>
           </Paper>
-        </Grid>
 
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3}>
-            <Typography variant="h6" gutterBottom>
+          <Paper elevation={3} className="dashboard-section">
+            <Typography variant="h6" gutterBottom className="section-heading">
               Hostel Details
             </Typography>
-            <Box display="flex" justifyContent="flex-end">
-              <Link to="/student/hostel">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  style={{ margin: 8 }}
-                >
-                  View Hostel Details
-                </Button>
-              </Link>
-            </Box>
+            <Link to="/student/hostel">
+              <Button
+                variant="contained"
+                color="primary"
+                className="dashboard-button"
+              >
+                View Hostel Details
+              </Button>
+            </Link>
           </Paper>
-        </Grid>
 
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3}>
-            <Typography variant="h6" gutterBottom>
+          <Paper elevation={3} className="dashboard-section">
+            <Typography variant="h6" gutterBottom className="section-heading">
               Payment Gateway
             </Typography>
-            <Box display="flex" justifyContent="flex-end">
-              <Link to="/student/payment">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  style={{ margin: 8 }}
-                >
-                  Go to Payment Gateway
-                </Button>
-              </Link>
-            </Box>
+            <Link to="/student/payment">
+              <Button
+                variant="contained"
+                color="primary"
+                className="dashboard-button"
+              >
+                Go to Payment Gateway
+              </Button>
+            </Link>
           </Paper>
-        </Grid>
-      </Grid>
-    </Container>
+        </Box>
+      </Container>
+    </div>
   );
 }
 
-export default studentDash;
-
-// website  _________________________  
+export default StudentDash;

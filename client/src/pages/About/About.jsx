@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Card, Typography } from "@mui/material";
 import ReactMarkdown from "react-markdown";
+import "./AboutUs.css"; // Import the CSS file
 
 const aboutUsContent = `
 # About Us
@@ -42,17 +43,21 @@ We welcome you to explore Shivam Public School further. If you have any question
 [Contact Information]
 `;
 
-const aboutUs = () => {
+const AboutUs = () => {
   return (
-    <Container maxWidth="lg">
-      <Typography variant="h1" align="center" sx={{ margin: "2rem 0" }}>
-        About us
+    <Container maxWidth="lg" className="about-us-container">
+      <Typography
+        variant="h1"
+        align="center"
+        className="about-us-heading cursive-text"
+      >
+        About Us
       </Typography>
-      <Card>
+      <Card className="about-us-card">
         <ReactMarkdown>{aboutUsContent}</ReactMarkdown>
       </Card>
     </Container>
   );
 };
 
-export default aboutUs;
+export default AboutUs;

@@ -10,6 +10,31 @@ const activitiesData = [
     description: "Displaying creative artworks by talented students.",
     date: "September 10, 2023",
   },
+  {
+    title: "Art Exhibition",
+    description: "Displaying creative artworks by talented students.",
+    date: "September 10, 2023",
+  },
+  {
+    title: "Art Exhibition",
+    description: "Displaying creative artworks by talented students.",
+    date: "September 10, 2023",
+  },
+  {
+    title: "Art Exhibition",
+    description: "Displaying creative artworks by talented students.",
+    date: "September 10, 2023",
+  },
+  {
+    title: "Art Exhibition",
+    description: "Displaying creative artworks by talented students.",
+    date: "September 10, 2023",
+  },
+  {
+    title: "Art Exhibition",
+    description: "Displaying creative artworks by talented students.",
+    date: "September 10, 2023",
+  },
   // Add more activities here
 ];
 

@@ -1,95 +1,48 @@
 import { Typography, Button, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import "./../styles/Appbar.css"; // Import the CSS file
 
 function Appbar({}) {
   const navigate = useNavigate();
 
   return (
-    // <Grid item xs={12} md={6}>
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        padding: 4,
-        zIndex: 1,
-      }}
-    >
-      <div
-        style={{ marginLeft: 10, cursor: "pointer" }}
-        onClick={() => {
-          navigate("/");
-        }}
-      >
-        <Typography variant={"h5"}> Univ Website</Typography>
+    <div className="appbar-container">
+      <div className="appbar-logo" onClick={() => navigate("/")}>
+        <Typography variant="h5">Univ Website</Typography>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-        <Button
-          variant={"inherit"}
-          onClick={() => {
-            navigate("/");
-          }}
-        >
+      <div className="appbar-buttons">
+        <Button variant="inherit" onClick={() => navigate("/")}>
           Home
         </Button>
-        <Button
-          variant={"inherit"}
-          onClick={() => {
-            navigate("/about");
-          }}
-        >
+        <Button variant="inherit" onClick={() => navigate("/about")}>
           About Us
         </Button>
-        <Button
-          variant={"inherit"}
-          onClick={() => {
-            navigate("/academics");
-          }}
-        >
+        <Button variant="inherit" onClick={() => navigate("/academics")}>
           Academics
         </Button>
-        <Button
-          variant={"inherit"}
-          onClick={() => {
-            navigate("/admissions");
-          }}
-        >
+        <Button variant="inherit" onClick={() => navigate("/admissions")}>
           Admissions
         </Button>
-        <Button
-          variant={"inherit"}
-          onClick={() => {
-            navigate("/contact");
-          }}
-        >
+        <Button variant="inherit" onClick={() => navigate("/contact")}>
           Contact
         </Button>
       </div>
-
-      <div style={{ display: "flex" }}>
-        <div style={{ marginRight: 10 }}>
-          <Button
-            variant={"contained"}
-            onClick={() => {
-              navigate("/student/register");
-            }}
-          >
-            Register
-          </Button>
-        </div>
-        <div style={{ marginRight: 18 }}>
-          <Button
-            variant={"contained"}
-            onClick={() => {
-              navigate("/student/login");
-            }}
-            style={{ backgroundColor: "#00008B" }}
-          >
-            Login
-          </Button>
-        </div>
+      <div className="appbar-actions">
+        <Button
+          variant="contained"
+          onClick={() => navigate("/student/register")}
+        >
+          Register
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => navigate("/student/login")}
+          style={{ backgroundColor: "#00008B" }}
+        >
+          Login
+        </Button>
       </div>
     </div>
-    // </Grid>
   );
 }
 

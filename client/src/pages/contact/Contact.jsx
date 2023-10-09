@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, Typography, TextField, Button, Grid } from "@mui/material";
+import "./Contact.css";
 
 const ContactUsPage = () => {
   const [formData, setFormData] = useState({
@@ -53,8 +54,8 @@ const ContactUsPage = () => {
   };
 
   return (
-    <Container maxWidth="md">
-      <Typography variant="h4" align="center" sx={{ margin: "2rem 0" }}>
+    <Container maxWidth="md" className="container">
+      <Typography variant="h4" align="center">
         Contact Us
       </Typography>
       <form onSubmit={handleSubmit}>

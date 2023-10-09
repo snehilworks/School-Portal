@@ -8,23 +8,27 @@ import {
   Divider,
 } from "@mui/material";
 import activitiesData from "./activitiesData";
+import "./Academics.css"; // Import the CSS file
 
 const AcademicsPage = () => {
   return (
-    <Container maxWidth="md">
-      <Typography variant="h4" align="center" sx={{ margin: "2rem 0" }}>
+    <Container maxWidth="md" className="academics-container">
+      <Typography variant="h4" align="center" className="academics-heading">
         Academics and Activities
       </Typography>
-      <List>
+      <List className="academics-list">
         {activitiesData.map((activity, index) => (
           <React.Fragment key={index}>
-            <ListItem>
+            <ListItem className="academics-list-item">
               <ListItemText
                 primary={activity.title}
                 secondary={activity.date}
+                className="academics-list-item-text"
               />
             </ListItem>
-            <Divider />
+            {index !== activitiesData.length - 1 && (
+              <Divider className="academics-divider" />
+            )}
           </React.Fragment>
         ))}
       </List>
