@@ -1,7 +1,10 @@
 /* Default styles for larger screens */
 .about-us-container {
   padding: 20px;
+  margin: 10px;
   background-color: #4169e1;
+  box-sizing: border-box;
+  border-radius: 2%;
 }
 
 .about-us-heading {

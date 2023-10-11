@@ -8,12 +8,12 @@ import {
   Divider,
 } from "@mui/material";
 import activitiesData from "./activitiesData";
-import "./Academics.css"; // Import the CSS file
+import "./Academics.css";
 
 const AcademicsPage = () => {
   return (
     <Container maxWidth="md" className="academics-container">
-      <Typography variant="h4" align="center" className="academics-heading">
+      <Typography variant="h3" align="center" className="academics-heading">
         Academics and Activities
       </Typography>
       <List className="academics-list">

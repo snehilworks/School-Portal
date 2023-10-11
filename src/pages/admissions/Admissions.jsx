@@ -1,3 +1,4 @@
+// AdmissionsPage.jsx
 import React from "react";
 import {
   Container,
@@ -10,6 +11,7 @@ import {
   TableCell,
   Paper,
 } from "@mui/material";
+import "./Admissions.css"; // Import the CSS file
 
 const AdmissionsPage = () => {
   // Dummy data for seat availability
@@ -27,16 +29,16 @@ const AdmissionsPage = () => {
   ];
 
   return (
-    <Container maxWidth="md">
-      <Typography variant="h4" align="center" sx={{ margin: "2rem 0" }}>
+    <Container maxWidth="md" className="admission-container">
+      <Typography variant="h4" align="center" className="admissions-heading">
         Admissions
       </Typography>
-      <TableContainer component={Paper}>
-        <Table>
+      <TableContainer component={Paper} className="admissions-table-container">
+        <Table className="admissions-table">
           <TableHead>
             <TableRow>
-              <TableCell>Class</TableCell>
-              <TableCell>Seats Available</TableCell>
+              <TableCell className="table-header">Class</TableCell>
+              <TableCell className="table-header">Seats Available</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

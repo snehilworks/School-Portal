@@ -1,118 +1,73 @@
-import React, { useState } from "react";
-import { Container, Typography, TextField, Button, Grid } from "@mui/material";
+import React from "react";
+import {
+  Container,
+  Grid,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+} from "@mui/material";
 import "./Contact.css";
 
-const ContactUsPage = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-
-  const [formErrors, setFormErrors] = useState({
-    name: false,
-    email: false,
-    message: false,
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Perform form validation
-    const errors = {};
-
-    if (!formData.name.trim()) {
-      errors.name = true;
-    }
-
-    if (
-      !formData.email.trim() ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
-    ) {
-      errors.email = true;
-    }
-
-    if (!formData.message.trim()) {
-      errors.message = true;
-    }
-
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-
-    // Handle form submission logic (e.g., sending an email)
-    console.log("Form submitted:", formData);
-  };
-
+const ContactPage = () => {
   return (
-    <Container maxWidth="md" className="container">
-      <Typography variant="h4" align="center">
-        Contact Us
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              fullWidth
-              required
-              error={formErrors.name}
-              helperText={formErrors.name ? "Please enter your name" : ""}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              fullWidth
-              required
-              error={formErrors.email}
-              helperText={
-                formErrors.email ? "Please enter a valid email address" : ""
-              }
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Message"
-              name="message"
-              multiline
-              rows={4}
-              value={formData.message}
-              onChange={handleChange}
-              fullWidth
-              required
-              error={formErrors.message}
-              helperText={formErrors.message ? "Please enter your message" : ""}
-            />
-          </Grid>
+    <Container className="contact-container">
+      <Grid container spacing={3}>
+        <Grid item xs={6}>
+          <Paper className="contact-form" elevation={3}>
+            <Typography variant="h5" component="div">
+              Contact Us
+            </Typography>
+            <form>
+              <TextField
+                label="Name"
+                variant="outlined"
+                fullWidth
+                style={{ margin: 5 }}
+              />
+              <TextField
+                label="Email"
+                variant="outlined"
+                fullWidth
+                style={{ margin: 5 }}
+              />
+              <TextField
+                label="Send Us Message"
+                variant="outlined"
+                multiline
+                rows={5}
+                fullWidth
+                style={{ margin: 5 }}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ margin: 10 }}
+              >
+                Send
+              </Button>
+            </form>
+          </Paper>
         </Grid>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          sx={{ marginTop: "1rem" }}
-        >
-          Submit
-        </Button>
-      </form>
+        <Grid item xs={6}>
+          <Paper className="contact-info" elevation={3}>
+            <Typography variant="h5" component="div">
+              Contact Information
+            </Typography>
+            <Typography>
+              <b>Email</b>: shivampublicschool@gmail.com
+            </Typography>
+            <Typography>
+              <b>Phone</b>: (123) 456-7890
+            </Typography>
+            <Typography>
+              <b>Address</b>: 123 School Street, City
+            </Typography>
+          </Paper>
+        </Grid>
+      </Grid>
     </Container>
   );
 };
 
-export default ContactUsPage;
+export default ContactPage;

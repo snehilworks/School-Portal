@@ -1,59 +1,67 @@
-/* ContactUsPage.css */
-
-/* Center the form and add some spacing */
-.container {
-  text-align: center;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #f5f5f5;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  max-width: 600px;
+.contact-container {
+  padding: 20px;
+  background-color: yellow;
 }
 
-/* Style the form title */
-h4 {
-  margin-bottom: 1.5rem;
-  color: #333;
-}
-
-/* Style the form inputs and error messages */
 form {
-  text-align: left;
+  margin: 10px;
 }
 
-/* Style the form inputs */
-input[type="text"],
-input[type="email"],
+/* You can add additional custom styles here */
+.contact-page {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+.contact-form {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  border: 1.75px solid black;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form h2 {
+  margin-bottom: 20px;
+}
+
+.contact-info {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  border: 2px solid black;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.contact-info h2 {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+}
+
+input,
 textarea {
   width: 100%;
   padding: 10px;
-  margin-bottom: 1rem;
+  margin: 5px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 4px;
 }
 
-/* Style the error messages */
-.error-message {
-  color: red;
-  font-size: 14px;
-  margin-top: -10px;
-  margin-bottom: 10px;
-}
-
-/* Style the submit button */
-button[type="submit"] {
-  background-color: #007bff;
-  color: white;
+button {
+  background-color: #3498db;
+  color: #252525;
   border: none;
-  border-radius: 5px;
   padding: 10px 20px;
-  font-size: 18px;
+  margin-top: 10px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button[type="submit"]:hover {
-  background-color: #0056b3;
 }

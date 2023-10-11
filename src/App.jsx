@@ -20,9 +20,7 @@ import StudentDash from "./pages/Student/studentDashboard/studentDashboard";
 
 function App() {
   return (
-    <div
-      style={{ width: "100vw", height: "100vh", backgroundColor: "#eeeeee" }}
-    >
+    <div>
       <Router>
         <Appbar />
         <Routes>

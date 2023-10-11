@@ -1,11 +1,12 @@
 import { Grid, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import "./../styles/Landing.css";
 
 export const Landing = () => {
   const navigate = useNavigate();
   return (
-    <div>
+    <div className="Landing-div">
       <Grid container style={{ padding: "5vw" }}>
         <Grid item xs={12} md={6} lg={6}>
           <div style={{ marginTop: 100 }}>
@@ -20,6 +21,7 @@ export const Landing = () => {
                     onClick={() => {
                       navigate("/student/register");
                     }}
+                    style={{ backgroundColor: "#4caf50" }}
                   >
                     Register
                   </Button>

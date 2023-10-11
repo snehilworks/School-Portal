@@ -1,10 +1,9 @@
-/* AcademicsPage.css */
-
-/* Container for the Academics and Activities page */
 .academics-container {
   padding: 20px;
-  background-color: #fff; /* Set the background color */
-  border-radius: 10px;
+  margin: 10px;
+  /* Set the background color */
+  background-color: #bbf744;
+  border-radius: 2%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -12,12 +11,14 @@
 .academics-heading {
   font-size: 2rem;
   margin: 2rem 0;
-  color: #333; /* Set the text color */
+  color: #252525; /* Set the text color */
 }
 
 /* Style for the List component */
 .academics-list {
   padding: 0;
+  background-color: white;
+  border-radius: 2%;
 }
 
 /* Style for each ListItem component */
