@@ -1,0 +1,23 @@
+.hostel-details {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.room-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.room {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+h1 {
+  text-align: center;
+}
+
+/* Add more CSS styles as needed */

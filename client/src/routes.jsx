@@ -1,13 +1,16 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
 
-import Appbar from "./components/Appbar";
 import Register from "./pages/Student/studentRegister/Register";
+import StPays from "./pages/Student/StPays/StPays";
+import SEvents from "./pages/Student/SEvents/SEvents";
+import SGrade from "./pages/Student/SGrade/SGrade";
+import SAttendance from "./pages/Student/SAttendance/SAttendance";
 import Login from "./pages/Student/studentLogin/Login";
 import TLogin from "./pages/Teacher/teacherLogin/teacherLogin";
 import TRegister from "./pages/Teacher/teacherRegister/teacherRegister";
 
 import Admissions from "./pages/admissions/Admissions";
+import Hostel from "./pages/Hostel/Hostel";
 import Academics from "./pages/academics/Academics";
 import About from "./pages/about/About";
 import Contact from "./pages/contact/Contact";
@@ -42,6 +45,12 @@ const routes = [
       />
     ),
   },
+  { path: "/student/payment", element: <StPays /> },
+  { path: "/student/attendance", element: <SAttendance /> },
+  { path: "/student/grades", element: <SGrade /> },
+
+  { path: "/student/events", element: <SEvents /> },
+  { path: "/student/hostel", element: <Hostel /> },
 
   // Teacher Routes
   { path: "/teacher/login", element: <TLogin /> },
