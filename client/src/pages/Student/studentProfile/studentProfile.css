@@ -1,3 +1,36 @@
-.container {
-  background-color: rgb(28, 219, 155);
+/* src/components/StudentProfile.css */
+
+.student-profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #69bcef;
+}
+
+.student-profile-card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+}
+
+.student-profile-card h5 {
+  margin: 0 0 20px;
+}
+
+.student-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.student-info p {
+  margin: 5px 0;
+}
+
+.student-info strong {
+  font-weight: bold;
 }

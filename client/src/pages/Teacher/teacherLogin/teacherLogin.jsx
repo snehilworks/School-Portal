@@ -6,6 +6,7 @@ import { useSetRecoilState } from "recoil";
 import { BASE_URL } from "../../../config";
 import { useNavigate } from "react-router-dom";
 import { userState } from "../../../store/atoms/user";
+import "./TeacherLogin.css"; // Import the CSS file
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -15,23 +16,16 @@ function Register() {
 
   return (
     <div>
-      <div
-        style={{
-          paddingTop: 150,
-          marginBottom: 10,
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <Typography variant={"h4"} style={{ fontWeight: "bold" }}>
-          New Here... Create an Account!
+      <div className="title-text">
+        <Typography variant="h4" style={{ fontWeight: "bold" }}>
+          Teacher Login
         </Typography>
       </div>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <Card varint={"outlined"} style={{ width: 400, padding: 20 }}>
+        <Card className="card" variant="outlined">
           <TextField
-            fullWidth={true}
-            label="Email"
+            fullWidth
+            label="Teacher's Email"
             variant="outlined"
             onChange={(event) => {
               setEmail(event.target.value);
@@ -40,10 +34,10 @@ function Register() {
           <br />
           <br />
           <TextField
-            fullWidth={true}
-            label="Password"
+            fullWidth
+            label="Teacher's Password"
             variant="outlined"
-            type={"password"}
+            type="password"
             onChange={(e) => {
               setPassword(e.target.value);
             }}
@@ -51,7 +45,8 @@ function Register() {
           <br />
           <br />
           <Button
-            size={"large"}
+            className="login-button"
+            size="large"
             variant="contained"
             onClick={async () => {
               const response = await axios.post(`${BASE_URL}/admin/signup`, {
@@ -63,22 +58,31 @@ function Register() {
               setUser({ userEmail: email, isLoading: false });
               navigate("/dashboard");
             }}
+            style={{
+              backgroundColor: "#ff5722",
+            }}
           >
-            {" "}
             Login
           </Button>
         </Card>
       </div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <Card style={{ width: 400, padding: 10, marginTop: 30 }}>
-          <b>New Here ? </b>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          textAlign: "center",
+        }}
+      >
+        <Card className="card">
+          <b>New Here ?</b>
           <Button
+            className="register-button"
             variant="contained"
             size="small"
-            style={{ backgroundColor: "#00008B", margin: 10 }}
             onClick={() => {
               navigate("/teacher/register");
             }}
+            style={{ backgroundColor: "#106013", margin: 10 }}
           >
             Register
           </Button>

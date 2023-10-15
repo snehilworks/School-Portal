@@ -15,7 +15,7 @@ import TProfile from "./pages/Teacher/teacherProfile/teacherProfile";
 // import about from "./pages/About/About";
 
 import NotFoundPage from "./components/NotFoundPage";
-import AdminDash from "./pages/Teacher/teacherDashboard/adminDash";
+import TeacherDash from "./pages/Teacher/teacherDashboard/teacherDash";
 import StudentDash from "./pages/Student/studentDashboard/studentDashboard";
 
 function App() {
@@ -50,7 +50,7 @@ function App() {
           {/* admin Routes */}
           <Route path={"/teacher/login"} element={<TLogin />} />
           <Route path={"/teacher/register"} element={<TRegister />} />
-          <Route path={"/teacher/dashboard"} element={<AdminDash />} />
+          <Route path={"/teacher/dashboard"} element={<TeacherDash />} />
           <Route path={"/teacher/profile"} element={<TProfile />} />
 
           <Route component={NotFoundPage} />

@@ -6,6 +6,7 @@ import { useSetRecoilState } from "recoil";
 import { BASE_URL } from "../../../config";
 import { useNavigate } from "react-router-dom";
 import { userState } from "../../../store/atoms/user";
+import "./teacherRegister.css";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -24,14 +25,14 @@ function Register() {
         }}
       >
         <Typography variant={"h4"} style={{ fontWeight: "bold" }}>
-          New Here... Create an Account!
+          Teacher's Registration
         </Typography>
       </div>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Card varint={"outlined"} style={{ width: 400, padding: 20 }}>
           <TextField
             fullWidth={true}
-            label="Email"
+            label="Teacher's Email"
             variant="outlined"
             onChange={(event) => {
               setEmail(event.target.value);
@@ -41,7 +42,7 @@ function Register() {
           <br />
           <TextField
             fullWidth={true}
-            label="Password"
+            label="Teacher's Password"
             variant="outlined"
             type={"password"}
             onChange={(e) => {
@@ -63,6 +64,7 @@ function Register() {
               setUser({ userEmail: email, isLoading: false });
               navigate("/dashboard");
             }}
+            style={{ backgroundColor: "#106013" }}
           >
             {" "}
             Register
@@ -75,7 +77,7 @@ function Register() {
           <Button
             variant="contained"
             size="small"
-            style={{ backgroundColor: "#00008B", margin: 10 }}
+            style={{ backgroundColor: "#ff5722", margin: 10 }}
             onClick={() => {
               navigate("/teacher/login");
             }}

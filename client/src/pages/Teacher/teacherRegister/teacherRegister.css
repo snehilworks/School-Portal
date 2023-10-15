@@ -1,0 +1,13 @@
+.title-text {
+  text-align: center;
+  padding-top: 150px;
+  margin-bottom: 10px;
+}
+
+/* Card style */
+.card {
+  width: 400px;
+  padding: 20px;
+  margin: 0 auto;
+  margin-top: 30px;
+}

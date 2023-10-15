@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Typography, Button, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import "./teacherDash.css"; // Import the CSS file
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
@@ -26,10 +27,12 @@ const TeacherDashboard = () => {
   };
 
   return (
-    <Container>
-      <Typography variant="h4">Teacher Dashboard</Typography>
+    <Container className="container">
+      <Typography variant="h4" className="title">
+        Teacher Dashboard
+      </Typography>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={2} className="button-grid">
         <Grid item xs={12} md={6}>
           <Button
             variant="contained"
@@ -37,6 +40,7 @@ const TeacherDashboard = () => {
             size="large"
             fullWidth
             onClick={handleManageAttendanceClick}
+            className="button primary"
           >
             Manage Attendance
           </Button>
@@ -49,6 +53,7 @@ const TeacherDashboard = () => {
             size="large"
             fullWidth
             onClick={handleUpdateMarksClick}
+            className="button primary"
           >
             Update Marks
           </Button>
@@ -61,6 +66,7 @@ const TeacherDashboard = () => {
             size="large"
             fullWidth
             onClick={handleStudentRosterClick}
+            className="button primary"
           >
             Student Roster
           </Button>
@@ -73,6 +79,7 @@ const TeacherDashboard = () => {
             size="large"
             fullWidth
             onClick={handleGradebookClick}
+            className="button primary"
           >
             Gradebook
           </Button>

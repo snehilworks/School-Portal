@@ -1,0 +1,38 @@
+/* TeacherDashboard.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+}
+
+.title {
+  font-size: 24px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  max-width: 600px;
+}
+
+.button {
+  padding: 20px;
+  font-size: 16px;
+  text-transform: none;
+}
+
+/* Customize button styles */
+.button.primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.button.primary:hover {
+  background-color: #0056b3;
+}
