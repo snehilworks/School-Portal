@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Hostel.css"; // Import your CSS file
 
-function HostelDetails() {
+function Hostel() {
   // Simulated hostel room data (replace with actual data)
   const [roomData, setRoomData] = useState([]);
 
@@ -35,4 +35,4 @@ function HostelDetails() {
   );
 }
 
-export default HostelDetails;
+export default Hostel;
