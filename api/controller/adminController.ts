@@ -61,3 +61,14 @@ export const deleteTeacher = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const updateAdmissionStatus = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    //update admission status of this particular student
+    // based on the id as an admin
+  } catch (error) {
+    console.log("Error Updating admission status: ", error);
+    res.status(512).json({ message: "Internal server error" });
+  }
+};

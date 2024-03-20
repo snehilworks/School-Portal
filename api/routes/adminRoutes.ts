@@ -4,6 +4,7 @@ import {
   addTeacher,
   updateTeacher,
   deleteTeacher,
+  updateAdmissionStatus
 } from "./../controller/adminController";
 
 const router = express.Router();
@@ -23,5 +24,9 @@ router.put("/teachers/:id", updateTeacher);
 
 // Deleting a teacher
 router.delete("/teachers/:id", deleteTeacher);
+
+//student Updation : Admin
+
+router.post("/student/:id", updateAdmissionStatus);
 
 export default router;
