@@ -6,6 +6,7 @@ import { useSetRecoilState } from "recoil";
 import { BASE_URL } from "../../../config";
 import { useNavigate } from "react-router-dom";
 import { userState } from "../../../store/atoms/user";
+import axios from "axios"; // Import axios
 import "./TeacherLogin.css"; // Import the CSS file
 
 function Register() {
@@ -49,14 +50,17 @@ function Register() {
             size="large"
             variant="contained"
             onClick={async () => {
-              const response = await axios.post(`${BASE_URL}/admin/signup`, {
-                username: email,
-                password: password,
-              });
+              const response = await axios.post(
+                `http://localhost:4000/api/teacher/login`,
+                {
+                  email: email,
+                  password: password,
+                }
+              );
               let data = response.data;
               localStorage.setItem("token", data.token);
               setUser({ userEmail: email, isLoading: false });
-              navigate("/dashboard");
+              navigate("teacher/dashboard");
             }}
             style={{
               backgroundColor: "#ff5722",
@@ -66,13 +70,6 @@ function Register() {
           </Button>
         </Card>
       </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          textAlign: "center",
-        }}
-      ></div>
     </div>
   );
 }

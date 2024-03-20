@@ -1,4 +1,5 @@
 import express from "express";
+import TeacherModel from "../models/teacherModel";
 import * as teacherController from "./../controller/teacherController";
 
 const router = express.Router();
@@ -9,6 +10,9 @@ router.get("/", (req, res) => {
 
 // Teacher dashboard
 router.get("/dashboard", teacherController.getDashboard);
+
+// Teacher login
+router.post("/login", teacherController.login);
 
 // View and edit profile
 // router.get("/profile", teacherController.getProfile);
