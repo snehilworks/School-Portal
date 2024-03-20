@@ -7,6 +7,7 @@ export interface Teacher extends Document {
   subjects: string[];
   phone: number;
   classTeacher: boolean;
+  classes: string[];
 }
 
 const teacherSchema: Schema = new Schema({
@@ -16,6 +17,7 @@ const teacherSchema: Schema = new Schema({
   subjects: [{ type: String, required: true }],
   phone: { type: Number },
   classTeacher: { type: Boolean, default: false },
+  classes: [{ type: String }],
 });
 
 export default mongoose.model<Teacher>("Teacher", teacherSchema);
