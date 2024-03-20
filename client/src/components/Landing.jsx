@@ -10,7 +10,7 @@ export const Landing = () => {
       <Grid container style={{ padding: "5vw" }}>
         <Grid item xs={12} md={6} lg={6}>
           <div style={{ marginTop: 100 }}>
-            <Typography variant={"h2"}>Univ Website</Typography>
+            <Typography variant={"h2"}>Shivam Public School, Aarni</Typography>
             <Typography variant={"h5"}>Second home for your child</Typography>
             {
               <div style={{ display: "flex", marginTop: 20 }}>
