@@ -34,7 +34,10 @@ export const updateTeacher = async (req: Request, res: Response) => {
     if (!updatedTeacher) {
       return res.status(404).json({ message: "Teacher not found" });
     }
-    res.json(updatedTeacher);
+    res.json({
+      message: "Updated Teacher Detail for id: " + id,
+      data: updatedTeacher,
+    });
   } catch (error) {
     console.error("Error updating teacher:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -49,7 +52,10 @@ export const deleteTeacher = async (req: Request, res: Response) => {
     if (!deletedTeacher) {
       return res.status(404).json({ message: "Teacher not found" });
     }
-    res.json(deletedTeacher);
+    res.json({
+      message: "Teacher with " + id + " Id deleted!",
+      data: deletedTeacher,
+    });
   } catch (error) {
     console.error("Error deleting teacher:", error);
     res.status(500).json({ message: "Internal server error" });
