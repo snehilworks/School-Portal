@@ -72,22 +72,7 @@ function Register() {
           justifyContent: "center",
           textAlign: "center",
         }}
-      >
-        <Card className="card">
-          <b>New Here ?</b>
-          <Button
-            className="register-button"
-            variant="contained"
-            size="small"
-            onClick={() => {
-              navigate("/teacher/register");
-            }}
-            style={{ backgroundColor: "#106013", margin: 10 }}
-          >
-            Register
-          </Button>
-        </Card>
-      </div>
+      ></div>
     </div>
   );
 }
