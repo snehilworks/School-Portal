@@ -1,10 +1,20 @@
 import { Request, Response } from "express";
+import bcrypt from "bcrypt";
 import Teacher from "../models/teacherModel";
 
 // adding a new teacher
 export const addTeacher = async (req: Request, res: Response) => {
   try {
-    const newTeacher = new Teacher(req.body);
+    const { password, ...teacherData } = req.body;
+
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const newTeacher = new Teacher({
+      ...teacherData,
+      password: hashedPassword,
+    });
+
     await newTeacher.save();
     res.status(201).json(newTeacher);
   } catch (error) {
