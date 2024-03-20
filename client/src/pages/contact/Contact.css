@@ -51,16 +51,32 @@ button {
 }
 
 /* Mobile responsiveness using media query */
-@media screen and (max-width: 768px) {
+/* @media screen and (max-width: 768px) {
   /* Adjust contact page grid on small screens */
-  .contact-form,
+/* .contact-form,
   .contact-info {
     border: 1px solid black;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  } */
+
+/* Center align text within buttons on small screens */
+/* button { */
+/* text-align: center; */
+/* } */
+/* }  */
+
+@media (max-width: 600px) {
+  .contact-container {
+    flex-direction: column;
   }
 
-  /* Center align text within buttons on small screens */
-  button {
-    text-align: center;
+  .contact-form,
+  .contact-info {
+    flex: unset;
+    margin: 0;
+  }
+
+  .contact-form {
+    margin-bottom: 20px;
   }
 }

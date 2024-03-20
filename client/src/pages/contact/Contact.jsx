@@ -13,7 +13,7 @@ const ContactPage = () => {
   return (
     <Container className="contact-container">
       <Grid container spacing={3}>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <Paper className="contact-form" elevation={3}>
             <Typography variant="h5" component="div">
               Contact Us
@@ -49,7 +49,7 @@ const ContactPage = () => {
             </form>
           </Paper>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <Paper className="contact-info" elevation={3}>
             <Typography variant="h5" component="div">
               Contact Information
