@@ -11,6 +11,7 @@ export interface Student extends Document {
   guardianPhone?: number;
   class?: string;
   section?: string;
+  admission: boolean;
 }
 
 const studentSchema: Schema = new Schema({
@@ -24,6 +25,7 @@ const studentSchema: Schema = new Schema({
   guardianPhone: { type: Number },
   class: { type: String },
   section: { type: String },
+  admission: { type: Boolean, default: false },
 });
 
 export default mongoose.model<Student>("Student", studentSchema);
