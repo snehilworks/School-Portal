@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import Teacher from "../models/teacherModel";
+import Student from "../models/studentModel";
 
 // adding a new teacher
 export const addTeacher = async (req: Request, res: Response) => {
@@ -73,10 +74,29 @@ export const deleteTeacher = async (req: Request, res: Response) => {
 };
 
 export const updateAdmissionStatus = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.params; //student id
+  const { admissionStatus } = req.body; //new admission status
   try {
-    //update admission status of this particular student
-    // based on the id as an admin
+    if (typeof admissionStatus !== "boolean") {
+      return res
+        .status(400)
+        .json({ message: "Invalid admission status. Must be true or false." });
+    }
+
+    const updatedStudent = await Student.findByIdAndUpdate(
+      id,
+      { admission: admissionStatus },
+      { new: true } // Returns the updated document
+    );
+
+    if (!updatedStudent) {
+      return res.status(404).json({ message: "Student not found." });
+    }
+
+    res.status(200).json({
+      message: "Admission status updated successfully.",
+      student: updatedStudent,
+    });
   } catch (error) {
     console.log("Error Updating admission status: ", error);
     res.status(512).json({ message: "Internal server error" });
