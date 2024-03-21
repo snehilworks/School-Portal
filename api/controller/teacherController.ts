@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import Teacher from "../models/teacherModel";
+import { loginSchema } from "../validations/loginValidation";
 
 export const getDashboard = async (req: Request, res: Response) => {
   try {
@@ -31,7 +32,8 @@ export const getDashboard = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    //validate the user data for login
+    const { email, password } = loginSchema.parse(req.body);
     const teacher_data = await Teacher.findOne({ email });
 
     if (!teacher_data) {
