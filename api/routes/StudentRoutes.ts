@@ -7,6 +7,12 @@ router.get("/", (req, res) => {
   res.send("Student Related Routes Here!");
 });
 
+// Route to student register
+router.post("/register", StudentController.register);
+
+// Route for student login
+router.post("/login", StudentController.login);
+
 // Route to access student profile page
 router.get("/profile", StudentController.getProfile);
 

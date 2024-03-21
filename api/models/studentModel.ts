@@ -15,7 +15,7 @@ export interface Student extends Document {
 }
 
 const studentSchema: Schema = new Schema({
-  name: { type: String, required: true },
+  name: { type: String },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   phone: { type: Number },
