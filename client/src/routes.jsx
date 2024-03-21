@@ -20,6 +20,7 @@ import TLogin from "./pages/Teacher/teacherLogin/teacherLogin";
 import TRegister from "./pages/Teacher/teacherRegister/teacherRegister";
 import TProfile from "./pages/Teacher/teacherProfile/teacherProfile";
 import TeacherDash from "./pages/Teacher/teacherDashboard/teacherDash";
+import AdminDash from "./pages/Admin/AdminDashboard/adminDash";
 
 // import TAttendanceList from "./pages/Teacher/TAttendanceList/TAttendanceList";
 // import TeacherDash from "./pages/Teacher/";
@@ -33,6 +34,9 @@ const routes = [
   { path: "/academics", element: <Academics /> },
   { path: "/about", element: <About /> },
   { path: "/contact", element: <Contact /> },
+
+  //Admin Routes
+  { path: "/admin/dashboard", element: <AdminDash /> },
 
   // Student Routes
   { path: "/student/login", element: <Login /> },

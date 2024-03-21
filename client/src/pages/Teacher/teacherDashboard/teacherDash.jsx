@@ -1,6 +1,20 @@
 import React from "react";
-import { Container, Typography, Button, Grid } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Button,
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import GroupIcon from "@mui/icons-material/Group";
 import "./teacherDash.css"; // Import the CSS file
 
 const TeacherDashboard = () => {
@@ -21,71 +35,68 @@ const TeacherDashboard = () => {
     navigate("/teacher/studentRoster");
   };
 
+  const handleClassesClick = () => {
+    // Navigate to the classes page
+    navigate("/teacher/classes");
+  };
+
   const handleGradebookClick = () => {
     // Navigate to the gradebook page
     navigate("/teacher/gradebook");
   };
 
   return (
-    <Container className="container">
-      <Typography variant="h4" className="title">
-        Teacher Dashboard
-      </Typography>
+    <div style={{ display: "flex" }}>
+      {/* Sidebar */}
+      <div className="sidebar">
+        <List>
+          <ListItem button onClick={handleManageAttendanceClick}>
+            <ListItemIcon>
+              <PlaylistAddCheckIcon style={{ color: "#fff" }} />
+            </ListItemIcon>
+            <ListItemText primary="Manage Attendance" />
+          </ListItem>
+          <ListItem button onClick={handleUpdateMarksClick}>
+            <ListItemIcon>
+              <EventAvailableIcon style={{ color: "#fff" }} />
+            </ListItemIcon>
+            <ListItemText primary="Update Marks" />
+          </ListItem>
+          <ListItem button onClick={handleStudentRosterClick}>
+            <ListItemIcon>
+              <GroupIcon style={{ color: "#fff" }} />
+            </ListItemIcon>
+            <ListItemText primary="Student Lists" />
+          </ListItem>
+          <ListItem button onClick={handleClassesClick}>
+            <ListItemIcon>
+              <MenuBookIcon style={{ color: "#fff" }} />
+            </ListItemIcon>
+            <ListItemText primary="Classes" />
+          </ListItem>
+          <ListItem button onClick={handleGradebookClick}>
+            <ListItemIcon>
+              <DashboardIcon style={{ color: "#fff" }} />
+            </ListItemIcon>
+            <ListItemText primary="Gradebook" />
+          </ListItem>
+        </List>
+      </div>
 
-      <Grid container spacing={2} className="button-grid">
-        <Grid item xs={12} md={6}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            fullWidth
-            onClick={handleManageAttendanceClick}
-            className="button primary"
-          >
-            Manage Attendance
-          </Button>
-        </Grid>
+      {/* Main Content */}
+      <Container maxWidth="lg">
+        <Typography
+          variant="h4"
+          style={{ marginBottom: "32px", marginTop: "32px" }}
+        >
+          Teacher Dashboard
+        </Typography>
 
-        <Grid item xs={12} md={6}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            fullWidth
-            onClick={handleUpdateMarksClick}
-            className="button primary"
-          >
-            Update Marks
-          </Button>
+        <Grid container spacing={2}>
+          {/* Main Content Goes Here */}
         </Grid>
-
-        <Grid item xs={12} md={6}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            fullWidth
-            onClick={handleStudentRosterClick}
-            className="button primary"
-          >
-            Student Roster
-          </Button>
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            fullWidth
-            onClick={handleGradebookClick}
-            className="button primary"
-          >
-            Gradebook
-          </Button>
-        </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </div>
   );
 };
 
