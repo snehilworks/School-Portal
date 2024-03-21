@@ -7,7 +7,7 @@ export interface Class extends Document {
 
 // Define class schema
 const classSchema: Schema = new Schema({
-  className: { type: String, required: true, unique: true },
+  className: { type: String, required: true, unique: true, index: true },
 });
 
 export default mongoose.model<Class>("Class", classSchema);
@@ -16,21 +16,33 @@ export default mongoose.model<Class>("Class", classSchema);
 
 // Define an array of class names
 // const classNames: string[] = [
-//   "I",
-//   "II",
-//   "III",
-//   "IV",
-//   "V",
-//   "VI",
-//   "VII",
-//   "VIII",
+//  "Nursery English",
+//  "Nursery Hindi",
+//  "LKG English",
+//  "LKG Hindi",
+//  "UKG English",
+//  "UKG Hindi",
+//   "I English",
+//   "I Hindi",
+//   "II English",
+//   "II Hindi",
+//  "III English",
+//  "III Hindi",
+//   "IV English",
+//   "IV Hindi",
+//   "V English",
+//   "V Hindi",
+//   "VI English",
+//   "VI Hindi",
+//   "VII English",
+//   "VII Hindi",
+//   "VIII English",
+//   "VIII Hindi",
 //   "IX",
 //   "X",
 //   "XI Science",
-//   "XI Commerce",
 //   "XI Arts",
 //   "XII Science",
-//   "XII Commerce",
 //   "XII Arts",
 // ];
 
