@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Typography,
@@ -16,12 +16,16 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import PaymentIcon from "@mui/icons-material/Payment";
 
 const AdminDashboard = () => {
+  const [selectedContent, setSelectedContent] = useState(null);
+
   const sidebarStyle = {
     backgroundColor: "#2c3e50",
     color: "#fff",
     height: "100vh",
+    width: "25%",
   };
 
   const buttonStyle = {
@@ -44,20 +48,85 @@ const AdminDashboard = () => {
     },
   };
 
+  const handleDashboard = () => {
+    setSelectedContent("Dashboard");
+  };
+
   const handleAddTeacher = () => {
-    console.log("Add Teacher Details");
+    setSelectedContent("Add Teacher");
   };
 
   const handleUpdateTeacher = () => {
-    console.log("Update Teacher Details");
+    setSelectedContent("Update Teacher");
   };
 
   const handleDeleteTeacher = () => {
-    console.log("Delete Teacher Details");
+    setSelectedContent("Delete Teacher");
   };
 
   const handleUpdateStudentStatus = () => {
-    console.log("Update Student Admission Status");
+    setSelectedContent("Update Student Admission Status");
+  };
+
+  const handlePayments = () => {
+    setSelectedContent("Payments");
+  };
+
+  const renderContent = () => {
+    switch (selectedContent) {
+      case "Dashboard":
+        return (
+          <Card>
+            <CardContent>
+              <Typography variant="h5">Dashboard Content</Typography>
+            </CardContent>
+          </Card>
+        );
+      case "Add Teacher":
+        return (
+          <Card>
+            <CardContent>
+              <Typography variant="h5">Add Teacher Content</Typography>
+            </CardContent>
+          </Card>
+        );
+      case "Update Teacher":
+        return (
+          <Card>
+            <CardContent>
+              <Typography variant="h5">Update Teacher Content</Typography>
+            </CardContent>
+          </Card>
+        );
+      case "Delete Teacher":
+        return (
+          <Card>
+            <CardContent>
+              <Typography variant="h5">Delete Teacher Content</Typography>
+            </CardContent>
+          </Card>
+        );
+      case "Update Student Admission Status":
+        return (
+          <Card>
+            <CardContent>
+              <Typography variant="h5">
+                Update Student Admission Status Content
+              </Typography>
+            </CardContent>
+          </Card>
+        );
+      case "Payments":
+        return (
+          <Card>
+            <CardContent>
+              <Typography variant="h5">Payments Content</Typography>
+            </CardContent>
+          </Card>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -65,7 +134,7 @@ const AdminDashboard = () => {
       {/* Sidebar */}
       <div style={sidebarStyle}>
         <List>
-          <ListItem button>
+          <ListItem button onClick={handleDashboard}>
             <ListItemIcon>
               <DashboardIcon style={{ color: "#fff" }} />
             </ListItemIcon>
@@ -95,6 +164,12 @@ const AdminDashboard = () => {
             </ListItemIcon>
             <ListItemText primary="Update Student Admission Status" />
           </ListItem>
+          <ListItem button onClick={handlePayments}>
+            <ListItemIcon>
+              <PaymentIcon style={{ color: "#fff" }} />
+            </ListItemIcon>
+            <ListItemText primary="Payments" />
+          </ListItem>
         </List>
       </div>
 
@@ -109,6 +184,9 @@ const AdminDashboard = () => {
 
         <Grid container spacing={3}>
           {/* Main Content Goes Here */}
+          <Grid item xs={4}>
+            {renderContent()}
+          </Grid>
         </Grid>
       </Container>
     </div>
