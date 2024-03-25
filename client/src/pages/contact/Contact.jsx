@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Grid,
@@ -8,8 +8,30 @@ import {
   Button,
 } from "@mui/material";
 import "./Contact.css";
+import axios from "axios";
+import { BASE_URL } from "../../config";
 
 const ContactPage = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSend = async () => {
+    try {
+      await axios.post(`${BASE_URL}/api/home/contact`, {
+        name,
+        email,
+        message,
+      });
+      // Optionally, you can clear the input fields after sending
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+
   return (
     <Container className="contact-container">
       <Grid container spacing={3}>
@@ -24,12 +46,16 @@ const ContactPage = () => {
                 variant="outlined"
                 fullWidth
                 style={{ margin: 5 }}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
               <TextField
                 label="Email"
                 variant="outlined"
                 fullWidth
                 style={{ margin: 5 }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
                 label="Send Us Message"
@@ -38,11 +64,14 @@ const ContactPage = () => {
                 rows={5}
                 fullWidth
                 style={{ margin: 5 }}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
               />
               <Button
                 variant="contained"
                 color="primary"
                 style={{ margin: 10 }}
+                onClick={handleSend}
               >
                 Send
               </Button>
