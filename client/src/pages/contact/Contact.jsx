@@ -6,7 +6,9 @@ import {
   Typography,
   TextField,
   Button,
+  Snackbar,
 } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import "./Contact.css";
 import axios from "axios";
 import { BASE_URL } from "../../config";
@@ -15,6 +17,7 @@ const ContactPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleSend = async () => {
     try {
@@ -27,9 +30,14 @@ const ContactPage = () => {
       setName("");
       setEmail("");
       setMessage("");
+      setOpenSnackbar(true);
     } catch (error) {
       console.error("Error sending message:", error);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -95,6 +103,20 @@ const ContactPage = () => {
           </Paper>
         </Grid>
       </Grid>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseSnackbar}
+          severity="success"
+        >
+          Message sent successfully!
+        </MuiAlert>
+      </Snackbar>
     </Container>
   );
 };
