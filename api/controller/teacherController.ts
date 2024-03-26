@@ -1,7 +1,13 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import Teacher from "../models/teacherModel";
 import { loginSchema } from "../validations/loginValidation";
+
+import * as dotenv from "dotenv";
+dotenv.config();
+
+const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 
 export const getDashboard = async (req: Request, res: Response) => {
   try {
@@ -34,8 +40,14 @@ export const login = async (req: Request, res: Response) => {
   try {
     //validate the user data for login
     const { email, password } = loginSchema.parse(req.body);
-    const teacher_data = await Teacher.findOne({ email });
 
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Email and password are required." });
+    }
+
+    const teacher_data = await Teacher.findOne({ email });
     if (!teacher_data) {
       return res.status(404).json({ message: "Teacher Data not Found!" });
     }
@@ -49,11 +61,19 @@ export const login = async (req: Request, res: Response) => {
       return res.status(403).json({ message: "Invalid email or password" });
     }
 
+    const teacherId = teacher_data._id;
+    const token = jwt.sign(
+      {
+        id: teacherId,
+      },
+      JWT_SECRET
+    );
+
+    res.cookie("sps", token);
+
     res.status(302).json({
       message: "Logged in Successfully",
-      data: {
-        token: "eyJhbGciOiJIUz",
-      },
+      teacher: teacher_data._id,
     });
   } catch (error) {
     console.error("Error during login:", error);
