@@ -1,5 +1,4 @@
 import express from "express";
-import TeacherModel from "../models/teacherModel";
 import * as teacherController from "./../controller/teacherController";
 
 const router = express.Router();
@@ -15,16 +14,16 @@ router.get("/dashboard", teacherController.getDashboard);
 router.post("/login", teacherController.login);
 
 // View and edit profile
-// router.get("/profile", teacherController.getProfile);
+router.get("/profile", teacherController.getTeacherProfile);
 // router.put("/profile", teacherController.updateProfile);
 
 // View classes and class details
-// router.get("/classes", teacherController.getClasses);
-// router.get("/classes/:id", teacherController.getClassDetails);
+router.get("/classes", teacherController.getClasses);
+router.get("/class/:id", teacherController.getClassDetails);
 
 // View students and student details
-// router.get("/students", teacherController.getStudents);
-// router.get("/students/:id", teacherController.getStudentDetails);
+router.get("/students", teacherController.getStudents);
+router.get("/student/:id", teacherController.getStudentDetails);
 
 // Record and view attendance
 // router.get("/attendance", teacherController.getAttendance);
