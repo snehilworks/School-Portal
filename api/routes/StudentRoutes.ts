@@ -20,10 +20,7 @@ router.get("/profile", StudentController.getProfile);
 router.get("/hostel", StudentController.getHostel);
 
 // Route to access student dashboard
-router.get("/dashboard", StudentController.getDashboard);
-
-// Route to access gradebook
-// router.get("/gradebook", StudentController.getGradebook);
+// router.get("/dashboard", StudentController.getDashboard);
 
 // Route to access activities
 router.get("/activities", StudentController.getActivities);
