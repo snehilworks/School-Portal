@@ -21,10 +21,10 @@ router.get("/teachers", getAllTeachers);
 router.post("/teachers", addTeacher);
 
 // Updating teacher details
-router.put("/teachers/:id", updateTeacher);
+router.put("/teacher/:id", updateTeacher);
 
 // Deleting a teacher
-router.delete("/teachers/:id", deleteTeacher);
+router.delete("/teacher/:id", deleteTeacher);
 
 //student Updation : Admin
 router.put("/student/:id", updateAdmissionStatus);
