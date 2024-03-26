@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import Teacher from "../models/teacherModel";
 import Student from "../models/studentModel";
+import Admission, {
+  Admission as AdmissionType,
+} from "../models/admissionModel";
 
 // adding a new teacher
 export const addTeacher = async (req: Request, res: Response) => {
@@ -102,3 +105,20 @@ export const updateAdmissionStatus = async (req: Request, res: Response) => {
     res.status(512).json({ message: "Internal server error" });
   }
 };
+
+export const getAdmissionList = async (req: Request, res: Response) => {
+  try {
+    const admissions: AdmissionType[] = await Admission.find();
+
+    if (!admissions || admissions.length === 0) {
+      return res.status(404).json({ message: "No admissions found" });
+    }
+
+    res.status(201).json(admissions);
+  } catch (error) {
+    console.log("Error Getting admission list: ", error);
+    res.status(512).json({ message: "Internal server error" });
+  }
+};
+
+export const addAdmissionSeats = async (req: Request, res: Response) => {};
