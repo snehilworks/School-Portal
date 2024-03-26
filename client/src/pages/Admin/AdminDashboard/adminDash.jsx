@@ -3,7 +3,6 @@ import {
   Container,
   Typography,
   Grid,
-  Button,
   Card,
   CardContent,
   List,
@@ -134,37 +133,40 @@ const AdminDashboard = () => {
       {/* Sidebar */}
       <div style={sidebarStyle}>
         <List>
-          <ListItem button onClick={handleDashboard}>
+          <ListItem onClick={handleDashboard} style={{ cursor: "pointer" }}>
             <ListItemIcon>
               <DashboardIcon style={{ color: "#fff" }} />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
-          <ListItem button onClick={handleAddTeacher}>
+          <ListItem onClick={handleAddTeacher} style={{ cursor: "pointer" }}>
             <ListItemIcon>
-              <PersonAddIcon style={{ color: "#fff" }} />
+              <PersonAddIcon style={{ color: "green" }} />
             </ListItemIcon>
             <ListItemText primary="Add Teacher" />
           </ListItem>
-          <ListItem button onClick={handleUpdateTeacher}>
+          <ListItem onClick={handleUpdateTeacher} style={{ cursor: "pointer" }}>
             <ListItemIcon>
               <EditIcon style={{ color: "#fff" }} />
             </ListItemIcon>
             <ListItemText primary="Update Teacher" />
           </ListItem>
-          <ListItem button onClick={handleDeleteTeacher}>
+          <ListItem onClick={handleDeleteTeacher} style={{ cursor: "pointer" }}>
             <ListItemIcon>
-              <DeleteIcon style={{ color: "#fff" }} />
+              <DeleteIcon style={{ color: "red" }} />
             </ListItemIcon>
             <ListItemText primary="Delete Teacher" />
           </ListItem>
-          <ListItem button onClick={handleUpdateStudentStatus}>
+          <ListItem
+            onClick={handleUpdateStudentStatus}
+            style={{ cursor: "pointer" }}
+          >
             <ListItemIcon>
               <EventAvailableIcon style={{ color: "#fff" }} />
             </ListItemIcon>
             <ListItemText primary="Update Student Admission Status" />
           </ListItem>
-          <ListItem button onClick={handlePayments}>
+          <ListItem onClick={handlePayments} style={{ cursor: "pointer" }}>
             <ListItemIcon>
               <PaymentIcon style={{ color: "#fff" }} />
             </ListItemIcon>
@@ -184,7 +186,7 @@ const AdminDashboard = () => {
 
         <Grid container spacing={3}>
           {/* Main Content Goes Here */}
-          <Grid item xs={4}>
+          <Grid item xs={12}>
             {renderContent()}
           </Grid>
         </Grid>
