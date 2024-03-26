@@ -9,7 +9,7 @@ export interface Admission extends Document {
 // Define admission schema
 const admissionSchema: Schema = new Schema({
   className: { type: String, ref: "Class", required: true },
-  admissionSeatsAvail: { type: Number, required: true },
+  admissionSeatsAvail: { type: Number, required: true, default: 0 },
   admissionDate: { type: Date, default: Date.now },
 });
 
