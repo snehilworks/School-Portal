@@ -5,6 +5,7 @@ import {
   updateTeacher,
   deleteTeacher,
   updateAdmissionStatus,
+  getAllStudents,
   getAdmissionList,
 } from "./../controller/adminController";
 
@@ -16,6 +17,9 @@ router.get("/", (req, res) => {
 
 // Fetching all teachers
 router.get("/teachers", getAllTeachers);
+
+// Fetching all Student List
+router.get("/students", getAllStudents);
 
 // Adding a new teacher
 router.post("/teachers", addTeacher);

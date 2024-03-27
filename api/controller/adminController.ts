@@ -38,6 +38,17 @@ export const getAllTeachers = async (req: Request, res: Response) => {
   }
 };
 
+//get all students
+export const getAllStudents = async (req: Request, res: Response) => {
+  try {
+    const students = await Student.find();
+    res.status(201).json(students);
+  } catch (error) {
+    console.error("Error fetching teachers:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 // Updating teacher details
 export const updateTeacher = async (req: Request, res: Response) => {
   const { id } = req.params;
