@@ -17,6 +17,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import PaymentIcon from "@mui/icons-material/Payment";
 
+import DashboardContent from "../../../components/AdminDash/DashboardContent";
+import AddTeacherContent from "../../../components/AdminDash/AddTeacherContent";
+import UpdateTeacherContent from "../../../components/AdminDash/UpdateTeacherContent";
+import DeleteTeacherContent from "../../../components/AdminDash/DeleteTeacherContent";
+import UpdateStudentStatusContent from "../../../components/AdminDash/UpdateStudentStatusContent";
+import PaymentsContent from "../../../components/AdminDash/PaymentsContent";
+
 const AdminDashboard = () => {
   const [selectedContent, setSelectedContent] = useState(null);
 
@@ -71,58 +78,24 @@ const AdminDashboard = () => {
     setSelectedContent("Payments");
   };
 
+  const handleContentChange = (content) => {
+    setSelectedContent(content);
+  };
+
   const renderContent = () => {
     switch (selectedContent) {
       case "Dashboard":
-        return (
-          <Card>
-            <CardContent>
-              <Typography variant="h5">Dashboard Content</Typography>
-            </CardContent>
-          </Card>
-        );
+        return <DashboardContent />;
       case "Add Teacher":
-        return (
-          <Card>
-            <CardContent>
-              <Typography variant="h5">Add Teacher Content</Typography>
-            </CardContent>
-          </Card>
-        );
+        return <AddTeacherContent />;
       case "Update Teacher":
-        return (
-          <Card>
-            <CardContent>
-              <Typography variant="h5">Update Teacher Content</Typography>
-            </CardContent>
-          </Card>
-        );
+        return <UpdateTeacherContent />;
       case "Delete Teacher":
-        return (
-          <Card>
-            <CardContent>
-              <Typography variant="h5">Delete Teacher Content</Typography>
-            </CardContent>
-          </Card>
-        );
+        return <DeleteTeacherContent />;
       case "Update Student Admission Status":
-        return (
-          <Card>
-            <CardContent>
-              <Typography variant="h5">
-                Update Student Admission Status Content
-              </Typography>
-            </CardContent>
-          </Card>
-        );
+        return <UpdateStudentStatusContent />;
       case "Payments":
-        return (
-          <Card>
-            <CardContent>
-              <Typography variant="h5">Payments Content</Typography>
-            </CardContent>
-          </Card>
-        );
+        return <PaymentsContent />;
       default:
         return null;
     }
