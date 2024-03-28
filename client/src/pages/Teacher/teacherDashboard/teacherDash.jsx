@@ -17,6 +17,12 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import GroupIcon from "@mui/icons-material/Group";
 import "./teacherDash.css";
 
+import AttendanceManageContent from "../../../components/TeacherDash/AttendanceManage";
+import UpdateMarksContent from "../../../components/TeacherDash/UpdateMarks";
+import StudentListContent from "../../../components/TeacherDash/StudentLists";
+import ClassesContent from "../../../components/TeacherDash/Classes";
+import GradebookContent from "../../../components/TeacherDash/Gradebook";
+
 const TeacherDashboard = () => {
   const [selectedContent, setSelectedContent] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar is initially open
@@ -28,45 +34,15 @@ const TeacherDashboard = () => {
   const renderContent = () => {
     switch (selectedContent) {
       case "Manage Attendance":
-        return (
-          <Card>
-            <CardContent>
-              <Typography variant="h5">Manage Attendance Content</Typography>
-            </CardContent>
-          </Card>
-        );
+        return <AttendanceManageContent />;
       case "Update Marks":
-        return (
-          <Card>
-            <CardContent>
-              <Typography variant="h5">Update Marks Content</Typography>
-            </CardContent>
-          </Card>
-        );
+        return <UpdateMarksContent />;
       case "Student Lists":
-        return (
-          <Card>
-            <CardContent>
-              <Typography variant="h5">Student Lists Content</Typography>
-            </CardContent>
-          </Card>
-        );
+        return <StudentListContent />;
       case "Classes":
-        return (
-          <Card>
-            <CardContent>
-              <Typography variant="h5">Classes Content</Typography>
-            </CardContent>
-          </Card>
-        );
+        return <ClassesContent />;
       case "Gradebook":
-        return (
-          <Card>
-            <CardContent>
-              <Typography variant="h5">Gradebook Content</Typography>
-            </CardContent>
-          </Card>
-        );
+        return <GradebookContent />;
       default:
         return null;
     }
