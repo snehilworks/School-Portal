@@ -11,6 +11,7 @@ import Register from "./pages/Student/studentRegister/Register";
 import StPays from "./pages/Student/StPays/StPays";
 import SEvents from "./pages/Student/SEvents/SEvents";
 import SGrade from "./pages/Student/SGrade/SGrade";
+import SHostel from "./pages/Student/SHostel/SHostel";
 import SAttendance from "./pages/Student/SAttendance/SAttendance";
 import Login from "./pages/Student/studentLogin/Login";
 import StudentDash from "./pages/Student/studentDashboard/studentDashboard";
@@ -59,7 +60,7 @@ const routes = [
   { path: "/student/grades", element: <SGrade /> },
 
   { path: "/student/events", element: <SEvents /> },
-  // { path: "/student/hostel", element: <Hostel /> },
+  { path: "/student/hostel", element: <SHostel /> },
 
   // Teacher Routes
   { path: "/teacher/login", element: <TLogin /> },

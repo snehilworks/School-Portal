@@ -1,54 +1,41 @@
 import React, { useState, useEffect } from "react";
+import { Typography, Card, CardContent, Grid, Container } from "@mui/material";
+import { Event as EventIcon } from "@mui/icons-material";
 import "./SEvents.css"; // Import your CSS file
 
 function EventsPage() {
-  // Simulated events data (replace with actual data)
-  const [events, setEvents] = useState([
+  // Sample events data
+  const sampleEventsData = [
     {
       date: "15/aug/2023",
-      title: "independence day",
-      description: "independence day 15 aug",
-      time: "8:00 am",
+      title: "Independence Day",
+      description: "Celebrate Independence Day on 15th August",
+      time: "8:00 AM",
     },
     {
-      date: "15/aug/2023",
-      title: "independence day",
-      description: "independence day 15 aug",
-      time: "8:00 am",
+      date: "25/dec/2023",
+      title: "Christmas Celebration",
+      description: "Join us for Christmas celebrations",
+      time: "7:00 PM",
     },
     {
-      date: "15/aug/2023",
-      title: "independence day",
-      description: "independence day 15 aug",
-      time: "8:00 am",
+      date: "31/dec/2023",
+      title: "New Year's Eve Party",
+      description: "Welcome the New Year with us",
+      time: "9:00 PM",
     },
-    {
-      date: "15/aug/2023",
-      title: "independence day",
-      description: "independence day 15 aug",
-      time: "8:00 am",
-    },
-    {
-      date: "15/aug/2023",
-      title: "independence day",
-      description: "independence day 15 aug",
-      time: "8:00 am",
-    },
-    {
-      date: "15/aug/2023",
-      title: "independence day",
-      description: "independence day 15 aug",
-      time: "8:00 am",
-    },
-  ]);
+    // Add more events as needed
+  ];
+
+  // State for events data
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
     // Simulated API call to fetch events data (replace with actual API call)
     const fetchData = async () => {
       // Replace this with the API endpoint to fetch events data
-      const response = await fetch("/api/events-data");
-      const data = await response.json();
-      setEvents(data);
+      // For now, we're using the sample events data
+      setEvents(sampleEventsData);
     };
 
     fetchData();
@@ -56,17 +43,34 @@ function EventsPage() {
 
   return (
     <div className="events-page">
-      <h1>School Events</h1>
-      <div className="event-list">
-        {events.map((event, index) => (
-          <div className="event" key={index}>
-            <h2>{event.title}</h2>
-            <p>{event.date}</p>
-            <p>{event.time}</p>
-            <p>{event.description}</p>
-          </div>
-        ))}
-      </div>
+      <Container maxWidth="lg">
+        <Typography variant="h3" gutterBottom className="title">
+          School Events
+        </Typography>
+        <Grid container spacing={3}>
+          {events.map((event, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card elevation={3} className="event-card">
+                <CardContent>
+                  <EventIcon color="primary" fontSize="large" />
+                  <Typography variant="h5" component="h2" gutterBottom>
+                    {event.title}
+                  </Typography>
+                  <Typography variant="subtitle1" gutterBottom>
+                    Date: {event.date}
+                  </Typography>
+                  <Typography variant="subtitle1" gutterBottom>
+                    Time: {event.time}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {event.description}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
     </div>
   );
 }
