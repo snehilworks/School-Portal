@@ -1,7 +1,7 @@
 // src/components/StudentProfile.js
 import React from "react";
 import { Card, CardContent, Container, Typography } from "@mui/material";
-import "./StudentProfile.css";
+import "./studentProfile.css";
 
 function StudentProfile(props) {
   const { name, rollNo, classTeacher, classNo, section } = props;
