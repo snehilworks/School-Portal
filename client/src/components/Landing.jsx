@@ -10,7 +10,7 @@ export const Landing = () => {
       <Grid container style={{ padding: "5vw" }}>
         <Grid item xs={12} md={6} lg={6}>
           <div style={{ marginTop: 100 }}>
-            <Typography variant={"h2"}>Univ Website</Typography>
+            <Typography variant={"h2"}>Shivam Public School, Aarni</Typography>
             <Typography variant={"h5"}>Second home for your child</Typography>
             {
               <div style={{ display: "flex", marginTop: 20 }}>
@@ -21,6 +21,7 @@ export const Landing = () => {
                     onClick={() => {
                       navigate("/student/register");
                     }}
+                    sx={{ borderRadius: 20, textTransform: "none" }}
                     style={{ backgroundColor: "#4caf50" }}
                   >
                     Register
@@ -33,6 +34,7 @@ export const Landing = () => {
                     onClick={() => {
                       navigate("/student/login");
                     }}
+                    sx={{ borderRadius: 20, textTransform: "none" }}
                     style={{ backgroundColor: "#00008B" }}
                   >
                     Login
@@ -49,14 +51,15 @@ export const Landing = () => {
               onClick={() => {
                 navigate("/teacher/login");
               }}
-              style={{ backgroundColor: "#FFA500", marginTop: 50 }}
+              sx={{ borderRadius: 20, textTransform: "none" }}
+              style={{ backgroundColor: "#00bcd4", marginTop: 50 }}
             >
               Login For Teachers
             </Button>
           </div>
         </Grid>
         <Grid item xs={12} md={6} lg={6} style={{ marginTop: 20 }}>
-          <img src={"/school.jpg"} width={"100%"} />
+          <img src={"/school.jpg"} width={"100%"} style={{ borderRadius: 8 }} />
         </Grid>
       </Grid>
     </div>
