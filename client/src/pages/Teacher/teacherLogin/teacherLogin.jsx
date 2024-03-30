@@ -1,95 +1,97 @@
-import { Card, Typography } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import {
+  Grid,
+  Box,
+  Paper,
+  Avatar,
+  Typography,
+  TextField,
+  Button,
+} from "@mui/material";
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { BASE_URL } from "../../../config";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { userState } from "../../../store/atoms/user";
-import "./TeacherLogin.css"; // Import the CSS file
+import { BASE_URL } from "../../../config";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-function Register() {
+function TeacherLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
 
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(`${BASE_URL}/api/teacher/login`, {
+        email: email,
+        password: password,
+      });
+      const data = response.data;
+      if (response.status === 201) {
+        localStorage.setItem("token", data.token);
+        setUser({ userEmail: email, isLoading: false });
+        navigate("/teacher/dashboard");
+      } else {
+        console.error("Login failed:", data.message);
+        // Handle login failure, such as displaying an error message to the user
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      // Handle login failure, such as displaying an error message to the user
+    }
+  };
+
   return (
-    <div>
-      <div className="title-text">
-        <Typography variant="h4" style={{ fontWeight: "bold" }}>
-          Teacher Login
-        </Typography>
-      </div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <Card className="card" variant="outlined">
-          <TextField
-            fullWidth
-            label="Teacher's Email"
-            variant="outlined"
-            onChange={(event) => {
-              setEmail(event.target.value);
-            }}
-          />
-          <br />
-          <br />
-          <TextField
-            fullWidth
-            label="Teacher's Password"
-            variant="outlined"
-            type="password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-          <br />
-          <br />
-          <Button
-            className="login-button"
-            size="large"
-            variant="contained"
-            onClick={async () => {
-              const response = await axios.post(`${BASE_URL}/admin/signup`, {
-                username: email,
-                password: password,
-              });
-              let data = response.data;
-              localStorage.setItem("token", data.token);
-              setUser({ userEmail: email, isLoading: false });
-              navigate("/dashboard");
-            }}
-            style={{
-              backgroundColor: "#ff5722",
+    <Grid container justifyContent="center" alignItems="center" height="100vh">
+      <Grid item xs={12} sm={8} md={6} lg={4}>
+        <Paper elevation={3} sx={{ padding: 4, borderRadius: 4, mx: 2 }}>
+          <Box display="flex" flexDirection="column" alignItems="center" mb={4}>
+            <Avatar sx={{ bgcolor: "rgb(31 41 55)", mb: 2 }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography variant="h5" component="h1" mt={2}>
+              Teacher Login
+            </Typography>
+          </Box>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleLogin();
             }}
           >
-            Login
-          </Button>
-        </Card>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          textAlign: "center",
-        }}
-      >
-        <Card className="card">
-          <b>New Here ?</b>
-          <Button
-            className="register-button"
-            variant="contained"
-            size="small"
-            onClick={() => {
-              navigate("/teacher/register");
-            }}
-            style={{ backgroundColor: "#106013", margin: 10 }}
-          >
-            Register
-          </Button>
-        </Card>
-      </div>
-    </div>
+            <TextField
+              fullWidth
+              label="Teacher's Email"
+              variant="outlined"
+              margin="normal"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Teacher's Password"
+              variant="outlined"
+              type="password"
+              margin="normal"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <Button
+              fullWidth
+              type="submit"
+              variant="contained"
+              size="large"
+              sx={{ mt: 2 }}
+              style={{ backgroundColor: "#00bcd4", color: "#fff" }}
+            >
+              Login
+            </Button>
+          </form>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 }
 
-export default Register;
+export default TeacherLogin;
