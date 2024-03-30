@@ -8,7 +8,7 @@ function Appbar({}) {
   return (
     <div className="appbar-container">
       <div className="appbar-logo" onClick={() => navigate("/")}>
-        <Typography variant="h5">Univ Website</Typography>
+        <Typography variant="h5">Shivam Public </Typography>
       </div>
       <div className="appbar-buttons">
         <Button variant="inherit" onClick={() => navigate("/")}>
@@ -30,14 +30,17 @@ function Appbar({}) {
       <div className="appbar-actions">
         <Button
           variant="contained"
+          color="primary" // Set the color to primary for the Register button
           onClick={() => navigate("/student/register")}
+          sx={{ borderRadius: 20, textTransform: "none" }} // Add styling for modern look
         >
           Register
         </Button>
         <Button
           variant="contained"
+          color="secondary" // Set the color to secondary for the Login button
           onClick={() => navigate("/student/login")}
-          style={{ backgroundColor: "#00008B" }}
+          sx={{ borderRadius: 20, textTransform: "none", bgcolor: "#00008B" }} // Add styling for modern look
         >
           Login
         </Button>
