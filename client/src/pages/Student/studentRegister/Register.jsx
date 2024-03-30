@@ -1,11 +1,19 @@
-import { Card, Typography } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import {
+  Card,
+  Typography,
+  Grid,
+  TextField,
+  Button,
+  Link,
+  Box,
+} from "@mui/material";
 import { useState } from "react";
-import { useSetRecoilState } from "recoil";
-import { BASE_URL } from "../../../config";
+import axios from "axios"; // Import axios
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import { userState } from "../../../store/atoms/user";
+import { BASE_URL } from "../../../config";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -13,78 +21,78 @@ function Register() {
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
 
+  const handleRegister = async () => {
+    try {
+      const response = await axios.post(`${BASE_URL}/admin/signup`, {
+        username: email,
+        password: password,
+      });
+      const data = response.data;
+      if (response.status === 201) {
+        localStorage.setItem("token", data.token);
+        setUser({ userEmail: email, isLoading: false });
+        navigate("/dashboard");
+      } else {
+        console.error("Registration failed:", data.message);
+        // Handle registration failure, such as displaying an error message to the user
+      }
+    } catch (error) {
+      console.error("Registration failed:", error);
+      // Handle registration failure, such as displaying an error message to the user
+    }
+  };
+
   return (
-    <div>
-      <div
-        style={{
-          paddingTop: 150,
-          marginBottom: 10,
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <Typography variant={"h4"} style={{ fontWeight: "bold" }}>
-          New Here... Create an Account!
-        </Typography>
-      </div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <Card varint={"outlined"} style={{ width: 400, padding: 20 }}>
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+    >
+      <Grid item xs={12} sm={8} md={6} lg={4}>
+        <Card variant="outlined" sx={{ p: 3, mx: { xs: 2 }, borderRadius: 4 }}>
+          <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+            <LockOutlinedIcon sx={{ fontSize: 48 }} />
+          </Box>
+          <Typography variant="h5" align="center" gutterBottom>
+            Create an Account
+          </Typography>
           <TextField
-            fullWidth={true}
+            fullWidth
             label="Email"
             variant="outlined"
-            onChange={(event) => {
-              setEmail(event.target.value);
-            }}
+            margin="normal"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
           />
-          <br />
-          <br />
           <TextField
-            fullWidth={true}
+            fullWidth
             label="Password"
             variant="outlined"
-            type={"password"}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
+            type="password"
+            margin="normal"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
           />
-          <br />
-          <br />
           <Button
-            size={"large"}
+            fullWidth
             variant="contained"
-            onClick={async () => {
-              const response = await axios.post(`${BASE_URL}/admin/signup`, {
-                username: email,
-                password: password,
-              });
-              let data = response.data;
-              localStorage.setItem("token", data.token);
-              setUser({ userEmail: email, isLoading: false });
-              navigate("/dashboard");
-            }}
+            size="large"
+            color="primary"
+            sx={{ mt: 2 }}
+            onClick={handleRegister}
           >
-            {" "}
             Register
           </Button>
+          <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+            Already have an account?{" "}
+            <Link href="/student/login" underline="hover">
+              Login
+            </Link>
+          </Typography>
         </Card>
-      </div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <Card style={{ width: 400, padding: 10, marginTop: 30 }}>
-          <b>Already Have An account ? </b>
-          <Button
-            variant="contained"
-            size="small"
-            style={{ backgroundColor: "#00008B", margin: 10 }}
-            onClick={() => {
-              navigate("/student/login");
-            }}
-          >
-            Login
-          </Button>
-        </Card>
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 }
 
