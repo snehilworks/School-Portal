@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Typography, Button, Avatar, Box } from "@mui/material";
-import StudentList from "./StudentList";
+// import StudentList from "./studentList";
 import "./TeacherProfile.css"; // Import the CSS file
 
 const TeacherProfile = () => {
