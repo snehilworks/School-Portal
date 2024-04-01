@@ -1,4 +1,3 @@
-// AdmissionsPage.jsx
 import React from "react";
 import {
   Container,
@@ -16,6 +15,9 @@ import "./Admissions.css"; // Import the CSS file
 const AdmissionsPage = () => {
   // Dummy data for seat availability
   const seatAvailability = [
+    { class: "Nursery", seatsAvailable: 0 },
+    { class: "LKG", seatsAvailable: 12 },
+    { class: "UKG", seatsAvailable: 2 },
     { class: "1", seatsAvailable: 20 },
     { class: "2", seatsAvailable: 15 },
     { class: "3", seatsAvailable: 18 },
@@ -26,6 +28,10 @@ const AdmissionsPage = () => {
     { class: "8", seatsAvailable: 16 },
     { class: "9", seatsAvailable: 14 },
     { class: "10", seatsAvailable: 10 },
+    { class: "11-Science", seatsAvailable: 12 },
+    { class: "11-Arts", seatsAvailable: 10 },
+    { class: "12-Science", seatsAvailable: 12 },
+    { class: "12-Arts", seatsAvailable: 10 },
   ];
 
   return (
@@ -39,6 +45,7 @@ const AdmissionsPage = () => {
             <TableRow>
               <TableCell className="table-header">Class</TableCell>
               <TableCell className="table-header">Seats Available</TableCell>
+              <TableCell className="table-header">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -46,6 +53,18 @@ const AdmissionsPage = () => {
               <TableRow key={row.class}>
                 <TableCell>{`Class ${row.class}`}</TableCell>
                 <TableCell>{row.seatsAvailable}</TableCell>
+                <TableCell>
+                  <button
+                    className={
+                      row.seatsAvailable > 0
+                        ? "admissions-button"
+                        : "admissions-button-disabled"
+                    }
+                    disabled={row.seatsAvailable === 0}
+                  >
+                    {row.seatsAvailable > 0 ? "Take Admission" : "Full"}
+                  </button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

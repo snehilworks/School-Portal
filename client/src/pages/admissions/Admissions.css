@@ -41,3 +41,31 @@
 .admissions-table tbody td {
   padding: 8px;
 }
+
+/* Admissions.css */
+.admissions-button {
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  outline: none; /* Remove outline on focus */
+}
+
+.admissions-button:hover {
+  background-color: #10cb19;
+  color: gray;
+}
+
+.admissions-button-disabled {
+  background-color: #ccc;
+  color: #000;
+  font-weight: bold;
+  cursor: not-allowed; /* Change cursor for disabled button */
+}
