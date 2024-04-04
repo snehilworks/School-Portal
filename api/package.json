@@ -17,6 +17,7 @@
     "express": "^4.18.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.2",
+    "razorpay": "^2.9.2",
     "typescript": "^5.4.2",
     "zod": "^3.22.4"
   },

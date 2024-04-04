@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import Razorpay from "razorpay";
 import cookieParser from "cookie-parser";
 import teacherRouter from "./routes/teacherRoutes";
 import StudentRouter from "./routes/StudentRoutes";
@@ -21,6 +22,23 @@ app.use(
     origin: "http://localhost:5173",
   })
 );
+
+//example implementation will integrate better
+
+let razor = new Razorpay({
+  key_id: "KEY_ID",
+  key_secret: "KEY_SECRET"
+});
+
+let options = {
+  amount: 5000, 
+  currency: "USD",
+  receipt: "order_reciept_1"
+};
+razor.orders.create(options, function(err, order) {
+  console.log(order);
+} )
+//--------------------------------------------------------
 
 app.get("/", (req, res) => {
   res.send("Welcome To Shivam_Public_School");
