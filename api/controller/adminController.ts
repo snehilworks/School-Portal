@@ -49,6 +49,39 @@ export const getAllStudents = async (req: Request, res: Response) => {
   }
 };
 
+export const getSpecificTeacher = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const teacherDetail = await Teacher.findById(id);
+    if (!teacherDetail) {
+      return res.status(404).json({ message: "Teacher not found" });
+    }
+    res.json({
+      data: teacherDetail,
+    });
+  } catch (error) {
+    console.error("Error getting teacher:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getSpecificStudent = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const StudentDetail = await Student.findById(id);
+    if (!StudentDetail) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+    res.json({
+      data: StudentDetail,
+    });
+  } catch (error) {
+    console.error("Error getting Student:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
 // Updating teacher details
 export const updateTeacher = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -133,3 +166,11 @@ export const getAdmissionList = async (req: Request, res: Response) => {
 };
 
 export const addAdmissionSeats = async (req: Request, res: Response) => {};
+
+export const getFees = async (req: Request, res: Response) => {};
+
+export const updateAdmissionSeats = async (req: Request, res: Response) => {};
+
+export const setClassTeacher = async (req: Request, res: Response) => {
+  
+};
