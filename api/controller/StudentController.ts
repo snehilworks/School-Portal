@@ -50,7 +50,7 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    //validate the request
+    // Validate the request
     const { email, password } = loginSchema.parse(req.body);
 
     if (!email || !password) {
@@ -79,9 +79,7 @@ export const login = async (req: Request, res: Response) => {
 
     res.cookie("sps", token);
 
-    res
-      .status(201)
-      .json({ message: "Login successful.", student: student._id });
+    res.redirect('http://localhost:5173/student/dashboard');
   } catch (error) {
     console.error("Error during login:", error);
     res.status(512).json({ message: "Internal server error" });
