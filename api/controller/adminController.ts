@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import Teacher from "../models/teacherModel";
 import Student from "../models/studentModel";
+import Class from "../models/classModel";
 import Admission, {
   Admission as AdmissionType,
 } from "../models/admissionModel";
@@ -165,12 +166,69 @@ export const getAdmissionList = async (req: Request, res: Response) => {
   }
 };
 
-export const addAdmissionSeats = async (req: Request, res: Response) => {};
+//add in class Model
+// export const addAdmissionSeats = async (req: Request, res: Response) => {
+
+// };
 
 export const getFees = async (req: Request, res: Response) => {};
 
-export const updateAdmissionSeats = async (req: Request, res: Response) => {};
+export const getAllClasses = async (req: Request, res: Response) => {
+  try {
+    const classes = await Class.find();
+    res.status(201).json(classes);
+  } catch (error) {
+    console.error("Error fetching teachers:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
+//update in class model
+export const updateAdmissionSeats = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { seatsAvailable } = req.body;
+
+  try {
+    // Find the class document by ID
+    const foundClass = await Class.findById(id);
+
+    if (!foundClass) {
+      return res.status(404).json({ message: "Class not found" });
+    }
+    // Update the seats available
+    foundClass.seatsAvailable = seatsAvailable;
+
+    // Save the updated class document
+    await foundClass.save();
+
+    res.status(200).json({ message: "Seats available updated successfully" });
+  } catch (error) {
+    console.error("Error updating seats available:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};  
+
+//update in class Model
 export const setClassTeacher = async (req: Request, res: Response) => {
-  
+  const { id } = req.params; // Get the class ID from request parameters
+  const { teacherId } = req.body;
+
+  try {
+    // Find the class document by ID
+    const foundClass = await Class.findById(id);
+
+    if (!foundClass) {
+      return res.status(404).json({ message: "Class not found" });
+    }
+
+    // Set the class teacher to the provided teacher ID
+    foundClass.classTeacher = teacherId;
+
+    await foundClass.save();
+
+    res.status(200).json({ message: "Class teacher updated successfully" });
+  } catch (error) {
+    console.error("Error setting class teacher:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };

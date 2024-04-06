@@ -11,7 +11,8 @@ import {
   updateAdmissionSeats,
   getSpecificTeacher,
   getSpecificStudent,
-  setClassTeacher
+  setClassTeacher,
+  getAllClasses
 } from "./../controller/adminController";
 
 const router = express.Router();
@@ -20,36 +21,25 @@ router.get("/", (req, res) => {
   res.send("Admin Related Routes Here!");
 });
 
-// Fetching all teachers
+// Teachers Routes
 router.get("/teachers", getAllTeachers);
-
-// Fetching all Student List
-router.get("/students", getAllStudents);
-
-// Adding a new teacher
 router.post("/teachers", addTeacher);
+router.get("/teachers/:id", getSpecificTeacher);
+router.put("/teachers/:id", updateTeacher);
+router.delete("/teachers/:id", deleteTeacher);
 
-router.get('/teacher/:id', getSpecificTeacher)
+// Students Routes
+router.get("/students", getAllStudents);
+router.get("/students/:id", getSpecificStudent);
+router.put("/students/:id", updateAdmissionStatus);
 
-// Updating teacher details
-router.put("/teacher/:id", updateTeacher);
-
-// Deleting a teacher
-router.delete("/teacher/:id", deleteTeacher);
-
-router.get('/student/:id', getSpecificStudent);
-
-//student Updation : Admin
-router.put("/student/:id", updateAdmissionStatus);
-
-//see all the fees related things
+// Fees Routes
 router.get("/fees", getFees);
 
-//post about the admission Seats availability and update from admin
-router.put("/admission-seat", updateAdmissionSeats);
-
-//put route for classteacher
-router.put('/set-class-teacher', setClassTeacher);
+// Class Routes
+router.get('/classes', getAllClasses);
+router.put("/admission-seat/:id", updateAdmissionSeats);
+router.put("/set-class-teacher/:id", setClassTeacher);
 
 //Admission list get with the className
 // router.get("/admissions/list", getAdmissionList);
