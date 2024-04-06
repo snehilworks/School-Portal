@@ -1,3 +1,5 @@
 # School Portal
 
-![univ](https://github.com/snehil-githubrepository/School-Portal/assets/69778988/cb03c09d-37f2-4d0a-a22e-c1f84c517192)
+## With New Refreshing Look...
+
+![schl-img](https://github.com/snehil-githubrepository/School-Portal/assets/69778988/4945a49c-5370-49ba-8360-ed6144076473)
