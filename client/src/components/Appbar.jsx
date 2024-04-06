@@ -8,7 +8,7 @@ function Appbar({}) {
   return (
     <div className="appbar-container">
       <div className="appbar-logo" onClick={() => navigate("/")}>
-        <Typography variant="h5">Shivam Public </Typography>
+        <Typography variant="h5">Shivam Public</Typography>
       </div>
       <div className="appbar-buttons">
         <Button variant="inherit" onClick={() => navigate("/")}>
