@@ -25,19 +25,19 @@ app.use(
 
 //example implementation will integrate better
 
-let razor = new Razorpay({
-  key_id: "KEY_ID",
-  key_secret: "KEY_SECRET"
-});
+// let razor = new Razorpay({
+//   key_id: "KEY_ID",
+//   key_secret: "KEY_SECRET"
+// });
 
-let options = {
-  amount: 5000, 
-  currency: "USD",
-  receipt: "order_reciept_1"
-};
-razor.orders.create(options, function(err, order) {
-  console.log(order);
-} )
+// let options = {
+//   amount: 5000, 
+//   currency: "INR",
+//   receipt: "order_reciept_1"
+// };
+// razor.orders.create(options, function(err, order) {
+//   console.log(order);
+// } )
 //--------------------------------------------------------
 
 app.get("/", (req, res) => {
