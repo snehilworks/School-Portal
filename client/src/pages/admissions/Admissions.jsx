@@ -15,7 +15,7 @@ import "./Admissions.css"; // Import the CSS file
 const AdmissionsPage = () => {
   // Dummy data for seat availability
   const seatAvailability = [
-    { class: "Nursery", seatsAvailable: 0 },
+    { class: "Nursery", seatsAvailable: 1 },
     { class: "LKG", seatsAvailable: 12 },
     { class: "UKG", seatsAvailable: 2 },
     { class: "1", seatsAvailable: 20 },
