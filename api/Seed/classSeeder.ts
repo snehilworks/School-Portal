@@ -32,31 +32,27 @@ const classData: Partial<Class>[] = [
   { className: "12-Arts", classTeacher: null, seatsAvailable: null },
 ];
 
-// Function to seed classes data
 async function seedClassesData() {
   try {
-    // Connect to MongoDB
-    await mongoose.connect("mongodb://127.0.0.1:27017/Shivam-Public", {
-      dbName: "Shivam-Public"
-    });
+      await mongoose.connect("mongodb://127.0.0.1:27017/Shivam-Public", {
+        dbName: "Shivam-Public"
+      });
 
-    console.log("MongoDB connected successfully");
+      console.log("MongoDB connected successfully");
 
-    // Clear existing data from the classes collection
-    await ClassModel.deleteMany({});
+      // Clear existing data from the classes collection
+      await ClassModel.deleteMany({});
 
-    // Insert seed data into the classes collection
-    await ClassModel.insertMany(classData);
+      // Insert seed data into the classes collection
+      await ClassModel.insertMany(classData);
 
-    console.log("Class seed data inserted successfully.");
+      console.log("Class seed data inserted successfully.");
 
-    // Disconnect from MongoDB
-    await mongoose.disconnect();
-    console.log("MongoDB disconnected successfully");
+      await mongoose.disconnect();
+      console.log("MongoDB disconnected successfully");
   } catch (error) {
-    console.error("Error seeding classes data:", error);
+      console.error("Error seeding classes data:", error);
   }
 }
 
-// Call the seed function
 seedClassesData();
