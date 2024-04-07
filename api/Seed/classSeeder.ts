@@ -1,36 +1,35 @@
 import mongoose from "mongoose";
 import ClassModel, { Class } from "../models/classModel";
 
-// Define an array of class data
 const classData: Partial<Class>[] = [
-  { className: "Nursery English", classTeacher: null, seatsAvailable: null },
+  { className: "Nursery-Eng", classTeacher: null, seatsAvailable: null },
   { className: "Nursery Hindi", classTeacher: null, seatsAvailable: null },
-  { className: "LKG English", classTeacher: null, seatsAvailable: null },
+  { className: "LKG Eng", classTeacher: null, seatsAvailable: null },
   { className: "LKG Hindi", classTeacher: null, seatsAvailable: null },
-  { className: "UKG English", classTeacher: null, seatsAvailable: null },
+  { className: "UKG Eng", classTeacher: null, seatsAvailable: null },
   { className: "UKG Hindi", classTeacher: null, seatsAvailable: null },
-  { className: "I English", classTeacher: null, seatsAvailable: null },
-  { className: "I Hindi", classTeacher: null, seatsAvailable: null },
-  { className: "II English", classTeacher: null, seatsAvailable: null },
-  { className: "II Hindi", classTeacher: null, seatsAvailable: null },
-  { className: "III English", classTeacher: null, seatsAvailable: null },
-  { className: "III Hindi", classTeacher: null, seatsAvailable: null },
-  { className: "IV English", classTeacher: null, seatsAvailable: null },
-  { className: "IV Hindi", classTeacher: null, seatsAvailable: null },
-  { className: "V English", classTeacher: null, seatsAvailable: null },
-  { className: "V Hindi", classTeacher: null, seatsAvailable: null },
-  { className: "VI English", classTeacher: null, seatsAvailable: null },
-  { className: "VI Hindi", classTeacher: null, seatsAvailable: null },
-  { className: "VII English", classTeacher: null, seatsAvailable: null },
-  { className: "VII Hindi", classTeacher: null, seatsAvailable: null },
-  { className: "VIII English", classTeacher: null, seatsAvailable: null },
-  { className: "VIII Hindi", classTeacher: null, seatsAvailable: null },
-  { className: "IX", classTeacher: null, seatsAvailable: null },
-  { className: "X", classTeacher: null, seatsAvailable: null },
-  { className: "XI Science", classTeacher: null, seatsAvailable: null },
-  { className: "XI Arts", classTeacher: null, seatsAvailable: null },
-  { className: "XII Science", classTeacher: null, seatsAvailable: null },
-  { className: "XII Arts", classTeacher: null, seatsAvailable: null },
+  { className: "1st-Eng", classTeacher: null, seatsAvailable: null },
+  { className: "1st-Hindi", classTeacher: null, seatsAvailable: null },
+  { className: "2nd-Eng", classTeacher: null, seatsAvailable: null },
+  { className: "2nd-Hindi", classTeacher: null, seatsAvailable: null },
+  { className: "3rd-Eng", classTeacher: null, seatsAvailable: null },
+  { className: "3rd-Hindi", classTeacher: null, seatsAvailable: null },
+  { className: "4th-Eng", classTeacher: null, seatsAvailable: null },
+  { className: "4th-Hindi", classTeacher: null, seatsAvailable: null },
+  { className: "5th-Eng", classTeacher: null, seatsAvailable: null },
+  { className: "5th-Hindi", classTeacher: null, seatsAvailable: null },
+  { className: "6th-Eng", classTeacher: null, seatsAvailable: null },
+  { className: "6th-Hindi", classTeacher: null, seatsAvailable: null },
+  { className: "7th-Eng", classTeacher: null, seatsAvailable: null },
+  { className: "7th-Hindi", classTeacher: null, seatsAvailable: null },
+  { className: "8th-English", classTeacher: null, seatsAvailable: null },
+  { className: "8th-Hindi", classTeacher: null, seatsAvailable: null },
+  { className: "9th", classTeacher: null, seatsAvailable: null },
+  { className: "10th", classTeacher: null, seatsAvailable: null },
+  { className: "11-Science", classTeacher: null, seatsAvailable: null },
+  { className: "11-Arts", classTeacher: null, seatsAvailable: null },
+  { className: "12-Science", classTeacher: null, seatsAvailable: null },
+  { className: "12-Arts", classTeacher: null, seatsAvailable: null },
 ];
 
 // Function to seed classes data
@@ -58,7 +57,6 @@ async function seedClassesData() {
     console.error("Error seeding classes data:", error);
   }
 }
-
 
 // Call the seed function
 seedClassesData();
