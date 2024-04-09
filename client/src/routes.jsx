@@ -11,6 +11,7 @@ import Register from "./pages/Student/studentRegister/Register";
 import StPays from "./pages/Student/StPays/StPays";
 import SEvents from "./pages/Student/SEvents/SEvents";
 import SGrade from "./pages/Student/SGrade/SGrade";
+import SHostel from "./pages/Student/SHostel/SHostel";
 import SAttendance from "./pages/Student/SAttendance/SAttendance";
 import Login from "./pages/Student/studentLogin/Login";
 import StudentDash from "./pages/Student/studentDashboard/studentDashboard";
@@ -20,6 +21,7 @@ import TLogin from "./pages/Teacher/teacherLogin/teacherLogin";
 import TRegister from "./pages/Teacher/teacherRegister/teacherRegister";
 import TProfile from "./pages/Teacher/teacherProfile/teacherProfile";
 import TeacherDash from "./pages/Teacher/teacherDashboard/teacherDash";
+import AdminDash from "./pages/Admin/AdminDashboard/adminDash";
 
 // import TAttendanceList from "./pages/Teacher/TAttendanceList/TAttendanceList";
 // import TeacherDash from "./pages/Teacher/";
@@ -33,6 +35,9 @@ const routes = [
   { path: "/academics", element: <Academics /> },
   { path: "/about", element: <About /> },
   { path: "/contact", element: <Contact /> },
+
+  //Admin Routes
+  { path: "/admin/dashboard", element: <AdminDash /> },
 
   // Student Routes
   { path: "/student/login", element: <Login /> },
@@ -55,7 +60,7 @@ const routes = [
   { path: "/student/grades", element: <SGrade /> },
 
   { path: "/student/events", element: <SEvents /> },
-  // { path: "/student/hostel", element: <Hostel /> },
+  { path: "/student/hostel", element: <SHostel /> },
 
   // Teacher Routes
   { path: "/teacher/login", element: <TLogin /> },

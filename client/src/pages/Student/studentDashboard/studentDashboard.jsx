@@ -1,33 +1,36 @@
 import React from "react";
 import { Container, Typography, Paper, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import { Grade, Event, Home, Payment, Today } from "@mui/icons-material";
 import "./studentDashboard.css"; // Import the CSS file
 
 function StudentDash() {
   const pageStyles = {
-    backgroundColor: "#00FFFF", // Set the background color here
-    minHeight: "100vh", // Ensure the page covers the full viewport height
+    backgroundColor: "#f3f4f6",
+    minHeight: "100vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    padding: "20px",
   };
 
   return (
     <div style={pageStyles}>
       <Container maxWidth="lg" className="student-dashboard">
-        {/* <Typography
+        <Typography
           variant="h3"
           align="center"
           gutterBottom
-          style={{ margin: 10, fontFamily: "algerian" }}
+          className="dashboard-heading"
         >
-          Welcome to Your Student Dashboard
-        </Typography> */}
+          Student Dashboard
+        </Typography>
 
         <Box display="flex" flexDirection="column" alignItems="center">
           <div className="dashboard-container">
-            <Paper elevation={3} className="dashboard-section">
-              <Typography variant="h6" gutterBottom className="section-heading">
+            <Paper elevation={3} className="dashboard-section gradient1">
+              <Grade fontSize="large" />
+              <Typography variant="h6" className="section-heading">
                 Grades
               </Typography>
               <Link to="/student/grades">
@@ -41,8 +44,9 @@ function StudentDash() {
               </Link>
             </Paper>
 
-            <Paper elevation={3} className="dashboard-section">
-              <Typography variant="h6" gutterBottom className="section-heading">
+            <Paper elevation={3} className="dashboard-section gradient2">
+              <Today fontSize="large" />
+              <Typography variant="h6" className="section-heading">
                 Attendance
               </Typography>
               <Link to="/student/attendance">
@@ -56,8 +60,9 @@ function StudentDash() {
               </Link>
             </Paper>
 
-            <Paper elevation={3} className="dashboard-section">
-              <Typography variant="h6" gutterBottom className="section-heading">
+            <Paper elevation={3} className="dashboard-section gradient1">
+              <Event fontSize="large" />
+              <Typography variant="h6" className="section-heading">
                 Events
               </Typography>
               <Link to="/student/events">
@@ -73,8 +78,9 @@ function StudentDash() {
           </div>
 
           <div className="dashboard-container">
-            <Paper elevation={3} className="dashboard-section">
-              <Typography variant="h6" gutterBottom className="section-heading">
+            <Paper elevation={3} className="dashboard-section gradient2">
+              <Home fontSize="large" />
+              <Typography variant="h6" className="section-heading">
                 Hostel Details
               </Typography>
               <Link to="/student/hostel">
@@ -88,8 +94,9 @@ function StudentDash() {
               </Link>
             </Paper>
 
-            <Paper elevation={3} className="dashboard-section">
-              <Typography variant="h6" gutterBottom className="section-heading">
+            <Paper elevation={3} className="dashboard-section gradient1">
+              <Payment fontSize="large" />
+              <Typography variant="h6" className="section-heading">
                 Payment Gateway
               </Typography>
               <Link to="/student/payment">

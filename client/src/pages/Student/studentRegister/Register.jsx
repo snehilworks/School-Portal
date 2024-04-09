@@ -23,7 +23,7 @@ function Register() {
 
   const handleRegister = async () => {
     try {
-      const response = await axios.post(`${BASE_URL}/admin/signup`, {
+      const response = await axios.post(`${BASE_URL}/api/student/register`, {
         username: email,
         password: password,
       });
