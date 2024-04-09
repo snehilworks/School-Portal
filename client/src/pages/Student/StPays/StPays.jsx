@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Button, TextField, Container, Typography } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Container,
+  Typography,
+  Box,
+  Grid,
+} from "@mui/material";
+import { Payment } from "@mui/icons-material";
 import "./StPays.css";
 
 function PaymentsPage() {
@@ -8,75 +16,74 @@ function PaymentsPage() {
   const [email, setEmail] = useState("");
 
   const handlePayment = async () => {
-    // You'll need to make a server request to generate a Razorpay payment
-    // Replace 'your_backend_endpoint' with the actual endpoint.
-    const response = await fetch("/your_backend_endpoint", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ amount, name, email }),
-    });
-
-    const { razorpay_order_id } = await response.json();
-
-    // Initialize Razorpay and open the payment modal
-    const razorpay = new Razorpay({
-      key_id: "YOUR_RAZORPAY_KEY_ID",
-      amount,
-      order_id: razorpay_order_id,
-      name,
-      description: "School Fee Payment",
-      image: "/your_school_logo.png", // URL to your school's logo
-      handler: function (response) {
-        // Handle the success and failure of the payment here
-        alert(`Payment ${response.razorpay_payment_id} successful!`);
-      },
-      prefill: {
-        name,
-        email,
-      },
-    });
-    razorpay.open();
+    // Simulated payment process
+    alert(`Processing payment for ${name}...`);
   };
 
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h4" component="h2" gutterBottom>
-        School Fee Payment
-      </Typography>
-      <TextField
-        label="Student Name"
-        fullWidth
-        variant="outlined"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        margin="normal"
-      />
-      <TextField
-        label="Student Email"
-        fullWidth
-        variant="outlined"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        margin="normal"
-      />
-      <TextField
-        label="Amount (INR)"
-        fullWidth
-        variant="outlined"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-        margin="normal"
-      />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handlePayment}
-        disabled={!amount || !name || !email}
+    <Container maxWidth="md">
+      <Box
+        sx={{
+          backgroundColor: "#f8f9fa",
+          borderRadius: 8,
+          padding: 3,
+          boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+          mt: 4, // Better margin top
+        }}
       >
-        Pay Now
-      </Button>
+        <Grid
+          container
+          spacing={3}
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+        >
+          <Grid item xs={12}>
+            <Payment fontSize="large" color="primary" />
+            <Typography variant="h4" component="h2" gutterBottom>
+              School Fee Payment
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Student Name"
+              fullWidth
+              variant="outlined"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Student Email"
+              fullWidth
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Amount (INR)"
+              fullWidth
+              variant="outlined"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handlePayment}
+              disabled={!amount || !name || !email}
+              fullWidth
+            >
+              Pay Now
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
     </Container>
   );
 }
