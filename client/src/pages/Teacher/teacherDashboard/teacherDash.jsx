@@ -19,13 +19,13 @@ import "./teacherDash.css";
 
 import AttendanceManageContent from "../../../components/TeacherDash/AttendanceManage";
 import UpdateMarksContent from "../../../components/TeacherDash/UpdateMarks";
-import StudentListContent from "../../../components/TeacherDash/StudentLists";
+import StudentListContent from "../../../components/TeacherDash/StudentList";
 import ClassesContent from "../../../components/TeacherDash/Classes";
 import GradebookContent from "../../../components/TeacherDash/Gradebook";
 
 const TeacherDashboard = () => {
   const [selectedContent, setSelectedContent] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar is initially open
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const handleItemClick = (content) => {
     setSelectedContent(content);
@@ -56,51 +56,31 @@ const TeacherDashboard = () => {
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
         <List>
-          <ListItem
-            button
-            selected={selectedContent === "Manage Attendance"}
-            onClick={() => handleItemClick("Manage Attendance")}
-          >
+          <ListItem onClick={() => handleItemClick("Manage Attendance")}>
             <ListItemIcon>
               <PlaylistAddCheckIcon />
             </ListItemIcon>
             <ListItemText primary="Manage Attendance" />
           </ListItem>
-          <ListItem
-            button
-            selected={selectedContent === "Update Marks"}
-            onClick={() => handleItemClick("Update Marks")}
-          >
+          <ListItem onClick={() => handleItemClick("Update Marks")}>
             <ListItemIcon>
               <EventAvailableIcon />
             </ListItemIcon>
             <ListItemText primary="Update Marks" />
           </ListItem>
-          <ListItem
-            button
-            selected={selectedContent === "Student Lists"}
-            onClick={() => handleItemClick("Student Lists")}
-          >
+          <ListItem onClick={() => handleItemClick("Student Lists")}>
             <ListItemIcon>
               <GroupIcon />
             </ListItemIcon>
             <ListItemText primary="Student Lists" />
           </ListItem>
-          <ListItem
-            button
-            selected={selectedContent === "Classes"}
-            onClick={() => handleItemClick("Classes")}
-          >
+          <ListItem onClick={() => handleItemClick("Classes")}>
             <ListItemIcon>
               <MenuBookIcon />
             </ListItemIcon>
             <ListItemText primary="Classes" />
           </ListItem>
-          <ListItem
-            button
-            selected={selectedContent === "Gradebook"}
-            onClick={() => handleItemClick("Gradebook")}
-          >
+          <ListItem onClick={() => handleItemClick("Gradebook")}>
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
