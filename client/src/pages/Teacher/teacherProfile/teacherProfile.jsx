@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Typography, Button, Avatar, Box } from "@mui/material";
-import StudentList from "./StudentList";
-import "./TeacherProfile.css"; // Import the CSS file
+// import StudentList from "./studentList";
+import "./teacherProfile.css"; // Import the CSS file
 
 const TeacherProfile = () => {
   const [isClassTeacher, setIsClassTeacher] = useState(true);
