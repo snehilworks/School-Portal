@@ -3,7 +3,7 @@ import React from "react";
 import Admissions from "./pages/admissions/Admissions";
 // import Hostel from "./pages/Hostel/Hostel";
 import Academics from "./pages/academics/Academics";
-import About from "./pages/about/About";
+import About from "./pages/About/About.jsx";
 import Contact from "./pages/contact/Contact";
 import { Landing } from "./components/Landing.jsx";
 //student imports
