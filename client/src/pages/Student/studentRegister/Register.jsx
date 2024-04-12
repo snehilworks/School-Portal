@@ -86,9 +86,14 @@ function Register() {
           </Button>
           <Typography variant="body2" align="center" sx={{ mt: 2 }}>
             Already have an account?{" "}
-            <Link href="/student/login" underline="hover">
+            <Button
+              variant="text"
+              size="small"
+              style={{ color: "#00008B" }}
+              onClick={() => navigate("/student/login")}
+            >
               Login
-            </Link>
+            </Button>
           </Typography>
         </Card>
       </Grid>
