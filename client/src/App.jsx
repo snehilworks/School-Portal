@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import Appbar from "./components/Appbar";
-import Layout from "./layout";
+import Layout from "./Layout";
 import routes from "./routes";
 
 function App() {
