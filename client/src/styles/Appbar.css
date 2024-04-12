@@ -1,7 +1,12 @@
 /* Container styles */
 .appbar-container {
   display: flex;
-  flex-wrap: wrap; /* Allow items to wrap to the next line on small screens */
+  position:fixed;
+  top: 0;
+  left :0;
+  right: 0;
+  z-index: 200;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   background-color: #3457d5;
