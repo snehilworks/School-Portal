@@ -6,7 +6,8 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import PaymentIcon from "@mui/icons-material/Payment";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 
 const AdminSidebar = ({ setSelectedContent }) => {
   const sidebarStyle = {
@@ -38,6 +39,10 @@ const AdminSidebar = ({ setSelectedContent }) => {
 
   const handlePayments = () => {
     setSelectedContent("Payments");
+  };
+
+  const handleFees = () => {
+    setSelectedContent("Fees");
   };
 
   return (
@@ -76,9 +81,15 @@ const AdminSidebar = ({ setSelectedContent }) => {
           </ListItemIcon>
           <ListItemText primary="Update Student Admission Status" />
         </ListItem>
+        <ListItem onClick={handleFees} style={{ cursor: "pointer" }}>
+          <ListItemIcon>
+            <CurrencyRupeeIcon style={{ color: "#fff" }} />
+          </ListItemIcon>
+          <ListItemText primary="Fees" />
+        </ListItem>
         <ListItem onClick={handlePayments} style={{ cursor: "pointer" }}>
           <ListItemIcon>
-            <PaymentIcon style={{ color: "#fff" }} />
+            <AccountBalanceIcon style={{ color: "#fff" }} />
           </ListItemIcon>
           <ListItemText primary="Payments" />
         </ListItem>
