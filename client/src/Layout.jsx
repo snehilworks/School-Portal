@@ -1,12 +1,12 @@
 import React from "react";
-import Appbar from "./components/Appbar";
-import "./Layout.css";
+import Appbar from "./components/ui/Appbar/Appbar";
 
 function Layout({ children }) {
   return (
-    <div className="layout-styling">
+    <div className="w-full min-h-screen h-full bg-white flex flex-col items-center">
       <Appbar />
-      <div>{children}</div>
+
+      <div className="w-full h-full flex-1">{children}</div>
     </div>
   );
 }

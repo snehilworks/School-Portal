@@ -1,17 +1,8 @@
 import React, { useState } from "react";
-import {
-  Container,
-  Grid,
-  Paper,
-  Typography,
-  TextField,
-  Button,
-  Snackbar,
-} from "@mui/material";
+import { Container, Grid, Paper, Typography, TextField, Button, Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import "./Contact.css";
 import axios from "axios";
-import { BASE_URL } from "../../config";
 
 const ContactPage = () => {
   const [name, setName] = useState("");
@@ -21,7 +12,7 @@ const ContactPage = () => {
 
   const handleSend = async () => {
     try {
-      await axios.post(`${BASE_URL}/api/home/contact`, {
+      await axios.post(`${process.env.API_URL}/api/home/contact`, {
         name,
         email,
         message,
@@ -49,38 +40,10 @@ const ContactPage = () => {
               Contact Us
             </Typography>
             <form>
-              <TextField
-                label="Name"
-                variant="outlined"
-                fullWidth
-                style={{ margin: 5 }}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              <TextField
-                label="Email"
-                variant="outlined"
-                fullWidth
-                style={{ margin: 5 }}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <TextField
-                label="Send Us Message"
-                variant="outlined"
-                multiline
-                rows={5}
-                fullWidth
-                style={{ margin: 5 }}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ margin: 10 }}
-                onClick={handleSend}
-              >
+              <TextField label="Name" variant="outlined" fullWidth style={{ margin: 5 }} value={name} onChange={(e) => setName(e.target.value)} />
+              <TextField label="Email" variant="outlined" fullWidth style={{ margin: 5 }} value={email} onChange={(e) => setEmail(e.target.value)} />
+              <TextField label="Send Us Message" variant="outlined" multiline rows={5} fullWidth style={{ margin: 5 }} value={message} onChange={(e) => setMessage(e.target.value)} />
+              <Button variant="contained" color="primary" style={{ margin: 10 }} onClick={handleSend}>
                 Send
               </Button>
             </form>
@@ -103,17 +66,8 @@ const ContactPage = () => {
           </Paper>
         </Grid>
       </Grid>
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-      >
-        <MuiAlert
-          elevation={6}
-          variant="filled"
-          onClose={handleCloseSnackbar}
-          severity="success"
-        >
+      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+        <MuiAlert elevation={6} variant="filled" onClose={handleCloseSnackbar} severity="success">
           Message sent successfully!
         </MuiAlert>
       </Snackbar>

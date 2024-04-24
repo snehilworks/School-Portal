@@ -7,7 +7,6 @@ import { useSetRecoilState } from "recoil";
 import axios from "axios"; // Import axios
 import { useNavigate } from "react-router-dom";
 import { userState } from "../../../store/atoms/user";
-import { BASE_URL } from "../../../config";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -17,7 +16,7 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/student/login`, {
+      const response = await axios.post(`${process.env.API_URL}/api/student/login`, {
         email: email,
         password: password,
       });
@@ -48,42 +47,15 @@ function Login() {
               Welcome Back! Please Login
             </Typography>
           </Box>
-          <TextField
-            fullWidth
-            label="Email"
-            variant="outlined"
-            margin="normal"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-          <TextField
-            fullWidth
-            label="Password"
-            variant="outlined"
-            type="password"
-            margin="normal"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <Button
-            fullWidth
-            variant="contained"
-            size="large"
-            color="primary"
-            sx={{ mt: 2 }}
-            onClick={handleLogin}
-          >
+          <TextField fullWidth label="Email" variant="outlined" margin="normal" value={email} onChange={(event) => setEmail(event.target.value)} />
+          <TextField fullWidth label="Password" variant="outlined" type="password" margin="normal" value={password} onChange={(event) => setPassword(event.target.value)} />
+          <Button fullWidth variant="contained" size="large" color="primary" sx={{ mt: 2 }} onClick={handleLogin}>
             Login
           </Button>
           <Box display="flex" justifyContent="center" mt={2}>
             <Typography variant="body2">
               Don't have an account?{" "}
-              <Button
-                variant="text"
-                size="small"
-                style={{ color: "#00008B" }}
-                onClick={() => navigate("/student/register")}
-              >
+              <Button variant="text" size="small" style={{ color: "#00008B" }} onClick={() => navigate("/student/register")}>
                 Register
               </Button>
             </Typography>
