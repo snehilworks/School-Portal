@@ -14,6 +14,7 @@ import {
   setClassTeacher,
   getAllClasses
 } from "./../controller/adminController";
+import FeeController  from './../controller/feeController';
 
 const router = express.Router();
 
@@ -43,6 +44,11 @@ router.put("/set-class-teacher/:id", setClassTeacher);
 
 //Admission list get with the className
 // router.get("/admissions/list", getAdmissionList);
+
+//Fee Routes
+router.post('/create-payment', FeeController.createPayment);
+router.post('/payment-success', FeeController.handlePaymentSuccess);
+router.get('/payment/:paymentId', FeeController.getPaymentDetails);
 
 //Admission list add
 // router.post("/admissions", addAdmissionSeats);
