@@ -3,26 +3,59 @@ import {
   Typography,
   Card,
   CardContent,
-  TextField,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  Box,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Container,
+  Paper,
 } from "@mui/material";
-import axios from "axios";
 
 const GradebookContent = () => {
+  const [students, setStudents] = useState([]);
+
+  // Dummy data for demonstration
+  const dummyStudents = [
+    { id: 1, name: "John Doe", rollNumber: "001", grade: "A" },
+    { id: 2, name: "Jane Smith", rollNumber: "002", grade: "B" },
+    { id: 3, name: "Alice Johnson", rollNumber: "003", grade: "C" },
+    { id: 4, name: "Bob Brown", rollNumber: "004", grade: "A" },
+  ];
+
+  useEffect(() => {
+    // Set dummy data to state variable
+    setStudents(dummyStudents);
+  }, []);
+
   return (
-    <Card>
-      <CardContent>
-        <Typography variant="h5">Gradebook Component</Typography>
-      </CardContent>
-    </Card>
+    <Container maxWidth="lg">
+      <Paper elevation={3} style={{ padding: "20px" }}>
+        <Typography variant="h4" gutterBottom>
+          Gradebook Component
+        </Typography>
+        <Table>
+          <TableHead>
+            <TableRow style={{ backgroundColor: "#f0f0f0" }}>
+              <TableCell style={{ fontWeight: "bold" }}>Name</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Roll Number</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Grade (Till Last Semester)
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {students.map((student) => (
+              <TableRow key={student.id}>
+                <TableCell>{student.name}</TableCell>
+                <TableCell>{student.rollNumber}</TableCell>
+                <TableCell>{student.grade}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+    </Container>
   );
 };
 

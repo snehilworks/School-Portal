@@ -18,31 +18,46 @@ const TeacherSidebar = ({ setSelectedContent, isSidebarOpen }) => {
       onClick={() => setIsSidebarOpen(!isSidebarOpen)}
     >
       <List>
-        <ListItem onClick={() => handleItemClick("Manage Attendance")}>
+        <ListItem
+          onClick={() => handleItemClick("Manage Attendance")}
+          style={{ cursor: "pointer" }}
+        >
           <ListItemIcon>
             <PlaylistAddCheckIcon />
           </ListItemIcon>
           <ListItemText primary="Manage Attendance" />
         </ListItem>
-        <ListItem onClick={() => handleItemClick("Update Marks")}>
+        <ListItem
+          onClick={() => handleItemClick("Update Marks")}
+          style={{ cursor: "pointer" }}
+        >
           <ListItemIcon>
             <EventAvailableIcon />
           </ListItemIcon>
           <ListItemText primary="Update Marks" />
         </ListItem>
-        <ListItem onClick={() => handleItemClick("Student Lists")}>
+        <ListItem
+          onClick={() => handleItemClick("Student Lists")}
+          style={{ cursor: "pointer" }}
+        >
           <ListItemIcon>
             <GroupIcon />
           </ListItemIcon>
           <ListItemText primary="Student Lists" />
         </ListItem>
-        <ListItem onClick={() => handleItemClick("Classes")}>
+        <ListItem
+          onClick={() => handleItemClick("Classes")}
+          style={{ cursor: "pointer" }}
+        >
           <ListItemIcon>
             <MenuBookIcon />
           </ListItemIcon>
           <ListItemText primary="Classes" />
         </ListItem>
-        <ListItem onClick={() => handleItemClick("Gradebook")}>
+        <ListItem
+          onClick={() => handleItemClick("Gradebook")}
+          style={{ cursor: "pointer" }}
+        >
           <ListItemIcon>
             <DashboardIcon />
           </ListItemIcon>
