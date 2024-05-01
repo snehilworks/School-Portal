@@ -7,7 +7,7 @@ export default {
         poppins: ["Poppins", "sans-serif"],
       },
       screens: {
-        tablet: "568px",
+        tablet: "768px",
         laptop: "1024px",
       },
     },

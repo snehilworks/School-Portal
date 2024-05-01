@@ -3,7 +3,7 @@ import Appbar from "./components/ui/Appbar/Appbar";
 
 function Layout({ children }) {
   return (
-    <div className="w-full h-screen flex flex-col items-center">
+    <div className="w-full min-h-screen h-screen flex flex-col items-center">
       <Appbar />
 
       <div className="w-full h-full">{children}</div>

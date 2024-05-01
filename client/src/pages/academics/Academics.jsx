@@ -1,38 +1,23 @@
 import React from "react";
-import {
-  Container,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-} from "@mui/material";
+import { Container, Typography, List, ListItem, ListItemText, Divider } from "@mui/material";
 import activitiesData from "./activitiesData";
 import "./Academics.css";
 
 const AcademicsPage = () => {
   return (
-    <Container maxWidth="md" className="academics-container">
-      <Typography variant="h3" align="center" className="academics-heading">
-        Academics and Activities
-      </Typography>
-      <List className="academics-list">
-        {activitiesData.map((activity, index) => (
-          <React.Fragment key={index}>
-            <ListItem className="academics-list-item">
-              <ListItemText
-                primary={activity.title}
-                secondary={activity.date}
-                className="academics-list-item-text"
-              />
+    <div className="w-full h-full bg-white">
+      <div className="component-container flex flex-col gap-2 items-start">
+        <p className="mb-2 laptop:mb-4 font-bold text-[30px] laptop:text-[40px]">Academics and Activities</p>
+
+        <List className="academics-list">
+          {activitiesData.map((activity, index) => (
+            <ListItem key={index} className="academics-list-item">
+              <ListItemText primary={activity.title} secondary={activity.date} className="academics-list-item-text" />
             </ListItem>
-            {index !== activitiesData.length - 1 && (
-              <Divider className="academics-divider" />
-            )}
-          </React.Fragment>
-        ))}
-      </List>
-    </Container>
+          ))}
+        </List>
+      </div>
+    </div>
   );
 };
 

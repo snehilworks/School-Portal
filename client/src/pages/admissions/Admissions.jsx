@@ -1,16 +1,6 @@
 import React from "react";
-import {
-  Container,
-  Typography,
-  Table,
-  TableContainer,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
-} from "@mui/material";
-import "./Admissions.css"; // Import the CSS file
+import { Container, Typography, Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper } from "@mui/material";
+import PrimaryButton from "../../components/ui/PrimaryButton";
 
 const AdmissionsPage = () => {
   // Dummy data for seat availability
@@ -35,42 +25,44 @@ const AdmissionsPage = () => {
   ];
 
   return (
-    <Container maxWidth="md" className="admission-container">
-      <Typography variant="h4" align="center" className="admissions-heading">
-        Admissions
-      </Typography>
-      <TableContainer component={Paper} className="admissions-table-container">
-        <Table className="admissions-table">
-          <TableHead>
-            <TableRow>
-              <TableCell className="table-header">Class</TableCell>
-              <TableCell className="table-header">Seats Available</TableCell>
-              <TableCell className="table-header">Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {seatAvailability.map((row) => (
-              <TableRow key={row.class}>
-                <TableCell>{`Class ${row.class}`}</TableCell>
-                <TableCell>{row.seatsAvailable}</TableCell>
-                <TableCell>
-                  <button
-                    className={
-                      row.seatsAvailable > 0
-                        ? "admissions-button"
-                        : "admissions-button-disabled"
-                    }
-                    disabled={row.seatsAvailable === 0}
-                  >
-                    {row.seatsAvailable > 0 ? "Take Admission" : "Full"}
-                  </button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Container>
+    <div className="w-full h-full bg-white">
+      <div className="component-container flex flex-col gap-2 items-start">
+        <p className="mb-2 laptop:mb-4 font-bold text-[30px] laptop:text-[40px]">Admissions</p>
+
+        <div className="mx-0 tablet:mx-auto w-full tablet:w-fit">
+          <TableContainer>
+            <Table className="w-full">
+              <TableHead sx={{ fontWeight: "bold" }}>
+                <TableRow>
+                  <TableCell className="table-header" sx={{ fontWeight: "bold", textAlign: "center", minWidth: "150px" }}>
+                    Class
+                  </TableCell>
+                  <TableCell className="table-header" sx={{ fontWeight: "bold", textAlign: "center", minWidth: "150px" }}>
+                    Seats Available
+                  </TableCell>
+                  <TableCell className="table-header" sx={{ fontWeight: "bold", textAlign: "center", minWidth: "150px" }}>
+                    Action
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {seatAvailability.map((row) => (
+                  <TableRow key={row.class}>
+                    <TableCell>{`Class ${row.class}`}</TableCell>
+                    <TableCell>{row.seatsAvailable}</TableCell>
+                    <TableCell>
+                      <PrimaryButton color={"student"} disabled={row.seatsAvailable === 0}>
+                        {row.seatsAvailable > 0 ? "Take Admission" : "Full"}
+                      </PrimaryButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      </div>
+    </div>
   );
 };
 

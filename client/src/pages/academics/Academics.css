@@ -1,38 +1,12 @@
-.academics-container {
-  padding: 20px;
-  margin: 10px;
-  /* Set the background color */
-  background-color: #bbf744;
-  border-radius: 2%;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Heading style */
-.academics-heading {
-  font-size: 2rem;
-  margin: 2rem 0;
-  color: #252525; /* Set the text color */
-}
-
 /* Style for the List component */
 .academics-list {
-  padding: 0;
-  background-color: white;
-  border-radius: 2%;
+  @apply w-full grid grid-cols-1 laptop:grid-cols-2 gap-2 laptop:gap-4;
 }
 
 /* Style for each ListItem component */
 .academics-list-item {
-  padding: 16px 0;
-}
+  @apply w-full px-4 tablet:px-6 py-2 tablet:py-4 rounded-lg;
 
-/* Style for the ListItemText component */
-.academics-list-item-text {
-  font-size: 1.2rem;
-}
-
-/* Style for the Divider component */
-.academics-divider {
-  margin: 8px 0;
-  background-color: #ddd; /* Set the divider color */
+  border: 2px solid #edede9;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }

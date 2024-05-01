@@ -8,8 +8,8 @@ import { faChalkboardTeacher, faGraduationCap, faSchool } from "@fortawesome/fre
 export const Landing = () => {
   const navigate = useNavigate();
   return (
-    <div className="w-full h-full ">
-      <div className="component-container flex items-start laptop:items-center justify-center bg-white">
+    <div className="w-full h-full bg-white">
+      <div className="component-container flex items-start laptop:items-center justify-center">
         <div className="w-full flex flex-col laptop:flex-row items-center justify-between gap-4">
           <div className="order-2 laptop:order-1 h-fit laptop:h-full flex flex-col items-center justify-between">
             <p className="text-[20px] laptop:text-[46px] font-semibold">Shivam Public School, Aarni</p>
