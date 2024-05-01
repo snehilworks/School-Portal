@@ -1,75 +1,57 @@
 import { Grid, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import PrimaryButton from "./ui/PrimaryButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChalkboardTeacher, faGraduationCap, faSchool } from "@fortawesome/free-solid-svg-icons";
 
 export const Landing = () => {
   const navigate = useNavigate();
   return (
-    // <div className="Landing-div">
-    //   <Grid container style={{ padding: "5vw" }}>
-    //     <Grid item xs={12} md={6} lg={6}>
-    //       <div style={{ marginTop: 100 }}>
-    //         <Typography variant={"h2"}>Shivam Public School, Aarni</Typography>
-    //         <Typography variant={"h5"}>Second home for your child</Typography>
-    //         {
-    //           <div style={{ display: "flex", marginTop: 20 }}>
-    //             <div style={{ marginRight: 10 }}>
-    //               <Button
-    //                 size={"large"}
-    //                 variant={"contained"}
-    //                 onClick={() => {
-    //                   navigate("/student/register");
-    //                 }}
-    //                 sx={{ borderRadius: 20, textTransform: "none" }}
-    //                 style={{ backgroundColor: "#4caf50" }}
-    //               >
-    //                 Register
-    //               </Button>
-    //             </div>
-    //             <div>
-    //               <Button
-    //                 size={"large"}
-    //                 variant={"contained"}
-    //                 onClick={() => {
-    //                   navigate("/student/login");
-    //                 }}
-    //                 sx={{ borderRadius: 20, textTransform: "none" }}
-    //                 style={{ backgroundColor: "#00008B" }}
-    //               >
-    //                 Login
-    //               </Button>
-    //             </div>
-    //           </div>
-    //         }
-    //       </div>
-    //       <div>
-    //         {" "}
-    //         <Button
-    //           size={"large"}
-    //           variant={"contained"}
-    //           onClick={() => {
-    //             navigate("/teacher/login");
-    //           }}
-    //           sx={{ borderRadius: 20, textTransform: "none" }}
-    //           style={{ backgroundColor: "#00bcd4", marginTop: 50 }}
-    //         >
-    //           Login For Teachers
-    //         </Button>
-    //       </div>
-    //     </Grid>
-    //     <Grid item xs={12} md={6} lg={6} style={{ marginTop: 20 }}>
-    //       <img src={"/school.jpg"} width={"100%"} style={{ borderRadius: 8 }} />
-    //     </Grid>
-    //   </Grid>
-    // </div>
-    <div className="w-full h-full bg-black">
-      <div className="component-container bg-white">
-        <div className="w-full flex items-center justify-between gap-4">
-          <div>
-            <p className="text-xl font-semibold">Shivam Public School, Aarni</p>
+    <div className="w-full h-full ">
+      <div className="component-container flex items-start laptop:items-center justify-center bg-white">
+        <div className="w-full flex flex-col laptop:flex-row items-center justify-between gap-4">
+          <div className="order-2 laptop:order-1 h-fit laptop:h-full flex flex-col items-center justify-between">
+            <p className="text-[20px] laptop:text-[46px] font-semibold">Shivam Public School, Aarni</p>
+
+            <div className="btns mt-4 laptop:mt-8 w-fit flex flex-col mx-auto items-center laptop:items-start gap-4">
+              <PrimaryButton
+                extra_styles={{ width: "100%" }}
+                onClick={() => {
+                  navigate("/student/register");
+                }}
+              >
+                <div className="flex items-center gap-2 px-4 py-2">
+                  <FontAwesomeIcon icon={faSchool} className="text-[20px] laptop:text-[36px]" />
+                  <p className="text-lg laptop:text-xl">Register</p>
+                </div>
+              </PrimaryButton>
+              <PrimaryButton
+                color={"student"}
+                onClick={() => {
+                  navigate("/student/login");
+                }}
+              >
+                <div className="flex items-center gap-2 px-4 py-2">
+                  <FontAwesomeIcon icon={faGraduationCap} className="text-[20px] laptop:text-[36px]" />
+                  <p className="text-lg laptop:text-xl">Login for Students</p>
+                </div>
+              </PrimaryButton>
+              <PrimaryButton
+                color={"teacher"}
+                onClick={() => {
+                  navigate("/teacher/login");
+                }}
+              >
+                <div className="flex items-center gap-2 px-4 py-2">
+                  <FontAwesomeIcon icon={faChalkboardTeacher} className="text-[20px] laptop:text-[36px]" />
+                  <p className="text-lg laptop:text-xl">Login for Faculties</p>
+                </div>
+              </PrimaryButton>
+            </div>
           </div>
-          <div>
-            <img src={"/school.jpg"} width={"100%"} className="w-full tablet:w-1/2" />
+          <div className="order-1 laptop:order-2 w-full tablet:w-1/2 rounded-lg overflow-hidden">
+            <img src={"/school.jpg"} className="w-full" />
           </div>
         </div>
       </div>

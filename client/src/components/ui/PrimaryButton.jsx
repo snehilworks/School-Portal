@@ -3,7 +3,7 @@ import { blue, deepPurple, green } from "@mui/material/colors";
 
 import React from "react";
 
-const PrimaryButton = ({ variant, children, color }) => {
+const PrimaryButton = ({ variant, children, color, extra_styles, onClick }) => {
   const theme = createTheme({
     palette: {
       default: { main: blue["700"], contrastText: "#fff" },
@@ -29,7 +29,7 @@ const PrimaryButton = ({ variant, children, color }) => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Button variant={variant || "contained"} color={color || "default"}>
+        <Button variant={variant || "contained"} color={color || "default"} style={{ ...extra_styles }} onClick={onClick}>
           {children}
         </Button>
       </ThemeProvider>
