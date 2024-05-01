@@ -62,10 +62,17 @@ export const Landing = () => {
     //     </Grid>
     //   </Grid>
     // </div>
-    <>
-      <div className="main-container">
-        <div className="w-full h-full bg-black"></div>
+    <div className="w-full h-full bg-black">
+      <div className="component-container bg-white">
+        <div className="w-full flex items-center justify-between gap-4">
+          <div>
+            <p className="text-xl font-semibold">Shivam Public School, Aarni</p>
+          </div>
+          <div>
+            <img src={"/school.jpg"} width={"100%"} className="w-full tablet:w-1/2" />
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 };

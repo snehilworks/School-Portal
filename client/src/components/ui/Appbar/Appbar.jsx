@@ -9,7 +9,7 @@ function Appbar({}) {
 
   return (
     <>
-      <AppBar position="sticky" sx={{ backgroundColor: indigo["800"] }} elevation={0}>
+      <AppBar sx={{ backgroundColor: indigo["800"] }} elevation={0}>
         <Toolbar className="w-full max-w-[1440px] mx-auto">
           <div className="w-full flex items-center justify-between font-poppins">
             <div onClick={() => navigate("/")}>

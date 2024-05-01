@@ -6,17 +6,15 @@ import routes from "./routes";
 
 function App() {
   return (
-    <div>
-      <Router>
-        <Layout>
-          <Routes>
-            {routes.map((route, index) => (
-              <Route key={index} path={route.path} element={route.element} />
-            ))}
-          </Routes>
-        </Layout>
-      </Router>
-    </div>
+    <Router>
+      <Layout>
+        <Routes>
+          {routes.map((route, index) => (
+            <Route key={index} path={route.path} element={route.element} />
+          ))}
+        </Routes>
+      </Layout>
+    </Router>
   );
 }
 
