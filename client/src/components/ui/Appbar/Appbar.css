@@ -1,0 +1,7 @@
+.appbar-buttons {
+  @apply hidden tablet:flex items-center gap-2;
+}
+
+.appbar-link {
+  @apply text-white font-medium text-xs tablet:text-sm cursor-pointer font-poppins;
+}
