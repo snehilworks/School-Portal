@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import Teacher from "../models/teacherModel";
 import Student from "../models/studentModel";
+import Fee from "../models/feeModel";
 import Class from "../models/classModel";
 import Admission, {
   Admission as AdmissionType,
@@ -170,6 +171,33 @@ export const getAdmissionList = async (req: Request, res: Response) => {
 // export const addAdmissionSeats = async (req: Request, res: Response) => {
 
 // };
+
+export const setFees = async (req: Request, res: Response) => {
+  try {
+    const className = req.body.class;
+    const desc = req.body.description;
+    const amount = req.body.amount;
+
+    const existingClass = await Class.findOne({ name: className });
+    if (!existingClass) {
+      return res.status(404).json({ message: "Class not found" });
+    }
+
+    const newFee = new Fee({
+      class: existingClass._id, // Use the class ID as the foreign key
+      description: desc,
+      amount: amount
+    });
+
+    await newFee.save();
+
+    res.status(201).json({ message: "Fee set successfully", fee: newFee });
+
+  } catch (error) {
+    console.error("Error fetching teachers:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 export const getFees = async (req: Request, res: Response) => {};
 

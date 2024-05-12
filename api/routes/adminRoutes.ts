@@ -8,6 +8,7 @@ import {
   getAllStudents,
   getAdmissionList,
   getFees,
+  setFees,
   updateAdmissionSeats,
   getSpecificTeacher,
   getSpecificStudent,
@@ -36,6 +37,7 @@ router.put("/students/:id", updateAdmissionStatus);
 
 // Fees Routes
 router.get("/fees", getFees);
+router.post('/set-fees', setFees);
 
 // Class Routes
 router.get('/classes', getAllClasses);
