@@ -35,7 +35,7 @@ export const getDashboard = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error fetching teacher dashboard:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(512).json({ message: "Internal server error" });
   }
 };
 
@@ -80,7 +80,7 @@ export const login = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error during login:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(512).json({ message: "Internal server error" });
   }
 };
 
@@ -103,8 +103,8 @@ export const getStudents = async (req: Request, res: Response) => {
 
     res.status(201).json(response);
   } catch (error) {
-    console.error("Error fetching teachers:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error fetching students:", error);
+    res.status(512).json({ message: "Internal server error" });
   }
 };
 

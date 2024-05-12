@@ -6,7 +6,7 @@ export const getAdmissions = async (req: Request, res: Response) => {
     //function to get admissions data from database to display on home
   } catch (error) {
     console.error("Error Getting admissions Data: " + error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(512).json({ message: "Internal Server Error" });
   }
 };
 
@@ -28,7 +28,7 @@ export const contactMessage = async (req: Request, res: Response) => {
     res.status(201).json({ message: "Message sent successfully" });
   } catch (error) {
     console.error("Error Getting admissions Data: " + error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(512).json({ message: "Internal Server Error" });
   }
 };
 

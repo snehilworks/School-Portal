@@ -26,7 +26,7 @@ class FeeController {
           res.json(order);
         } catch (error) {
           // console.error("Error adding teacher:", error);
-          res.status(500).json({ message: "Internal server error" });
+          res.status(512).json({ message: "Internal server error" });
         }
       }
 
@@ -45,7 +45,7 @@ class FeeController {
           res.json({ message: 'Payment successful', email });
         } catch (error) {
           // console.error("Error adding teacher:", error);
-          res.status(500).json({ message: "Internal server error" });
+          res.status(512).json({ message: "Internal server error" });
         }
       }
     
@@ -58,7 +58,7 @@ class FeeController {
           res.json(payment);
         } catch (error) {
             // console.error("Error adding teacher:", error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(512).json({ message: "Internal server error" });
         }
       }
 };

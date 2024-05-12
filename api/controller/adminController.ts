@@ -25,7 +25,7 @@ export const addTeacher = async (req: Request, res: Response) => {
     res.status(201).json(newTeacher);
   } catch (error) {
     console.error("Error adding teacher:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(512).json({ message: "Internal server error" });
   }
 };
 
@@ -36,7 +36,7 @@ export const getAllTeachers = async (req: Request, res: Response) => {
     res.status(201).json(teachers);
   } catch (error) {
     console.error("Error fetching teachers:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(512).json({ message: "Internal server error" });
   }
 };
 
@@ -60,8 +60,8 @@ export const getAllStudents = async (req: Request, res: Response) => {
 
     res.status(201).json(response);
   } catch (error) {
-    console.error("Error fetching teachers:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error fetching students:", error);
+    res.status(512).json({ message: "Internal server error" });
   }
 };
 
@@ -77,7 +77,7 @@ export const getSpecificTeacher = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error getting teacher:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(512).json({ message: "Internal server error" });
   }
 };
 
@@ -93,7 +93,7 @@ export const getSpecificStudent = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error getting Student:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(512).json({ message: "Internal server error" });
   }
 };
 
@@ -114,7 +114,7 @@ export const updateTeacher = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error updating teacher:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(512).json({ message: "Internal server error" });
   }
 };
 
@@ -132,7 +132,7 @@ export const deleteTeacher = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error deleting teacher:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(512).json({ message: "Internal server error" });
   }
 };
 
@@ -209,7 +209,7 @@ export const setFees = async (req: Request, res: Response) => {
 
   } catch (error) {
     console.error("Error fetching teachers:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(512).json({ message: "Internal server error" });
   }
 };
 
@@ -221,7 +221,7 @@ export const getAllClasses = async (req: Request, res: Response) => {
     res.status(201).json(classes);
   } catch (error) {
     console.error("Error fetching teachers:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(512).json({ message: "Internal server error" });
   }
 };
 
@@ -246,7 +246,7 @@ export const updateAdmissionSeats = async (req: Request, res: Response) => {
     res.status(200).json({ message: "Seats available updated successfully" });
   } catch (error) {
     console.error("Error updating seats available:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(512).json({ message: "Internal server error" });
   }
 };  
 
@@ -271,6 +271,6 @@ export const setClassTeacher = async (req: Request, res: Response) => {
     res.status(200).json({ message: "Class teacher updated successfully" });
   } catch (error) {
     console.error("Error setting class teacher:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(512).json({ message: "Internal server error" });
   }
 };
