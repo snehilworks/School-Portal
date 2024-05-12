@@ -43,8 +43,22 @@ export const getAllTeachers = async (req: Request, res: Response) => {
 //get all students
 export const getAllStudents = async (req: Request, res: Response) => {
   try {
-    const students = await Student.find();
-    res.status(201).json(students);
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = 15;
+
+    const startIdx = (page - 1) * limit;
+
+    const totalStudents = await Student.countDocuments(); //total number of students
+
+    const students = await Student.find().skip(startIdx).limit(limit);
+
+    const response = {
+      students: students,
+      totalPages: Math.ceil(totalStudents / limit), // Calculate total pages
+      currentPage: page
+    };
+
+    res.status(201).json(response);
   } catch (error) {
     console.error("Error fetching teachers:", error);
     res.status(500).json({ message: "Internal server error" });
