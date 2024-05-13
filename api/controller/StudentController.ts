@@ -94,6 +94,24 @@ export const getActivities = async (req: Request, res: Response) => {};
 
 export const getExams = async (req: Request, res: Response) => {};
 
+export const getClass = async (req: Request, res: Response) => {
+  try {
+    const { email } = loginSchema.parse(req.body);
+    const student = await Student.findOne({ email });
+
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+    const studentClass = student.class;
+
+    res.status(200).json({class : studentClass});
+
+  } catch (error) {
+    console.error("Error fetching student class:", error);
+    res.status(512).json({ message: "Internal Server Error" });
+  }
+};
+
 export const getProfile = async (req: Request, res: Response) => {
   try {
     const token = req.cookies.sps;
