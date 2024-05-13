@@ -18,16 +18,15 @@ import axios from "axios";
 import { BASE_URL } from "../../config";
 
 function FeeForm() {
-  const [classIds, setClassIds] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [feeData, setFeeData] = useState({
     name: "",
     description: "",
     amount: 0,
-    currency: "",
-    type: "",
+    currency: "USD",
+    type: "Annual",
     selectedClass: "",
   });
-  const [classes, setClasses] = useState([]);
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
@@ -45,15 +44,7 @@ function FeeForm() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === "type") {
-      setFeeData({ ...feeData, type: value });
-    } else {
-      setFeeData({ ...feeData, [name]: value });
-    }
-  };
-
-  const handleClassChange = (e) => {
-    setFeeData({ ...feeData, selectedClass: e.target.value });
+    setFeeData({ ...feeData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -91,14 +82,23 @@ function FeeForm() {
       <Box mt={8}>
         <Card
           variant="outlined"
-          style={{ boxSizing: "border-box", borderRadius: "8px" }}
+          sx={{
+            boxSizing: "border-box",
+            borderRadius: 4,
+            boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.1)",
+          }}
         >
           <CardContent>
-            <Typography variant="h4" align="center" gutterBottom>
+            <Typography
+              variant="h4"
+              align="center"
+              gutterBottom
+              sx={{ fontWeight: 600, mb: 4 }}
+            >
               Set Fees
             </Typography>
             <form onSubmit={handleSubmit}>
-              <Grid container spacing={2}>
+              <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <FormControl fullWidth variant="outlined">
                     <InputLabel id="class-select-label">
@@ -108,7 +108,8 @@ function FeeForm() {
                       labelId="class-select-label"
                       id="class-select"
                       value={feeData.selectedClass}
-                      onChange={handleClassChange}
+                      onChange={handleInputChange}
+                      name="selectedClass"
                       label="Select Class"
                     >
                       <MenuItem value="">
@@ -146,21 +147,21 @@ function FeeForm() {
                   />
                 </Grid>
                 {/* <Grid item xs={12} sm={6}>
-                  <TextField
-                    select
-                    name="type"
-                    value={feeData.type}
-                    onChange={handleInputChange}
-                    fullWidth
-                    required
-                    variant="outlined"
-                    SelectProps={{ native: true }}
-                  >
-                    <option value="">Select Type</option>
-                    <option value="Annual">Annual</option>
-                    <option value="Quarterly">Quarterly</option>
-                    <option value="Monthly">Monthly</option>
-                  </TextField>
+                  <FormControl fullWidth variant="outlined">
+                    <InputLabel id="fee-type-label">Fee Type</InputLabel>
+                    <Select
+                      labelId="fee-type-label"
+                      id="fee-type"
+                      value={feeData.type}
+                      onChange={handleInputChange}
+                      label="Fee Type"
+                      name="type"
+                    >
+                      <MenuItem value="Annual">Annual</MenuItem>
+                      <MenuItem value="Quarterly">Quarterly</MenuItem>
+                      <MenuItem value="Monthly">Monthly</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid> */}
                 <Grid item xs={12}>
                   <Box mt={4} display="flex" justifyContent="center">
@@ -170,7 +171,9 @@ function FeeForm() {
                       color="primary"
                       size="large"
                       sx={{
-                        borderRadius: 20,
+                        borderRadius: 30,
+                        fontWeight: 600,
+                        px: 5,
                         boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.15)",
                         transform: "translateY(-4px)",
                         transition: "transform 0.3s ease-in-out",
@@ -191,7 +194,8 @@ function FeeForm() {
         {submitted && (
           <Box mt={4} display="flex" justifyContent="center">
             <Typography variant="h5">
-              Thank you! {feeData.type} Fees for Class have been set.
+              Thank you! {feeData.type} Fees for the selected class have been
+              set.
             </Typography>
           </Box>
         )}
