@@ -14,6 +14,8 @@ import {
   Grid,
   Grow,
 } from "@mui/material";
+import axios from "axios";
+import { BASE_URL } from "../../config";
 
 function FeeForm() {
   const [classIds, setClassIds] = useState([]);
@@ -34,13 +36,8 @@ function FeeForm() {
 
   const fetchClasses = async () => {
     try {
-      const response = await fetch("http://localhost:400/api/classes");
-      if (response.ok) {
-        const data = await response.json();
-        setClasses(data);
-      } else {
-        console.error("Failed to fetch classes");
-      }
+      const response = await axios.get(`${BASE_URL}/api/admin/classes`);
+      setClasses(response.data);
     } catch (error) {
       console.error("Error fetching classes:", error.message);
     }
@@ -64,15 +61,21 @@ function FeeForm() {
     setSubmitted(true);
 
     try {
-      const response = await fetch("/api/set-fees", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await axios.post(
+        `${BASE_URL}/api/admin/set-fees`,
+        {
+          classIds: feeData.selectedClass,
+          description: feeData.description,
+          amount: feeData.amount,
         },
-        body: JSON.stringify({ classIds, feeData }),
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      if (response.ok) {
+      if (response.status === 200) {
         alert("Fees set for classes successfully");
       } else {
         alert("Failed to set fees for classes");
@@ -113,7 +116,7 @@ function FeeForm() {
                       </MenuItem>
                       {classes.map((cls) => (
                         <MenuItem key={cls._id} value={cls._id}>
-                          {cls.name}
+                          {cls.className}
                         </MenuItem>
                       ))}
                     </Select>
@@ -130,7 +133,7 @@ function FeeForm() {
                     variant="outlined"
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={12}>
                   <TextField
                     type="number"
                     label="Amount"
@@ -142,7 +145,7 @@ function FeeForm() {
                     variant="outlined"
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                {/* <Grid item xs={12} sm={6}>
                   <TextField
                     select
                     name="type"
@@ -158,7 +161,7 @@ function FeeForm() {
                     <option value="Quarterly">Quarterly</option>
                     <option value="Monthly">Monthly</option>
                   </TextField>
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12}>
                   <Box mt={4} display="flex" justifyContent="center">
                     <Button
@@ -186,13 +189,11 @@ function FeeForm() {
           </CardContent>
         </Card>
         {submitted && (
-          <Grow in={submitted} timeout={1000}>
-            <Box mt={4} display="flex" justifyContent="center">
-              <Typography variant="h5">
-                Thank you! {feeData.type} Fees for Class have been set.
-              </Typography>
-            </Box>
-          </Grow>
+          <Box mt={4} display="flex" justifyContent="center">
+            <Typography variant="h5">
+              Thank you! {feeData.type} Fees for Class have been set.
+            </Typography>
+          </Box>
         )}
       </Box>
     </Container>
