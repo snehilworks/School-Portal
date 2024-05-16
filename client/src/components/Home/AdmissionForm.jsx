@@ -11,6 +11,8 @@ import {
   MenuItem,
 } from "@mui/material";
 import "./AdmissionForm.css";
+import axios from "axios";
+import { BASE_URL } from "../../config";
 
 const modalStyle = {
   display: "flex",
@@ -20,12 +22,12 @@ const modalStyle = {
 };
 
 const modalContentStyle = {
-  backgroundColor: "#F9F9F9", // Light gray background
-  borderRadius: "12px", // Increased border radius for a softer look
-  padding: "40px", // Increased padding for better spacing
+  backgroundColor: "#F9F9F9",
+  borderRadius: "12px",
+  padding: "40px",
   maxWidth: "600px",
-  width: "80%", // Adjusted width to make it responsive
-  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)", // Added box shadow for depth
+  width: "80%",
+  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
 };
 
 const AdmissionForm = ({ open, onClose }) => {
@@ -53,10 +55,55 @@ const AdmissionForm = ({ open, onClose }) => {
     onClose();
   };
 
-  const handlePay = () => {
-    // Here, you can redirect the user to the Razorpay payment gateway
-    // Example: window.location.href = 'YOUR_RAZORPAY_PAYMENT_URL';
-    // Make sure to replace 'YOUR_RAZORPAY_PAYMENT_URL' with the actual URL provided by Razorpay
+  const amount = 499;
+  const currency = "INR";
+  const receiptId = "OrderReceipt 1";
+
+  const handlePay = async (e) => {
+    const response = await axios.post(`${BASE_URL}/order`, {
+      amount,
+      currency,
+      receipt: receiptId,
+    });
+    const order = response.data;
+
+    var options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY || "",
+      amount,
+      currency,
+      name: "Shivam Public",
+      description: "Test Transaction",
+      image: "https://example.com/your_logo",
+      order_id: order.id,
+      handler: function (response) {
+        alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature);
+      },
+      prefill: {
+        name: "Gaurav Kumar",
+        email: "gaurav.kumar@example.com",
+        contact: "900090000",
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+    var rzp1 = new window.Razorpay(options);
+    rzp1.on("payment.failed", function (response) {
+      alert(response.error.code);
+      alert(response.error.description);
+      alert(response.error.source);
+      alert(response.error.step);
+      alert(response.error.reason);
+      alert(response.error.metadata.order_id);
+      alert(response.error.metadata.payment_id);
+    });
+    rzp1.open();
+    e.preventDefault();
   };
 
   return (
