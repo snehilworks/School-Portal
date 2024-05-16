@@ -1,8 +1,21 @@
-import React from "react";
-import { Container, Typography, Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Container,
+  Typography,
+  Table,
+  TableContainer,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper,
+} from "@mui/material";
 import PrimaryButton from "../../components/ui/PrimaryButton";
+import AdmissionForm from "../../components/Home/AdmissionForm";
 
 const AdmissionsPage = () => {
+  const [openModal, setOpenModal] = useState(false);
+
   // Dummy data for seat availability
   const seatAvailability = [
     { class: "Nursery", seatsAvailable: 1 },
@@ -24,23 +37,54 @@ const AdmissionsPage = () => {
     { class: "12-Arts", seatsAvailable: 10 },
   ];
 
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
   return (
     <div className="w-full h-full bg-white">
       <div className="component-container flex flex-col gap-2 items-start">
-        <p className="mb-2 laptop:mb-4 font-bold text-[30px] laptop:text-[40px]">Admissions</p>
+        <p className="mb-2 laptop:mb-4 font-bold text-[30px] laptop:text-[40px]">
+          Admissions
+        </p>
 
         <div className="mx-0 tablet:mx-auto w-full tablet:w-fit">
           <TableContainer>
             <Table className="w-full">
               <TableHead sx={{ fontWeight: "bold" }}>
                 <TableRow>
-                  <TableCell className="table-header" sx={{ fontWeight: "bold", textAlign: "center", minWidth: "150px" }}>
+                  <TableCell
+                    className="table-header"
+                    sx={{
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      minWidth: "150px",
+                    }}
+                  >
                     Class
                   </TableCell>
-                  <TableCell className="table-header" sx={{ fontWeight: "bold", textAlign: "center", minWidth: "150px" }}>
+                  <TableCell
+                    className="table-header"
+                    sx={{
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      minWidth: "150px",
+                    }}
+                  >
                     Seats Available
                   </TableCell>
-                  <TableCell className="table-header" sx={{ fontWeight: "bold", textAlign: "center", minWidth: "150px" }}>
+                  <TableCell
+                    className="table-header"
+                    sx={{
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      minWidth: "150px",
+                    }}
+                  >
                     Action
                   </TableCell>
                 </TableRow>
@@ -51,7 +95,11 @@ const AdmissionsPage = () => {
                     <TableCell>{`Class ${row.class}`}</TableCell>
                     <TableCell>{row.seatsAvailable}</TableCell>
                     <TableCell>
-                      <PrimaryButton color={"student"} disabled={row.seatsAvailable === 0}>
+                      <PrimaryButton
+                        onClick={handleOpenModal}
+                        color={"student"}
+                        disabled={row.seatsAvailable === 0}
+                      >
                         {row.seatsAvailable > 0 ? "Take Admission" : "Full"}
                       </PrimaryButton>
                     </TableCell>
@@ -60,6 +108,7 @@ const AdmissionsPage = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <AdmissionForm open={openModal} onClose={handleCloseModal} />
         </div>
       </div>
     </div>
