@@ -23,25 +23,33 @@ app.use(
   })
 );
 
-//example implementation will integrate better
-
-// let razor = new Razorpay({
-//   key_id: "KEY_ID",
-//   key_secret: "KEY_SECRET"
-// });
-
-// let options = {
-//   amount: 5000, 
-//   currency: "INR",
-//   receipt: "order_reciept_1"
-// };
-// razor.orders.create(options, function(err, order) {
-//   console.log(order);
-// } )
-//--------------------------------------------------------
 
 app.get("/", (req, res) => {
   res.send("Welcome To Shivam_Public_School");
+});
+
+app.post("/order", async (req, res) => {
+  try {
+    if (!process.env.RAZORPAY_ID_KEY || !process.env.RAZORPAY_SECRET_KEY) {
+      throw new Error('Razorpay key_id and key_secret must be set in the environment variables.');
+    }
+    const razor = new Razorpay({
+      key_id: process.env.RAZORPAY_ID_KEY,
+      key_secret: process.env.RAZORPAY_SECRET_KEY
+    });
+
+  const options = req.body;
+  const order = await razor.orders.create(options);
+
+  if(!order) {
+    return res.status(500).send("Error");
+  }
+
+  res.json(order);
+} catch (err) {
+  console.log(err);
+  res.status(512).send("Error");
+}
 });
 
 app.use("/api/home", homeRouter);
