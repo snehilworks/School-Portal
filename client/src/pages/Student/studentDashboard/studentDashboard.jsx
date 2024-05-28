@@ -3,6 +3,8 @@ import { Container, Typography, Paper, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Grade, Event, Home, Payment, Today } from "@mui/icons-material";
 import "./studentDashboard.css"; // Import the CSS file
+// import PrimaryButton from "@/../../src/components/ui/PrimaryButton";
+import PrimaryButton from "./../../../components/ui/PrimaryButton";
 
 function StudentDash() {
   const pageStyles = {
@@ -34,13 +36,13 @@ function StudentDash() {
                 Grades
               </Typography>
               <Link to="/student/grades">
-                <Button
+                <PrimaryButton
                   variant="contained"
                   color="primary"
                   className="dashboard-button"
                 >
                   View Grades
-                </Button>
+                </PrimaryButton>
               </Link>
             </Paper>
 
@@ -50,13 +52,13 @@ function StudentDash() {
                 Attendance
               </Typography>
               <Link to="/student/attendance">
-                <Button
+                <PrimaryButton
                   variant="contained"
                   color="primary"
                   className="dashboard-button"
                 >
                   View Attendance
-                </Button>
+                </PrimaryButton>
               </Link>
             </Paper>
 
@@ -66,13 +68,13 @@ function StudentDash() {
                 Events
               </Typography>
               <Link to="/student/events">
-                <Button
+                <PrimaryButton
                   variant="contained"
                   color="primary"
                   className="dashboard-button"
                 >
                   View Events
-                </Button>
+                </PrimaryButton>
               </Link>
             </Paper>
           </div>
@@ -84,13 +86,13 @@ function StudentDash() {
                 Hostel Details
               </Typography>
               <Link to="/student/hostel">
-                <Button
+                <PrimaryButton
                   variant="contained"
                   color="primary"
                   className="dashboard-button"
                 >
                   View Hostel Details
-                </Button>
+                </PrimaryButton>
               </Link>
             </Paper>
 
@@ -100,13 +102,13 @@ function StudentDash() {
                 Payment Gateway
               </Typography>
               <Link to="/student/payment">
-                <Button
+                <PrimaryButton
                   variant="contained"
                   color="primary"
                   className="dashboard-button"
                 >
                   Go to Payment Gateway
-                </Button>
+                </PrimaryButton>
               </Link>
             </Paper>
           </div>

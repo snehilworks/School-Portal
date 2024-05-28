@@ -1,28 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-  Typography,
-  Card,
-  CardContent,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  FormControl,
-  Select,
-  MenuItem,
-  Button,
-  Box,
-  Paper,
-  IconButton,
-} from "@mui/material";
 import axios from "axios";
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
 
 const AttendanceManageContent = () => {
-  const [students, setStudents] = useState([]); // State to store students
-  const [attendanceData, setAttendanceData] = useState([]); // State to store attendance data
+  const [students, setStudents] = useState([]);
+  const [attendanceData, setAttendanceData] = useState([]);
 
   useEffect(() => {
     // Dummy student data
@@ -36,7 +17,6 @@ const AttendanceManageContent = () => {
 
     setStudents(dummyStudents);
 
-    // Initialize attendance data
     const initialAttendanceData = dummyStudents.map((student) => ({
       studentId: student.id,
       attendance: student.attendance,
@@ -44,7 +24,6 @@ const AttendanceManageContent = () => {
     setAttendanceData(initialAttendanceData);
   }, []);
 
-  // Function to handle attendance change
   const handleAttendanceChange = (studentId) => (event) => {
     const updatedAttendanceData = attendanceData.map((item) => {
       if (item.studentId === studentId) {
@@ -58,7 +37,6 @@ const AttendanceManageContent = () => {
     setAttendanceData(updatedAttendanceData);
   };
 
-  // Function to submit attendance
   const handleSubmitAttendance = () => {
     axios
       .post("https://api.example.com/attendance", attendanceData)
@@ -71,83 +49,52 @@ const AttendanceManageContent = () => {
   };
 
   return (
-    <Card sx={{ p: 2 }}>
-      <CardContent>
-        <Typography variant="h5" gutterBottom>
-          Manage Attendance
-        </Typography>
-
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Attendance</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+    <div className="container mx-auto px-4 py-8">
+      <h2 className="text-2xl font-bold mb-4">Manage Attendance</h2>
+      <div className="overflow-x-auto">
+        <table className="w-full table-auto lg:table-fixed">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="px-4 py-2 w-1/3">Name</th>
+              <th className="px-4 py-2 w-1/4">Attendance</th>
+            </tr>
+          </thead>
+          <tbody>
             {students.map((student) => (
-              <TableRow key={student.id}>
-                <TableCell>{student.name}</TableCell>
-                <TableCell>
-                  <FormControl sx={{ minWidth: 120 }}>
-                    <Select
-                      value={
-                        attendanceData.find(
-                          (item) => item.studentId === student.id
-                        )?.attendance || ""
-                      }
-                      onChange={handleAttendanceChange(student.id)}
-                      sx={{
-                        color:
-                          attendanceData.find(
-                            (item) => item.studentId === student.id
-                          )?.attendance === "Absent"
-                            ? "error.main"
-                            : "success.main",
-                      }}
-                      inputProps={{
-                        variant: "standard",
-                      }}
-                      IconComponent={null}
-                    >
-                      <MenuItem value="Present">
-                        <Box display="flex" alignItems="center">
-                          Present
-                          {attendanceData.find(
-                            (item) => item.studentId === student.id
-                          )?.attendance === "Present" && (
-                            <CheckIcon sx={{ ml: 1 }} />
-                          )}
-                        </Box>
-                      </MenuItem>
-                      <MenuItem value="Absent">
-                        <Box display="flex" alignItems="center">
-                          Absent
-                          {attendanceData.find(
-                            (item) => item.studentId === student.id
-                          )?.attendance === "Absent" && (
-                            <ClearIcon sx={{ ml: 1 }} />
-                          )}
-                        </Box>
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                </TableCell>
-              </TableRow>
+              <tr key={student.id} className="border-b">
+                <td className="px-4 py-2 truncate">{student.name}</td>
+                <td className="px-4 py-2">
+                  <select
+                    value={
+                      attendanceData.find(
+                        (item) => item.studentId === student.id
+                      )?.attendance || ""
+                    }
+                    onChange={handleAttendanceChange(student.id)}
+                    className={`px-2 py-1 border rounded ${
+                      attendanceData.find(
+                        (item) => item.studentId === student.id
+                      )?.attendance === "Absent"
+                        ? "text-red-500"
+                        : "text-green-500"
+                    }`}
+                  >
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+                  </select>
+                </td>
+              </tr>
             ))}
-          </TableBody>
-        </Table>
-
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSubmitAttendance}
-          sx={{ mt: 2 }}
-        >
-          Submit Attendance
-        </Button>
-      </CardContent>
-    </Card>
+          </tbody>
+        </table>
+      </div>
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+        onClick={handleSubmitAttendance}
+      >
+        Submit Attendance
+      </button>
+    </div>
   );
 };
 

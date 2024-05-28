@@ -1,18 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {
-  Typography,
-  Card,
-  CardContent,
-  TextField,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Grid,
-  Box,
-  Divider,
-} from "@mui/material";
 import axios from "axios";
 
 const UpdateMarksContent = () => {
@@ -77,65 +63,67 @@ const UpdateMarksContent = () => {
   };
 
   return (
-    <Card
-      sx={{
-        p: 3,
-        borderRadius: 2,
-        boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-      }}
-    >
-      <CardContent>
-        <Typography variant="h5" gutterBottom sx={{ mb: 2 }}>
-          Update Marks Component
-        </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel>Select Subject</InputLabel>
-              <Select value={selectedSubject} onChange={handleSubjectChange}>
-                <MenuItem value="">Select</MenuItem>
-                <MenuItem value="Mathematics">Mathematics</MenuItem>
-                <MenuItem value="Science">Science</MenuItem>
-                <MenuItem value="History">History</MenuItem>
-                <MenuItem value="English">English</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-        </Grid>
+    <div className="container mx-auto px-4 py-8">
+      <div className="bg-white rounded-lg shadow-md p-6 md:p-8 lg:p-10">
+        <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center">
+          Update Marks
+        </h1>
+        <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-center">
+          <label
+            htmlFor="subject"
+            className="block text-gray-700 font-bold mb-2 md:mb-0 md:mr-4"
+          >
+            Select Subject:
+          </label>
+          <select
+            id="subject"
+            value={selectedSubject}
+            onChange={handleSubjectChange}
+            className="w-full md:w-auto px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Science">Science</option>
+            <option value="History">History</option>
+            <option value="English">English</option>
+          </select>
+        </div>
         {selectedSubject && (
           <>
-            <Typography variant="h6" sx={{ mt: 3, mb: 2 }}>
-              Marks Update for {selectedSubject}
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
-            {marksData.map((student) => (
-              <Box key={student.studentId} sx={{ mb: 2 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-                  {student.name}
-                </Typography>
-                <TextField
-                  label="Marks"
-                  type="number"
-                  value={student.marks}
-                  onChange={(event) =>
-                    handleMarksUpdate(student.studentId, event.target.value)
-                  }
-                  fullWidth
-                />
-              </Box>
-            ))}
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSubmitMarks}
-              sx={{ mt: 3 }}
-            >
-              Submit Marks
-            </Button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+              {marksData.map((student) => (
+                <div
+                  key={student.studentId}
+                  className="bg-gray-100 rounded-lg p-6 shadow-md hover:shadow-lg transition duration-300 ease-in-out"
+                >
+                  <h3 className="text-lg font-semibold mb-2 text-gray-800">
+                    {student.name}
+                  </h3>
+                  <div className="flex items-center">
+                    <input
+                      type="number"
+                      value={student.marks}
+                      onChange={(event) =>
+                        handleMarksUpdate(student.studentId, event.target.value)
+                      }
+                      className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-center mt-8">
+              <button
+                className="bg-blue-500 text-white px-8 py-4 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out text-lg font-semibold shadow-md hover:shadow-lg"
+                onClick={handleSubmitMarks}
+              >
+                Submit Marks
+              </button>
+            </div>
           </>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

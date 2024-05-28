@@ -1,14 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {
-  Typography,
-  Card,
-  CardContent,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-  Box,
-} from "@mui/material";
 
 const ClassesContent = () => {
   const [teacherClasses, setTeacherClasses] = useState([]);
@@ -27,46 +17,36 @@ const ClassesContent = () => {
   }, []);
 
   return (
-    <Card style={{ backgroundColor: "#3f51b5", color: "white" }}>
-      <CardContent>
-        <Typography variant="h5" style={{ marginBottom: "16px" }}>
-          Classes Component
-        </Typography>
-        <List>
-          {teacherClasses.map((classInfo) => (
-            <React.Fragment key={classInfo.id}>
-              <ListItem
-                style={{
-                  "&:hover": {
-                    backgroundColor: "#9fa8da",
-                    color: "#303",
-                  },
-                }}
-              >
-                <ListItemText
-                  primaryTypographyProps={{ style: { color: "inherit" } }}
-                  primary={`Class: ${classInfo.className}`}
-                />
-              </ListItem>
-              <ListItem
-                style={{
-                  "&:hover": {
-                    backgroundColor: "#9fa8da",
-                    color: "#303",
-                  },
-                }}
-              >
-                <ListItemText
-                  primaryTypographyProps={{ style: { color: "inherit" } }}
-                  primary={`Subject: ${classInfo.subject}`}
-                />
-              </ListItem>
-              <Divider />
-            </React.Fragment>
-          ))}
-        </List>
-      </CardContent>
-    </Card>
+    <div className="bg-gradient-to-br from-blue-900 to-blue-600 text-white rounded-lg shadow-lg p-6">
+      <h1 className="text-3xl font-bold mb-8">Classes Component</h1>
+      <ul>
+        {teacherClasses.map((classInfo) => (
+          <li
+            key={classInfo.id}
+            className="flex justify-between items-center py-4 hover:bg-blue-700 transition duration-300 ease-in-out rounded-md px-4"
+          >
+            <div>
+              <p className="text-lg font-semibold">{classInfo.className}</p>
+              <p className="text-sm">{classInfo.subject}</p>
+            </div>
+            {/* <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-white hover:text-yellow-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            > */}
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+            {/* </svg> */}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

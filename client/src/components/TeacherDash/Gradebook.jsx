@@ -1,16 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {
-  Typography,
-  Card,
-  CardContent,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Container,
-  Paper,
-} from "@mui/material";
 
 const GradebookContent = () => {
   const [students, setStudents] = useState([]);
@@ -29,33 +17,54 @@ const GradebookContent = () => {
   }, []);
 
   return (
-    <Container maxWidth="lg">
-      <Paper elevation={3} style={{ padding: "20px" }}>
-        <Typography variant="h4" gutterBottom>
-          Gradebook Component
-        </Typography>
-        <Table>
-          <TableHead>
-            <TableRow style={{ backgroundColor: "#f0f0f0" }}>
-              <TableCell style={{ fontWeight: "bold" }}>Name</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Roll Number</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>
-                Grade (Till Last Semester)
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {students.map((student) => (
-              <TableRow key={student.id}>
-                <TableCell>{student.name}</TableCell>
-                <TableCell>{student.rollNumber}</TableCell>
-                <TableCell>{student.grade}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-    </Container>
+    <div className="container mx-auto px-4 py-8">
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h1 className="text-2xl font-bold mb-6 text-gray-800 text-center">
+          Gradebook
+        </h1>
+        <div className="overflow-x-auto rounded-lg">
+          <table className="w-full table-auto md:table-fixed border-collapse">
+            <thead>
+              <tr className="bg-blue-500 text-white uppercase text-sm leading-normal">
+                <th className="py-3 px-6 text-left">Name</th>
+                <th className="py-3 px-6 text-left">Roll Number</th>
+                <th className="py-3 px-6 text-left">
+                  Grade (Till Last Semester)
+                </th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-700 text-sm font-light">
+              {students.map((student) => (
+                <tr
+                  key={student.id}
+                  className="border-b border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out"
+                >
+                  <td className="py-3 px-6 text-left whitespace-nowrap truncate md:whitespace-normal md:max-w-xs">
+                    {student.name}
+                  </td>
+                  <td className="py-3 px-6 text-left whitespace-nowrap">
+                    {student.rollNumber}
+                  </td>
+                  <td className="py-3 px-6 text-left whitespace-nowrap">
+                    <span
+                      className={`px-3 py-1 rounded-full font-semibold ${
+                        student.grade === "A"
+                          ? "bg-green-200 text-green-800"
+                          : student.grade === "B"
+                          ? "bg-yellow-200 text-yellow-800"
+                          : "bg-red-200 text-red-800"
+                      }`}
+                    >
+                      {student.grade}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   );
 };
 
