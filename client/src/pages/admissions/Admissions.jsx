@@ -1,15 +1,4 @@
 import React, { useState } from "react";
-import {
-  Container,
-  Typography,
-  Table,
-  TableContainer,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
-} from "@mui/material";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import AdmissionForm from "../../components/Home/AdmissionForm";
 
@@ -46,70 +35,38 @@ const AdmissionsPage = () => {
   };
 
   return (
-    <div className="w-full h-full bg-white">
-      <div className="component-container flex flex-col gap-2 items-start">
-        <p className="mb-2 laptop:mb-4 font-bold text-[30px] laptop:text-[40px]">
-          Admissions
-        </p>
-
-        <div className="mx-0 tablet:mx-auto w-full tablet:w-fit">
-          <TableContainer>
-            <Table className="w-full">
-              <TableHead sx={{ fontWeight: "bold" }}>
-                <TableRow>
-                  <TableCell
-                    className="table-header"
-                    sx={{
-                      fontWeight: "bold",
-                      textAlign: "center",
-                      minWidth: "150px",
-                    }}
-                  >
-                    Class
-                  </TableCell>
-                  <TableCell
-                    className="table-header"
-                    sx={{
-                      fontWeight: "bold",
-                      textAlign: "center",
-                      minWidth: "150px",
-                    }}
-                  >
-                    Seats Available
-                  </TableCell>
-                  <TableCell
-                    className="table-header"
-                    sx={{
-                      fontWeight: "bold",
-                      textAlign: "center",
-                      minWidth: "150px",
-                    }}
-                  >
-                    Action
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {seatAvailability.map((row) => (
-                  <TableRow key={row.class}>
-                    <TableCell>{`Class ${row.class}`}</TableCell>
-                    <TableCell>{row.seatsAvailable}</TableCell>
-                    <TableCell>
-                      <PrimaryButton
-                        onClick={handleOpenModal}
-                        color={"student"}
-                        disabled={row.seatsAvailable === 0}
-                      >
-                        {row.seatsAvailable > 0 ? "Take Admission" : "Full"}
-                      </PrimaryButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <AdmissionForm open={openModal} onClose={handleCloseModal} />
+    <div className="w-full min-h-screen bg-white">
+      <div className="component-container max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <h2 className="mb-4 font-bold text-2xl md:text-4xl">Admissions</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full table-auto">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="px-4 py-2 text-left">Class</th>
+                <th className="px-4 py-2 text-left">Seats Available</th>
+                <th className="px-4 py-2 text-left">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {seatAvailability.map((row) => (
+                <tr key={row.class} className="odd:bg-gray-100">
+                  <td className="px-4 py-2 font-medium">{`Class ${row.class}`}</td>
+                  <td className="px-4 py-2">{row.seatsAvailable}</td>
+                  <td className="px-4 py-2">
+                    <PrimaryButton
+                      onClick={handleOpenModal}
+                      color={"student"}
+                      disabled={row.seatsAvailable === 0}
+                    >
+                      {row.seatsAvailable > 0 ? "Take Admission" : "Full"}
+                    </PrimaryButton>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
+        <AdmissionForm open={openModal} onClose={handleCloseModal} />
       </div>
     </div>
   );

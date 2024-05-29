@@ -1,34 +1,8 @@
 import React from "react";
-import {
-  Modal,
-  Fade,
-  Typography,
-  TextField,
-  Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material";
-import "./AdmissionForm.css";
+import { Modal, Fade, Typography } from "@mui/material";
 import axios from "axios";
 import { BASE_URL } from "../../config";
-
-const modalStyle = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: "rgba(0, 0, 0, 0.5)",
-};
-
-const modalContentStyle = {
-  backgroundColor: "#F9F9F9",
-  borderRadius: "12px",
-  padding: "40px",
-  maxWidth: "600px",
-  width: "80%",
-  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-};
+import "./AdmissionForm.css"; // Add any additional styles here if needed
 
 const AdmissionForm = ({ open, onClose }) => {
   const [formData, setFormData] = React.useState({
@@ -39,6 +13,8 @@ const AdmissionForm = ({ open, onClose }) => {
     selectedClass: "",
     fatherPhone: "",
     gender: "",
+    address: "",
+    email: "",
   });
 
   const handleChange = (e) => {
@@ -81,12 +57,12 @@ const AdmissionForm = ({ open, onClose }) => {
         alert(response.razorpay_signature);
       },
       prefill: {
-        name: "Gaurav Kumar",
-        email: "gaurav.kumar@example.com",
-        contact: "900090000",
+        name: formData.studentName,
+        email: formData.email,
+        contact: formData.fatherPhone,
       },
       notes: {
-        address: "Razorpay Corporate Office",
+        address: formData.address,
       },
       theme: {
         color: "#3399cc",
@@ -112,134 +88,162 @@ const AdmissionForm = ({ open, onClose }) => {
       onClose={onClose}
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
-      sx={modalStyle}
+      className="flex items-center justify-center"
     >
       <Fade in={open}>
-        <div className="animated-form" style={modalContentStyle}>
+        <div className="bg-white rounded-lg p-4 md:p-6 max-w-lg w-full mx-4 md:mx-auto shadow-lg overflow-y-auto max-h-screen">
           <Typography
             variant="h5"
             align="center"
-            style={{ marginBottom: "20px" }}
+            className="mb-4 md:mb-5 text-xl md:text-2xl font-bold"
           >
             Admission Form
           </Typography>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              id="studentName"
-              name="studentName"
-              label="Student Name"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.studentName}
-              onChange={handleChange}
-              required
-            />
-            <TextField
-              id="fatherName"
-              name="fatherName"
-              label="Father's Name"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.fatherName}
-              onChange={handleChange}
-              required
-            />
-            <TextField
-              id="motherName"
-              name="motherName"
-              label="Mother's Name"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.motherName}
-              onChange={handleChange}
-              required
-            />
-            <TextField
-              id="dateOfBirth"
-              name="dateOfBirth"
-              label="Date of Birth"
-              type="date"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.dateOfBirth}
-              onChange={handleChange}
-              required
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <FormControl variant="outlined" fullWidth margin="normal">
-              <InputLabel id="class-label">Class</InputLabel>
-              <Select
-                labelId="class-label"
-                id="selectedClass"
-                name="selectedClass"
-                value={formData.selectedClass}
-                onChange={handleChange}
-                label="Class"
-                required
-              >
-                <MenuItem value="Nursery">Nursery</MenuItem>
-                <MenuItem value="LKG">LKG</MenuItem>
-                <MenuItem value="UKG">UKG</MenuItem>
-                <MenuItem value="1">1</MenuItem>
-                <MenuItem value="2">2</MenuItem>
-                {/* Add more class options */}
-              </Select>
-            </FormControl>
-            <TextField
-              id="fatherPhone"
-              name="fatherPhone"
-              label="Father's Phone Number"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={formData.fatherPhone}
-              onChange={handleChange}
-              required
-            />
-            <FormControl variant="outlined" fullWidth margin="normal">
-              <InputLabel id="gender-label">Gender</InputLabel>
-              <Select
-                labelId="gender-label"
-                id="gender"
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                label="Gender"
-                required
-              >
-                <MenuItem value="male">Male</MenuItem>
-                <MenuItem value="female">Female</MenuItem>
-              </Select>
-            </FormControl>
-
-            <Button
+          <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
+            <div className="flex flex-col md:flex-row md:space-x-4">
+              <div className="w-full md:w-1/2">
+                <label className="block text-gray-700">Student Name</label>
+                <input
+                  id="studentName"
+                  name="studentName"
+                  type="text"
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                  value={formData.studentName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="w-full md:w-1/2">
+                <label className="block text-gray-700">Father's Name</label>
+                <input
+                  id="fatherName"
+                  name="fatherName"
+                  type="text"
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                  value={formData.fatherName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row md:space-x-4">
+              <div className="w-full md:w-1/2">
+                <label className="block text-gray-700">Mother's Name</label>
+                <input
+                  id="motherName"
+                  name="motherName"
+                  type="text"
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                  value={formData.motherName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="w-full md:w-1/2">
+                <label className="block text-gray-700">Date of Birth</label>
+                <input
+                  id="dateOfBirth"
+                  name="dateOfBirth"
+                  type="date"
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                  value={formData.dateOfBirth}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row md:space-x-4">
+              <div className="w-full md:w-1/2">
+                <label className="block text-gray-700">Class</label>
+                <select
+                  id="selectedClass"
+                  name="selectedClass"
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                  value={formData.selectedClass}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Class</option>
+                  <option value="Nursery">Nursery</option>
+                  <option value="LKG">LKG</option>
+                  <option value="UKG">UKG</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  {/* Add more class options */}
+                </select>
+              </div>
+              <div className="w-full md:w-1/2">
+                <label className="block text-gray-700">
+                  Father's Phone Number
+                </label>
+                <input
+                  id="fatherPhone"
+                  name="fatherPhone"
+                  type="text"
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                  value={formData.fatherPhone}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row md:space-x-4">
+              <div className="w-full md:w-1/2">
+                <label className="block text-gray-700">Gender</label>
+                <select
+                  id="gender"
+                  name="gender"
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                  value={formData.gender}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+              <div className="w-full md:w-1/2">
+                <label className="block text-gray-700">Email</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row md:space-x-4">
+              <div className="w-full">
+                <label className="block text-gray-700">Address</label>
+                <input
+                  id="address"
+                  name="address"
+                  type="text"
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                  value={formData.address}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+            <button
               type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-              style={{ marginTop: "20px" }}
+              className="w-full py-2 px-4 mt-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300"
             >
               Save
-            </Button>
+            </button>
           </form>
-          <Button
-            variant="contained"
-            fullWidth
+          <button
+            id="rzp-button1"
             onClick={handlePay}
-            style={{
-              marginTop: "20px",
-              backgroundColor: "#FF6B00",
-              color: "#FFFFFF",
-            }}
+            className="w-full py-2 px-4 mt-4 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors duration-300"
           >
             Pay Now
-          </Button>
+          </button>
         </div>
       </Fade>
     </Modal>
@@ -247,229 +251,3 @@ const AdmissionForm = ({ open, onClose }) => {
 };
 
 export default AdmissionForm;
-
-// import React from "react";
-// import {
-//   Modal,
-//   Fade,
-//   Typography,
-//   TextField,
-//   Button,
-//   FormControl,
-//   InputLabel,
-//   Select,
-//   MenuItem,
-// } from "@mui/material";
-// import "./AdmissionForm.css";
-
-// const modalStyle = {
-//   display: "flex",
-//   alignItems: "center",
-//   justifyContent: "center",
-//   backgroundColor: "rgba(0, 0, 0, 0.5)",
-// };
-
-// const modalContentStyle = {
-//   backgroundColor: "#F9F9F9", // Light gray background
-//   borderRadius: "12px", // Increased border radius for a softer look
-//   padding: "40px", // Increased padding for better spacing
-//   maxWidth: "800px", // Increased width
-//   width: "80%", // Adjusted width to make it responsive
-//   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)", // Added box shadow for depth
-// };
-
-// const formContainerStyle = {
-//   display: "flex",
-//   flexDirection: "column", // Display fields vertically
-//   gap: "20px", // Add space between fields
-// };
-
-// const horizontalContainerStyle = {
-//   display: "flex",
-//   flexDirection: "row", // Display fields horizontally
-//   justifyContent: "space-between", // Add space between fields
-// };
-
-// const formFieldStyle = {
-//   flex: 1, // Each field takes up equal space
-// };
-
-// const AdmissionForm = ({ open, onClose }) => {
-//   const [formData, setFormData] = React.useState({
-//     studentName: "",
-//     fatherName: "",
-//     motherName: "",
-//     dateOfBirth: "",
-//     selectedClass: "",
-//     fatherPhone: "",
-//     gender: "",
-//   });
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prevFormData) => ({
-//       ...prevFormData,
-//       [name]: value,
-//     }));
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     // You can perform form submission or validation here
-//     onClose();
-//   };
-
-//   const handlePay = () => {
-//     // Here, you can redirect the user to the Razorpay payment gateway
-//     // Example: window.location.href = 'YOUR_RAZORPAY_PAYMENT_URL';
-//     // Make sure to replace 'YOUR_RAZORPAY_PAYMENT_URL' with the actual URL provided by Razorpay
-//   };
-
-//   return (
-//     <Modal
-//       open={open}
-//       onClose={onClose}
-//       aria-labelledby="modal-title"
-//       aria-describedby="modal-description"
-//       sx={modalStyle}
-//     >
-//       <Fade in={open}>
-//         <div className="animated-form" style={modalContentStyle}>
-//           <Typography
-//             variant="h5"
-//             align="center"
-//             style={{ marginBottom: "20px" }}
-//           >
-//             Admission Form
-//           </Typography>
-//           <form onSubmit={handleSubmit} style={formContainerStyle}>
-//             <div style={horizontalContainerStyle}>
-//               <TextField
-//                 id="studentName"
-//                 name="studentName"
-//                 label="Student Name"
-//                 variant="outlined"
-//                 fullWidth
-//                 value={formData.studentName}
-//                 onChange={handleChange}
-//                 required
-//                 style={formFieldStyle}
-//               />
-//               <TextField
-//                 id="fatherName"
-//                 name="fatherName"
-//                 label="Father's Name"
-//                 variant="outlined"
-//                 fullWidth
-//                 value={formData.fatherName}
-//                 onChange={handleChange}
-//                 required
-//                 style={{ ...formFieldStyle, marginLeft: "20px" }}
-//               />
-//             </div>
-//             <div style={horizontalContainerStyle}>
-//               <TextField
-//                 id="motherName"
-//                 name="motherName"
-//                 label="Mother's Name"
-//                 variant="outlined"
-//                 fullWidth
-//                 value={formData.motherName}
-//                 onChange={handleChange}
-//                 required
-//                 style={formFieldStyle}
-//               />
-//               <TextField
-//                 id="dateOfBirth"
-//                 name="dateOfBirth"
-//                 label="Date of Birth"
-//                 type="date"
-//                 variant="outlined"
-//                 fullWidth
-//                 value={formData.dateOfBirth}
-//                 onChange={handleChange}
-//                 required
-//                 InputLabelProps={{
-//                   shrink: true,
-//                 }}
-//                 style={{ ...formFieldStyle, marginLeft: "20px" }}
-//               />
-//             </div>
-//             <div style={horizontalContainerStyle}>
-//               <FormControl variant="outlined" fullWidth>
-//                 <InputLabel id="class-label">Class</InputLabel>
-//                 <Select
-//                   labelId="class-label"
-//                   id="selectedClass"
-//                   name="selectedClass"
-//                   value={formData.selectedClass}
-//                   onChange={handleChange}
-//                   label="Class"
-//                   required
-//                   style={formFieldStyle}
-//                 >
-//                   <MenuItem value="Nursery">Nursery</MenuItem>
-//                   <MenuItem value="LKG">LKG</MenuItem>
-//                   <MenuItem value="UKG">UKG</MenuItem>
-//                   <MenuItem value="1">1</MenuItem>
-//                   <MenuItem value="2">2</MenuItem>
-//                   {/* Add more class options */}
-//                 </Select>
-//               </FormControl>
-//               <FormControl variant="outlined" fullWidth>
-//                 <InputLabel id="gender-label">Gender</InputLabel>
-//                 <Select
-//                   labelId="gender-label"
-//                   id="gender"
-//                   name="gender"
-//                   value={formData.gender}
-//                   onChange={handleChange}
-//                   label="Gender"
-//                   required
-//                   style={{ ...formFieldStyle, marginLeft: "20px" }}
-//                 >
-//                   <MenuItem value="male">Male</MenuItem>
-//                   <MenuItem value="female">Female</MenuItem>
-//                 </Select>
-//               </FormControl>
-//             </div>
-//             <TextField
-//               id="fatherPhone"
-//               name="fatherPhone"
-//               label="Father's Phone Number"
-//               variant="outlined"
-//               fullWidth
-//               value={formData.fatherPhone}
-//               onChange={handleChange}
-//               required
-//               style={{ ...formFieldStyle, marginTop: "20px" }}
-//             />
-//             <Button
-//               type="submit"
-//               variant="contained"
-//               color="primary"
-//               fullWidth
-//               style={{ marginTop: "20px" }}
-//             >
-//               Save
-//             </Button>
-//           </form>
-//           <Button
-//             variant="contained"
-//             fullWidth
-//             onClick={handlePay}
-//             style={{
-//               marginTop: "20px",
-//               backgroundColor: "#FF6B00",
-//               color: "#FFFFFF",
-//             }}
-//           >
-//             Pay Now
-//           </Button>
-//         </div>
-//       </Fade>
-//     </Modal>
-//   );
-// };
-
-// export default AdmissionForm;
