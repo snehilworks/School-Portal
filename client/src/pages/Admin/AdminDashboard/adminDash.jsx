@@ -61,7 +61,10 @@ const AdminDashboard = () => {
       <AdminSidebar setSelectedContent={setSelectedContent} />
 
       {/* Main Content */}
-      <Container maxWidth="lg">
+      <Container
+        className="bg-gradient-to-l  from-blue-100 to-blue-300"
+        style={{ flex: 1 }}
+      >
         <Typography
           variant="h4"
           style={{ marginBottom: "32px", marginTop: "32px" }}

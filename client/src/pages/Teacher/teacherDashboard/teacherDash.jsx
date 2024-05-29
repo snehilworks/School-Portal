@@ -51,7 +51,10 @@ const TeacherDashboard = () => {
       />
 
       {/* Main Content */}
-      <div style={{ flex: 1 }}>
+      <div
+        className="bg-gradient-to-r from-blue-100 to-blue-300"
+        style={{ flex: 1 }}
+      >
         <Container maxWidth="lg">
           <Typography
             variant="h4"

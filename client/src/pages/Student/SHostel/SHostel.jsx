@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 
 function HostelDetailsPage() {
   const [hostelDetails, setHostelDetails] = useState({
-    name: "Sunshine Hostel",
+    name: "Shivam Public Hostel",
     address: "123 ABC Street, City",
     capacity: 100,
     occupancy: 80,
-    facilities: ["WiFi", "Laundry", "Gym", "Cafeteria"],
+    facilities: ["Food", "Laundry", "Cafeteria"],
     roomTypes: [
       { class: "6 to 10", price: "100,000" },
       { class: "11 & 12", price: "120,000" },
