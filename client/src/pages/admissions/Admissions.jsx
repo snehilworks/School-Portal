@@ -1,18 +1,10 @@
-import React from "react";
-import {
-  Container,
-  Typography,
-  Table,
-  TableContainer,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
-} from "@mui/material";
-import "./Admissions.css"; // Import the CSS file
+import React, { useState } from "react";
+import PrimaryButton from "../../components/ui/PrimaryButton";
+import AdmissionForm from "../../components/Home/AdmissionForm";
 
 const AdmissionsPage = () => {
+  const [openModal, setOpenModal] = useState(false);
+
   // Dummy data for seat availability
   const seatAvailability = [
     { class: "Nursery", seatsAvailable: 1 },
@@ -34,43 +26,49 @@ const AdmissionsPage = () => {
     { class: "12-Arts", seatsAvailable: 10 },
   ];
 
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
   return (
-    <Container maxWidth="md" className="admission-container">
-      <Typography variant="h4" align="center" className="admissions-heading">
-        Admissions
-      </Typography>
-      <TableContainer component={Paper} className="admissions-table-container">
-        <Table className="admissions-table">
-          <TableHead>
-            <TableRow>
-              <TableCell className="table-header">Class</TableCell>
-              <TableCell className="table-header">Seats Available</TableCell>
-              <TableCell className="table-header">Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {seatAvailability.map((row) => (
-              <TableRow key={row.class}>
-                <TableCell>{`Class ${row.class}`}</TableCell>
-                <TableCell>{row.seatsAvailable}</TableCell>
-                <TableCell>
-                  <button
-                    className={
-                      row.seatsAvailable > 0
-                        ? "admissions-button"
-                        : "admissions-button-disabled"
-                    }
-                    disabled={row.seatsAvailable === 0}
-                  >
-                    {row.seatsAvailable > 0 ? "Take Admission" : "Full"}
-                  </button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Container>
+    <div className="w-full min-h-screen bg-white">
+      <div className="component-container max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <h2 className="mb-4 font-bold text-2xl md:text-4xl">Admissions</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full table-auto">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="px-4 py-2 text-left">Class</th>
+                <th className="px-4 py-2 text-left">Seats Available</th>
+                <th className="px-4 py-2 text-left">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {seatAvailability.map((row) => (
+                <tr key={row.class} className="odd:bg-gray-100">
+                  <td className="px-4 py-2 font-medium">{`Class ${row.class}`}</td>
+                  <td className="px-4 py-2">{row.seatsAvailable}</td>
+                  <td className="px-4 py-2">
+                    <PrimaryButton
+                      onClick={handleOpenModal}
+                      color={"student"}
+                      disabled={row.seatsAvailable === 0}
+                    >
+                      {row.seatsAvailable > 0 ? "Take Admission" : "Full"}
+                    </PrimaryButton>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <AdmissionForm open={openModal} onClose={handleCloseModal} />
+      </div>
+    </div>
   );
 };
 

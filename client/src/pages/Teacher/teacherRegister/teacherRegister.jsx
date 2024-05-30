@@ -3,7 +3,6 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { BASE_URL } from "../../../config";
 import { useNavigate } from "react-router-dom";
 import { userState } from "../../../store/atoms/user";
 import "./teacherRegister.css";
@@ -55,7 +54,7 @@ function Register() {
             size={"large"}
             variant="contained"
             onClick={async () => {
-              const response = await axios.post(`${BASE_URL}/admin/signup`, {
+              const response = await axios.post(`${process.env.API_URL}/admin/signup`, {
                 username: email,
                 password: password,
               });

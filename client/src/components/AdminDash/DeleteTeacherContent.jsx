@@ -61,39 +61,69 @@ const DeleteTeacherComponent = () => {
   };
 
   return (
-    <div>
-      <Card>
-        <CardContent>
-          <Typography variant="h5" gutterBottom align="center">
-            <strong>Delete Teacher</strong>
-          </Typography>
-          <FormControl fullWidth style={{ marginBottom: "16px" }}>
-            <InputLabel id="teacher-select-label">Select Teacher</InputLabel>
-            <Select
-              labelId="teacher-select-label"
-              id="teacher-select"
-              value={selectedTeacherId}
-              onChange={handleSelectChange}
-              fullWidth
-            >
-              {teachers.map((teacher) => (
-                <MenuItem key={teacher.id} value={teacher.id}>
-                  {teacher.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Box display="flex" justifyContent="center">
-            <Button
-              variant="contained"
-              color="error"
-              onClick={handleDeleteButtonClick}
-            >
-              Delete
-            </Button>
-          </Box>
-        </CardContent>
-      </Card>
+    <Card
+      sx={{
+        maxWidth: 500,
+        margin: "auto",
+        borderRadius: 4,
+        boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.1)",
+      }}
+    >
+      <CardContent>
+        <Typography
+          variant="h5"
+          gutterBottom
+          align="center"
+          sx={{ fontWeight: 600, mb: 4 }}
+        >
+          Delete Teacher
+        </Typography>
+        <FormControl fullWidth>
+          <InputLabel id="teacher-select-label" sx={{ fontWeight: 500 }}>
+            Select Teacher
+          </InputLabel>
+          <Select
+            labelId="teacher-select-label"
+            id="teacher-select"
+            value={selectedTeacherId}
+            onChange={handleSelectChange}
+            fullWidth
+            sx={{
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "text.primary",
+              },
+            }}
+          >
+            {teachers.map((teacher) => (
+              <MenuItem key={teacher.id} value={teacher.id}>
+                {teacher.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Box display="flex" justifyContent="center" mt={4}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleDeleteButtonClick}
+            sx={{
+              borderRadius: 30,
+              fontWeight: 600,
+              px: 5,
+              boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.15)",
+              transform: "translateY(-4px)",
+              transition: "transform 0.3s ease-in-out",
+              "&:hover": {
+                boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.25)",
+                transform: "translateY(-2px)",
+              },
+            }}
+          >
+            Delete
+          </Button>
+        </Box>
+      </CardContent>
+
       {/* Confirmation dialog */}
       <Dialog
         open={isConfirmationDialogOpen}
@@ -101,24 +131,33 @@ const DeleteTeacherComponent = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Confirm Deletion</DialogTitle>
+        <DialogTitle id="alert-dialog-title" sx={{ fontWeight: 600 }}>
+          Confirm Deletion
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Are you sure you want to delete this teacher?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteCanceled} color="primary">
+          <Button
+            onClick={handleDeleteCanceled}
+            color="primary"
+            sx={{ fontWeight: 500 }}
+          >
             Cancel
           </Button>
-          <Button onClick={handleDeleteConfirmed} color="error" autoFocus>
-            {" "}
-            {/* Set color to red */}
+          <Button
+            onClick={handleDeleteConfirmed}
+            color="error"
+            autoFocus
+            sx={{ fontWeight: 500 }}
+          >
             Delete
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </Card>
   );
 };
 

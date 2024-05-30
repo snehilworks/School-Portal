@@ -1,0 +1,14 @@
+.animated-form input:focus,
+.animated-form select:focus,
+.animated-form textarea:focus {
+  border-color: #2196f3; /* Change border color on focus */
+  box-shadow: 0 0 0 0.1rem rgba(33, 150, 243, 0.25); /* Add box shadow on focus */
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth transition */
+}
+
+.animated-form input:hover,
+.animated-form select:hover,
+.animated-form textarea:hover {
+  background-color: #f0f0f0; /* Change background color on hover */
+  transition: background-color 0.2s ease-in-out; /* Smooth transition */
+}

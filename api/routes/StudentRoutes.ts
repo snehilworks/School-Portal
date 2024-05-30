@@ -19,6 +19,8 @@ router.get("/profile", StudentController.getProfile);
 // Route to access student Hostel Related information
 router.get("/hostel", StudentController.getHostel);
 
+router.get('/class', StudentController.getClass);
+
 // Route to access student dashboard
 // router.get("/dashboard", StudentController.getDashboard);
 

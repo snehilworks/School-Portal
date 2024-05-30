@@ -1,19 +1,5 @@
 import express from "express";
-import {
-  getAllTeachers,
-  addTeacher,
-  updateTeacher,
-  deleteTeacher,
-  updateAdmissionStatus,
-  getAllStudents,
-  getAdmissionList,
-  getFees,
-  updateAdmissionSeats,
-  getSpecificTeacher,
-  getSpecificStudent,
-  setClassTeacher,
-  getAllClasses
-} from "./../controller/adminController";
+import * as AdminController from "./../controller/adminController";
 import FeeController  from './../controller/feeController';
 
 const router = express.Router();
@@ -23,24 +9,25 @@ router.get("/", (req, res) => {
 });
 
 // Teachers Routes
-router.get("/teachers", getAllTeachers);
-router.post("/teachers", addTeacher);
-router.get("/teachers/:id", getSpecificTeacher);
-router.put("/teachers/:id", updateTeacher);
-router.delete("/teachers/:id", deleteTeacher);
+router.get("/teachers", AdminController.getAllTeachers);
+router.post("/teachers", AdminController.addTeacher);
+router.get("/teachers/:id", AdminController.getSpecificTeacher);
+router.put("/teachers/:id", AdminController.updateTeacher);
+router.delete("/teachers/:id", AdminController.deleteTeacher);
 
 // Students Routes
-router.get("/students", getAllStudents);
-router.get("/students/:id", getSpecificStudent);
-router.put("/students/:id", updateAdmissionStatus);
+router.get("/students", AdminController.getAllStudents);
+router.get("/students/:id", AdminController.getSpecificStudent);
+router.put("/students/:id", AdminController.updateAdmissionStatus);
 
 // Fees Routes
-router.get("/fees", getFees);
+router.get("/fees", AdminController.getFees);
+router.post('/set-fees', AdminController.setFees);
 
 // Class Routes
-router.get('/classes', getAllClasses);
-router.put("/admission-seat/:id", updateAdmissionSeats);
-router.put("/set-class-teacher/:id", setClassTeacher);
+router.get('/classes', AdminController.getAllClasses);
+router.put("/admission-seat/:id", AdminController.updateAdmissionSeats);
+router.put("/set-class-teacher/:id", AdminController.setClassTeacher);
 
 //Admission list get with the className
 // router.get("/admissions/list", getAdmissionList);

@@ -1,18 +1,9 @@
-import {
-  Grid,
-  Box,
-  Paper,
-  Avatar,
-  Typography,
-  TextField,
-  Button,
-} from "@mui/material";
+import { Grid, Box, Paper, Avatar, Typography, TextField, Button } from "@mui/material";
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { userState } from "../../../store/atoms/user";
-import { BASE_URL } from "../../../config";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 function TeacherLogin() {
@@ -23,7 +14,7 @@ function TeacherLogin() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/teacher/login`, {
+      const response = await axios.post(`${process.env.API_URL}/api/teacher/login`, {
         email: email,
         password: password,
       });
@@ -60,31 +51,9 @@ function TeacherLogin() {
               handleLogin();
             }}
           >
-            <TextField
-              fullWidth
-              label="Teacher's Email"
-              variant="outlined"
-              margin="normal"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Teacher's Password"
-              variant="outlined"
-              type="password"
-              margin="normal"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-            <Button
-              fullWidth
-              type="submit"
-              variant="contained"
-              size="large"
-              sx={{ mt: 2 }}
-              style={{ backgroundColor: "#00bcd4", color: "#fff" }}
-            >
+            <TextField fullWidth label="Teacher's Email" variant="outlined" margin="normal" value={email} onChange={(event) => setEmail(event.target.value)} />
+            <TextField fullWidth label="Teacher's Password" variant="outlined" type="password" margin="normal" value={password} onChange={(event) => setPassword(event.target.value)} />
+            <Button fullWidth type="submit" variant="contained" size="large" sx={{ mt: 2 }} style={{ backgroundColor: "#00bcd4", color: "#fff" }}>
               Login
             </Button>
           </form>
