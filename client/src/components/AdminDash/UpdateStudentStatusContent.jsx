@@ -23,7 +23,7 @@ const UpdateStudentStatusContent = () => {
   const fetchStudents = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/admin/students"
+        `${process.env.API_URL}/api/admin/students`
       );
       console.log("Fetched students:", response.data); // Debug log
       setStudents(response.data);

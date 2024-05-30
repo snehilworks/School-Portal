@@ -14,12 +14,11 @@ import {
   Person as PersonIcon,
 } from "@mui/icons-material";
 import axios from "axios";
-import { BASE_URL } from "../../config";
 
 const DashboardContent = () => {
   const handleClick = async () => {
     try {
-      await axios.get(`${BASE_URL}/api/admin/teachers`);
+      await axios.get(`${process.env.API_URL}/api/admin/teachers`);
       // Handle successful response (optional)
       console.log("Request to /api/admin/teachers successful");
     } catch (error) {

@@ -36,7 +36,7 @@ const UpdateTeacherContent = () => {
   const fetchTeachers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/admin/teachers"
+        `${process.env.API_URL}/api/admin/teachers`
       );
       setTeachers(response.data);
     } catch (error) {
@@ -49,7 +49,7 @@ const UpdateTeacherContent = () => {
     setSelectedTeacherId(selectedId);
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/admin/teacher/${selectedId}`
+        `${process.env.API_URL}/api/admin/teacher/${selectedId}`
       );
       setTeacherDetails(response.data);
     } catch (error) {
@@ -69,7 +69,7 @@ const UpdateTeacherContent = () => {
     event.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:4000/api/admin/teacher/${selectedTeacherId}`,
+        `${process.env.API_URL}/api/admin/teacher/${selectedTeacherId}`,
         teacherDetails
       );
       console.log("Teacher details updated successfully:", response.data);

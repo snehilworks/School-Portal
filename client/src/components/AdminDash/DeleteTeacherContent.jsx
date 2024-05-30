@@ -29,7 +29,7 @@ const DeleteTeacherComponent = () => {
   const fetchTeachers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/admin/teachers"
+        `${process.env.API_URL}/api/admin/teachers`
       );
       setTeachers(response.data);
     } catch (error) {

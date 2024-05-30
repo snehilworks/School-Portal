@@ -58,7 +58,7 @@ const AddTeacherContent = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/admin/teachers",
+        `${process.env.API_URL}/api/admin/teachers`,
         payload
       );
       console.log("Teacher details submitted successfully:", response.data);

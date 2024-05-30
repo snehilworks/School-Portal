@@ -1,7 +1,6 @@
 import React from "react";
 import { Modal, Fade, Typography } from "@mui/material";
 import axios from "axios";
-import { BASE_URL } from "../../config";
 import "./AdmissionForm.css"; // Add any additional styles here if needed
 
 const AdmissionForm = ({ open, onClose }) => {
@@ -36,7 +35,7 @@ const AdmissionForm = ({ open, onClose }) => {
   const receiptId = "OrderReceipt 1";
 
   const handlePay = async (e) => {
-    const response = await axios.post(`${BASE_URL}/order`, {
+    const response = await axios.post(`${process.env.API_URL}/order`, {
       amount,
       currency,
       receipt: receiptId,

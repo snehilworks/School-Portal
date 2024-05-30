@@ -15,7 +15,6 @@ import {
   Grow,
 } from "@mui/material";
 import axios from "axios";
-import { BASE_URL } from "../../config";
 
 function FeeForm() {
   const [classes, setClasses] = useState([]);
@@ -35,7 +34,9 @@ function FeeForm() {
 
   const fetchClasses = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/admin/classes`);
+      const response = await axios.get(
+        `${process.env.API_URL}/api/admin/classes`
+      );
       setClasses(response.data);
     } catch (error) {
       console.error("Error fetching classes:", error.message);
@@ -53,7 +54,7 @@ function FeeForm() {
 
     try {
       const response = await axios.post(
-        `${BASE_URL}/api/admin/set-fees`,
+        `${process.env.API_URL}/api/admin/set-fees`,
         {
           classIds: feeData.selectedClass,
           description: feeData.description,
