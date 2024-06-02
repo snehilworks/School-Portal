@@ -47,10 +47,18 @@ const DeleteTeacherComponent = () => {
 
   const handleDeleteConfirmed = async () => {
     try {
-      // Make API call to delete the selected teacher
       console.log("Deleting teacher with ID:", selectedTeacherId);
+      await axios.delete(
+        `${process.env.API_URL}/api/admin/teachers/${selectedTeacherId}`
+      );
+      // Update the teachers state to remove the deleted teacher
+      setTeachers(
+        teachers.filter((teacher) => teacher.id !== selectedTeacherId)
+      );
       // Close confirmation dialog
       setConfirmationDialogOpen(false);
+      // Clear selected teacher ID
+      setSelectedTeacherId("");
     } catch (error) {
       console.error("Error deleting teacher:", error);
     }
