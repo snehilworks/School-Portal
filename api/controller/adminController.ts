@@ -194,7 +194,12 @@ export const setFees = async (req: Request, res: Response) => {
 
     const existingClass = await Class.findOne({ name: className });
     if (!existingClass) {
-      return res.status(404).json({ message: "Class not found" });
+      return res.status(422).json({ message: "Class not found" });
+    }
+
+    const existingFee = await Fee.findOne({ class: existingClass._id });
+    if (existingFee) {
+      return res.status(422).json({ message: "Fee already set for this class" });
     }
 
     const newFee = new Fee({

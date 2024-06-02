@@ -1,5 +1,8 @@
+import dotenv from 'dotenv';
 import mongoose from "mongoose";
 import ClassModel, { Class } from "../models/classModel";
+
+dotenv.config();
 
 const classData: Partial<Class>[] = [
   { className: "Nursery-Eng", classTeacher: null, seatsAvailable: null },
@@ -34,7 +37,7 @@ const classData: Partial<Class>[] = [
 
 async function seedClassesData() {
   try {
-      await mongoose.connect("mongodb://127.0.0.1:27017/Shivam-Public", {
+      await mongoose.connect(`${process.env.DATABASE_URL}`, {
         dbName: "Shivam-Public"
       });
 
