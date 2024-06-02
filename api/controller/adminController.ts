@@ -4,9 +4,6 @@ import Teacher from "../models/teacherModel";
 import Student from "../models/studentModel";
 import Fee from "../models/feeModel";
 import Class from "../models/classModel";
-import Admission, {
-  Admission as AdmissionType,
-} from "../models/admissionModel";
 
 // adding a new teacher
 export const addTeacher = async (req: Request, res: Response) => {
@@ -166,20 +163,20 @@ export const updateAdmissionStatus = async (req: Request, res: Response) => {
   }
 };
 
-export const getAdmissionList = async (req: Request, res: Response) => {
-  try {
-    const admissions: AdmissionType[] = await Admission.find();
+// export const getAdmissionList = async (req: Request, res: Response) => {
+//   try {
+//     const admissions: AdmissionType[] = await Admission.find();
 
-    if (!admissions || admissions.length === 0) {
-      return res.status(404).json({ message: "No admissions found" });
-    }
+//     if (!admissions || admissions.length === 0) {
+//       return res.status(404).json({ message: "No admissions found" });
+//     }
 
-    res.status(201).json(admissions);
-  } catch (error) {
-    console.log("Error Getting admission list: ", error);
-    res.status(512).json({ message: "Internal server error" });
-  }
-};
+//     res.status(201).json(admissions);
+//   } catch (error) {
+//     console.log("Error Getting admission list: ", error);
+//     res.status(512).json({ message: "Internal server error" });
+//   }
+// };
 
 //add in class Model
 // export const addAdmissionSeats = async (req: Request, res: Response) => {
