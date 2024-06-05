@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    origin: "https://shivam-public.vercel.app/",
+    origin: "https://shivam-public.vercel.app",
   })
 );
 
