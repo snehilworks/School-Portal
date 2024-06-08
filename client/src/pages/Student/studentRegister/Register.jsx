@@ -14,15 +14,18 @@ function Register() {
 
   const handleRegister = async () => {
     try {
-      const response = await axios.post(`${process.env.API_URL}/api/student/register`, {
-        username: email,
-        password: password,
-      });
+      const response = await axios.post(
+        `${process.env.API_URL}/api/student/register`,
+        {
+          email: email,
+          password: password,
+        }
+      );
       const data = response.data;
       if (response.status === 201) {
         localStorage.setItem("token", data.token);
         setUser({ userEmail: email, isLoading: false });
-        navigate("/dashboard");
+        navigate("/student/dashboard");
       } else {
         console.error("Registration failed:", data.message);
         // Handle registration failure, such as displaying an error message to the user

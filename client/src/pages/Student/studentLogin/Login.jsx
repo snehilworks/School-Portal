@@ -16,24 +16,30 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${process.env.API_URL}/api/student/login`, {
-        email: email,
-        password: password,
-      });
-      const data = response.data;
-      if (response.status === 201) {
+      const response = await axios.post(
+        `${process.env.API_URL}/api/student/login`,
+        {
+          email,
+          password,
+        }
+      );
+
+      if (response.status === 200) {
+        const data = response.data;
         localStorage.setItem("token", data.token);
+        // Assuming setUser is defined somewhere and used for setting user context/state
         setUser({ userEmail: email, isLoading: false });
+
+        console.log("Navigating to /student/dashboard");
         navigate("/student/dashboard");
       } else {
-        console.error("Login failed:", data.message);
-        // Handle login failure, such as displaying an error message to the user
+        console.error("Login failed:", response.data.message);
       }
     } catch (error) {
       console.error("Login failed:", error);
-      // Handle login failure, such as displaying an error message to the user
     }
   };
+  
 
   return (
     <Grid container justifyContent="center" alignItems="center" height="100vh">
