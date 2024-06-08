@@ -46,13 +46,13 @@ export const login = async (req: Request, res: Response) => {
 
     if (!email || !password) {
       return res
-        .status(400)
+        .status(422)
         .json({ message: "Email and password are required." });
     }
 
     const teacher_data = await Teacher.findOne({ email });
     if (!teacher_data) {
-      return res.status(404).json({ message: "Teacher Data not Found!" });
+      return res.status(401).json({ message: "Teacher Data not Found!" });
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -61,7 +61,7 @@ export const login = async (req: Request, res: Response) => {
     );
 
     if (!isPasswordValid) {
-      return res.status(403).json({ message: "Invalid email or password" });
+      return res.status(422).json({ message: "Invalid email or password" });
     }
 
     const teacherId = teacher_data._id;
@@ -69,18 +69,16 @@ export const login = async (req: Request, res: Response) => {
       {
         id: teacherId,
       },
-      JWT_SECRET
+      JWT_SECRET,
+      { expiresIn: '1h' }
     );
 
-    res.cookie("sps", token);
+    res.cookie("sps", token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
 
-    res.status(302).json({
-      message: "Logged in Successfully",
-      teacher: teacher_data._id,
-    });
+    return res.status(200).json({ token });
   } catch (error) {
     console.error("Error during login:", error);
-    res.status(512).json({ message: "Internal server error" });
+    res.status(512).json({ message: "Something went wrong" });
   }
 };
 
