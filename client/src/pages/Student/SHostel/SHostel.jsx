@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import HostelFeesForm from "../../../components/StudentDash/HostelFeesForm"; // Adjust the import path as needed
 
 function HostelDetailsPage() {
   const [hostelDetails, setHostelDetails] = useState({
@@ -13,6 +14,8 @@ function HostelDetailsPage() {
     ],
   });
 
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   useEffect(() => {
     const fetchHostelDetails = async () => {
       const response = await fetch("/api/hostel-details");
@@ -24,12 +27,18 @@ function HostelDetailsPage() {
   }, []);
 
   const handlePayFees = () => {
-    alert("Payment functionality will be implemented soon!");
+    setIsFormOpen(true);
+  };
+
+  const closeForm = () => {
+    setIsFormOpen(false);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-500 to-indigo-600 py-8">
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
+      <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 mt-30">
+        {" "}
+        {/* Adjusted margin-top */}
         <h1 className="text-3xl font-bold text-indigo-600 mb-6">
           {hostelDetails.name}
         </h1>
@@ -123,6 +132,9 @@ function HostelDetailsPage() {
           </button>
         </div>
       </div>
+
+      {/* HostelFeesForm Modal */}
+      <HostelFeesForm isOpen={isFormOpen} onClose={closeForm} />
     </div>
   );
 }

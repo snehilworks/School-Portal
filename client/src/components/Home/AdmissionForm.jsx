@@ -1,7 +1,6 @@
 import React from "react";
 import { Modal, Fade, Typography } from "@mui/material";
 import axios from "axios";
-// import { BASE_URL } from "../../config";
 import "./AdmissionForm.css"; // Add any additional styles here if needed
 
 const AdmissionForm = ({ open, onClose }) => {
@@ -91,7 +90,27 @@ const AdmissionForm = ({ open, onClose }) => {
       className="flex items-center justify-center"
     >
       <Fade in={open}>
-        <div className="bg-white rounded-lg p-4 md:p-6 max-w-lg w-full mx-4 md:mx-auto shadow-lg overflow-y-auto max-h-screen">
+        <div className="relative bg-white rounded-lg p-4 md:p-6 max-w-lg w-full mx-4 md:mx-auto shadow-lg overflow-y-auto max-h-screen">
+          <button
+            onClick={onClose}
+            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 focus:outline-none"
+            aria-label="Close"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
           <Typography
             variant="h5"
             align="center"

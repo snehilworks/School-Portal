@@ -27,16 +27,19 @@ const UpdateTeacherContent = () => {
     phone: "",
     classTeacher: false,
     classes: "",
+    classId: "",
   });
+  const [classes, setClasses] = useState([]); // State to hold class options
 
   useEffect(() => {
     fetchTeachers();
+    fetchClasses();
   }, []);
 
   const fetchTeachers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/api/admin/teachers"
+        `${process.env.API_URL}/api/admin/teachers`
       );
       setTeachers(response.data);
     } catch (error) {
@@ -44,14 +47,49 @@ const UpdateTeacherContent = () => {
     }
   };
 
+  const fetchClasses = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.API_URL}/api/admin/classes`
+      );
+      setClasses(response.data);
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+    }
+  };
+  // useEffect(() => {
+  //   console.log("Updated Teacher Details:", teacherDetails);
+  // }, [teacherDetails]);
+
   const handleSelectChange = async (event) => {
     const selectedId = event.target.value;
+    console.log("Selected Teacher ID:", selectedId); // Check if selectedId is correct
     setSelectedTeacherId(selectedId);
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/admin/teacher/${selectedId}`
+        `${process.env.API_URL}/api/admin/teacher/${selectedId}`
       );
-      setTeacherDetails(response.data);
+      const { data } = response;
+      console.log("Received Teacher Details:", data); // Check the received teacher details
+      // console.log(response.data.name);
+      console.log(data.data.name);
+      console.log(data.data.email);
+      // console.log(data.phone);
+      console.log(data.data.classes.join(", "));
+      console.log(data.data.subjects.join(", "));
+      const updatedTeacherDetails = {
+        name: data.data.name || "",
+        email: data.data.email || "",
+        password: data.data.password || "",
+        subjects: data.data.subjects ? data.data.subjects.join(", ") : "",
+        phone: data.data.phone || "",
+        classTeacher: data.data.classTeacher || false,
+        classes: data.data.classes ? data.data.classes.join(", ") : "",
+        classId: data.data.class ? data.data.class._id : "", // Assuming classId is fetched from class._id
+      };
+
+      setTeacherDetails(updatedTeacherDetails);
+      console.log("Updated Teacher Details:", updatedTeacherDetails); // Check the updated teacherDetails state
     } catch (error) {
       console.error("Error fetching teacher details:", error);
     }
@@ -67,10 +105,15 @@ const UpdateTeacherContent = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const payload = {
+      ...teacherDetails,
+      classId: teacherDetails.classTeacher ? teacherDetails.classId : null,
+    };
+
     try {
       const response = await axios.put(
-        `http://localhost:4000/api/admin/teacher/${selectedTeacherId}`,
-        teacherDetails
+        `${process.env.API_URL}/api/admin/teacher/${selectedTeacherId}`,
+        payload
       );
       console.log("Teacher details updated successfully:", response.data);
     } catch (error) {
@@ -95,7 +138,7 @@ const UpdateTeacherContent = () => {
               fullWidth
             >
               {teachers.map((teacher) => (
-                <MenuItem key={teacher.id} value={teacher.id}>
+                <MenuItem key={teacher._id} value={teacher._id}>
                   {teacher.name}
                 </MenuItem>
               ))}
@@ -184,6 +227,29 @@ const UpdateTeacherContent = () => {
                   label="Class Teacher"
                 />
               </Grid>
+              {teacherDetails.classTeacher && (
+                <Grid item xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel id="class-select-label">
+                      Select Class
+                    </InputLabel>
+                    <Select
+                      labelId="class-select-label"
+                      id="class-select"
+                      name="classId"
+                      value={teacherDetails.classId}
+                      onChange={handleChange}
+                      fullWidth
+                    >
+                      {classes.map((classItem) => (
+                        <MenuItem key={classItem._id} value={classItem._id}>
+                          {classItem.className}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              )}
               <Grid item xs={12}>
                 <Box display="flex" justifyContent="center" marginTop={2}>
                   <Button variant="contained" color="primary" type="submit">

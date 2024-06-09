@@ -113,25 +113,60 @@ function Appbar({}) {
                 open={open}
                 onClose={handleClose}
               >
-                <GradientMenuItem onClick={() => navigate("/")}>
+                <GradientMenuItem
+                  onClick={() => {
+                    navigate("/");
+                    handleClose();
+                  }}
+                >
                   Home
                 </GradientMenuItem>
-                <GradientMenuItem onClick={() => navigate("/about")}>
+                <GradientMenuItem
+                  onClick={() => {
+                    navigate("/about");
+                    handleClose();
+                  }}
+                >
                   About Us
                 </GradientMenuItem>
-                <GradientMenuItem onClick={() => navigate("/academics")}>
+                <GradientMenuItem
+                  onClick={() => {
+                    navigate("/academics");
+                    handleClose();
+                  }}
+                >
                   Academics
                 </GradientMenuItem>
-                <GradientMenuItem onClick={() => navigate("/admissions")}>
+                <GradientMenuItem
+                  onClick={() => {
+                    navigate("/admissions");
+                    handleClose();
+                  }}
+                >
                   Admissions
                 </GradientMenuItem>
-                <GradientMenuItem onClick={() => navigate("/contact")}>
+                <GradientMenuItem
+                  onClick={() => {
+                    navigate("/contact");
+                    handleClose();
+                  }}
+                >
                   Contact
                 </GradientMenuItem>
-                <GradientMenuItem onClick={() => navigate("/student/register")}>
+                <GradientMenuItem
+                  onClick={() => {
+                    navigate("/student/register");
+                    handleClose();
+                  }}
+                >
                   Register
                 </GradientMenuItem>
-                <GradientMenuItem onClick={() => navigate("/student/login")}>
+                <GradientMenuItem
+                  onClick={() => {
+                    navigate("/student/login");
+                    handleClose();
+                  }}
+                >
                   Login
                 </GradientMenuItem>
               </GradientMenu>

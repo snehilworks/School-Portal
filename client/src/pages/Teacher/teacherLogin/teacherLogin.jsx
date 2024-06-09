@@ -18,18 +18,18 @@ function TeacherLogin() {
         email: email,
         password: password,
       });
-      const data = response.data;
-      if (response.status === 201) {
+      
+      if (response.status === 200) {
+        const data = response.data;
         localStorage.setItem("token", data.token);
         setUser({ userEmail: email, isLoading: false });
         navigate("/teacher/dashboard");
       } else {
-        console.error("Login failed:", data.message);
+        console.error("Login failed:", response.data.message);
         // Handle login failure, such as displaying an error message to the user
       }
     } catch (error) {
       console.error("Login failed:", error);
-      // Handle login failure, such as displaying an error message to the user
     }
   };
 
