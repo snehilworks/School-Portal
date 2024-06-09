@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Card,
@@ -10,6 +10,10 @@ import {
   Grid,
   Snackbar,
   IconButton,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import { CheckCircleOutlineOutlined as SuccessIcon } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -23,16 +27,42 @@ const AddTeacherContent = () => {
     subjects: "",
     phone: "",
     classTeacher: false,
+    classId: "", // Changed to classId for MongoDB _id reference
     classes: "",
   });
   const [successMessage, setSuccessMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [classesList, setClassesList] = useState([]);
+
+  useEffect(() => {
+    if (teacherDetails.classTeacher) {
+      fetchClasses();
+    }
+  }, [teacherDetails.classTeacher]);
+
+  const fetchClasses = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.API_URL}/api/admin/classes`
+      );
+      setClassesList(response.data);
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+    }
+  };
 
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
     setTeacherDetails({
       ...teacherDetails,
       [name]: name === "classTeacher" ? checked : value,
+    });
+  };
+
+  const handleClassChange = (event) => {
+    setTeacherDetails({
+      ...teacherDetails,
+      classId: event.target.value,
     });
   };
 
@@ -54,7 +84,12 @@ const AddTeacherContent = () => {
       subjects: subjectsArray,
       classes: classesArray,
       classTeacher: teacherDetails.classTeacher ? true : false,
+      classId: teacherDetails.classTeacher ? teacherDetails.classId : null,
     };
+
+    if (!teacherDetails.classTeacher) {
+      delete payload.classId; // Clean up the payload if classTeacher is false
+    }
 
     try {
       const response = await axios.post(
@@ -71,6 +106,7 @@ const AddTeacherContent = () => {
         subjects: "",
         phone: "",
         classTeacher: false,
+        classId: "",
         classes: "",
       });
 
@@ -174,6 +210,27 @@ const AddTeacherContent = () => {
                 label="Class Teacher"
               />
             </Grid>
+            {teacherDetails.classTeacher && (
+              <Grid item xs={12}>
+                <FormControl variant="outlined" fullWidth>
+                  <InputLabel id="class-select-label">Class</InputLabel>
+                  <Select
+                    labelId="class-select-label"
+                    id="class-select"
+                    value={teacherDetails.classId}
+                    onChange={handleClassChange}
+                    label="Class"
+                    required
+                  >
+                    {classesList.map((classItem) => (
+                      <MenuItem key={classItem._id} value={classItem._id}>
+                        {classItem.className}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            )}
             <Grid item xs={12} align="center">
               <Button
                 variant="contained"
