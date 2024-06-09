@@ -14,37 +14,40 @@ export const getDashboard = async (req: Request, res: Response) => {};
 
 export const register = async (req: Request, res: Response) => {
   try {
+    // Validate the request
     const { email, password } = loginSchema.parse(req.body);
-
     // Validate if required fields are provided
     if (!email || !password) {
       return res
-        .status(400)
+        .status(401)
         .json({ message: "Email and password are required." });
     }
 
     // Check if the email is already registered
     const existingStudent = await Student.findOne({ email });
     if (existingStudent) {
-      return res.status(403).json({ message: "Email already registered." });
+      return res.status(422).json({ message: "Email already registered." });
     }
 
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Create a new student record
     const newStudent = new Student({
       email,
       password: hashedPassword,
     });
-
+    // Save the new student record
     await newStudent.save();
+    console.log('student saved to db');
 
+    // Respond with success message and student data
     res.status(201).json({
-      message: "Student registered successfully.",
-      student: newStudent,
+      message: "Student registered successfully."
     });
   } catch (error) {
     console.error("Error registering student:", error);
-    res.status(512).json({ message: "Internal server error" });
+    res.status(512).json({ message: "Something went wrong" });
   }
 };
 
@@ -55,18 +58,18 @@ export const login = async (req: Request, res: Response) => {
 
     if (!email || !password) {
       return res
-        .status(400)
+        .status(422)
         .json({ message: "Email and password are required." });
     }
 
     const student = await Student.findOne({ email });
     if (!student) {
-      return res.status(401).json({ message: "Invalid email or password." });
+      return res.status(422).json({ message: "Invalid email or password." });
     }
 
     const isPasswordValid = await bcrypt.compare(password, student.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid email or password." });
+      return res.status(422).json({ message: "Invalid email or password." });
     }
 
     const studentId = student._id;
@@ -74,15 +77,17 @@ export const login = async (req: Request, res: Response) => {
       {
         id: studentId,
       },
-      JWT_SECRET
+      JWT_SECRET,
+      { expiresIn: '1h' } // Optional: set token expiration
     );
 
-    res.cookie("sps", token);
+    res.cookie("sps", token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
 
-    res.redirect('http://localhost:5173/student/dashboard');
+    // Send response with token
+    return res.status(200).json({ token });
   } catch (error) {
     console.error("Error during login:", error);
-    res.status(512).json({ message: "Internal server error" });
+    return res.status(512).json({ message: "Something went wrong" });
   }
 };
 
