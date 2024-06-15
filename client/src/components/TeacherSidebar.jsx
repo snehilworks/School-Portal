@@ -7,15 +7,18 @@ import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import GroupIcon from "@mui/icons-material/Group";
 
+
 const TeacherSidebar = ({ setSelectedContent, isSidebarOpen }) => {
+  
   const handleItemClick = (content) => {
     setSelectedContent(content);
   };
 
   return (
     <div
-      className={`sidebar ${isSidebarOpen ? "open" : ""}`}
-      onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      className={`sm:absolute lg:relative h-screen sm:z-10 bg-gray-700 text-white ${
+        !isSidebarOpen ? "hidden" : "block"
+      }`}
     >
       <List>
         <ListItem

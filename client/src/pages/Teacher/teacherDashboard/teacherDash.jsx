@@ -12,6 +12,8 @@ import ClassesContent from "../../../components/TeacherDash/Classes";
 import GradebookContent from "../../../components/TeacherDash/Gradebook";
 
 import TeacherSidebar from "../../../components/TeacherSidebar";
+import { CiMenuBurger } from "react-icons/ci";
+import { RxCross1 } from "react-icons/rx";
 
 const TeacherDashboard = () => {
   const [selectedContent, setSelectedContent] = useState(null);
@@ -22,6 +24,7 @@ const TeacherDashboard = () => {
   };
 
   const toggleSidebar = () => {
+    console.log("toggle clicked");
     setIsSidebarOpen(!isSidebarOpen);
   };
 
@@ -43,16 +46,29 @@ const TeacherDashboard = () => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
+    <div className="overflow-x-hidden" style={{ display: "flex" }}>
       {/* Sidebar */}
       <TeacherSidebar
         setSelectedContent={setSelectedContent}
         isSidebarOpen={isSidebarOpen}
+        className={"absolute"}
       />
+
+      {!isSidebarOpen ? (
+        <CiMenuBurger
+          className="lg:hidden sm:block ml-1 mt-1 absolute z-150 text-white text-2xl bg-gray-700 rounded-full p-1 cursor-pointer"
+          onClick={toggleSidebar}
+        />
+      ) : (
+        <RxCross1
+          className="z-100 p-0.4 left-22 lg:hidden sm:block absolute text-red-400 text-2xl"
+          onClick={toggleSidebar}
+        />
+      )}
 
       {/* Main Content */}
       <div
-        className="bg-gradient-to-r from-blue-100 to-blue-300"
+        className="bg-gradient-to-r min-h-screen from-blue-100 to-blue-300"
         style={{ flex: 1 }}
       >
         <Container maxWidth="lg">
