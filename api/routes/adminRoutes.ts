@@ -20,6 +20,9 @@ router.get("/students", AdminController.getAllStudents);
 router.get("/students/:id", AdminController.getSpecificStudent);
 router.put("/students/:id", AdminController.updateAdmissionStatus);
 
+//get contact messages
+router.get('/contact-messages', AdminController.ContactMessages);
+
 // Fees Routes
 router.get("/fees", AdminController.getFees);
 router.post('/set-fees', AdminController.setFees);
