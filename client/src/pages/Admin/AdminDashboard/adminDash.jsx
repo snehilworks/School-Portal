@@ -8,6 +8,7 @@ import DeleteTeacherContent from "../../../components/AdminDash/DeleteTeacherCon
 import UpdateStudentStatusContent from "../../../components/AdminDash/UpdateStudentStatusContent";
 import PaymentsContent from "../../../components/AdminDash/PaymentsContent";
 import HandleFeesContent from "../../../components/AdminDash/HandleFeesContent";
+import ContactMessageContent from "../../../components/AdminDash/ContactMessageContent";
 
 import AdminSidebar from "../../../components/AdminSidebar";
 
@@ -50,6 +51,8 @@ const AdminDashboard = () => {
         return <PaymentsContent />;
       case "Fees":
         return <HandleFeesContent />;
+      case "Contact Messages":
+        return <ContactMessageContent />;
       default:
         return null;
     }

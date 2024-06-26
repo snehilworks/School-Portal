@@ -8,12 +8,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
+import { FaRegMessage } from "react-icons/fa6";
 
 const AdminSidebar = ({ setSelectedContent }) => {
   const sidebarStyle = {
     backgroundColor: "#2c3e50",
     color: "#fff",
-    height: "100vh",
+    // height: "100vh",
     width: "25%",
   };
 
@@ -37,6 +38,10 @@ const AdminSidebar = ({ setSelectedContent }) => {
     setSelectedContent("Update Student Admission Status");
   };
 
+  const handleContactMessages = () => {
+    setSelectedContent("Contact Messages");
+  };
+
   const handlePayments = () => {
     setSelectedContent("Payments");
   };
@@ -46,7 +51,7 @@ const AdminSidebar = ({ setSelectedContent }) => {
   };
 
   return (
-    <div style={sidebarStyle}>
+    <div className="h-[92vh] sticky top-16" style={sidebarStyle}>
       <List>
         <ListItem onClick={handleDashboard} style={{ cursor: "pointer" }}>
           <ListItemIcon>
@@ -92,6 +97,12 @@ const AdminSidebar = ({ setSelectedContent }) => {
             <AccountBalanceIcon style={{ color: "#fff" }} />
           </ListItemIcon>
           <ListItemText primary="Payments" />
+        </ListItem>
+        <ListItem onClick={handleContactMessages} style={{ cursor: "pointer" }}>
+          <ListItemIcon>
+            <FaRegMessage style={{ color: "#fff" }} />
+          </ListItemIcon>
+          <ListItemText primary="Contact Messages" />
         </ListItem>
       </List>
     </div>
