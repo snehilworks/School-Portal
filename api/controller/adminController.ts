@@ -4,6 +4,7 @@ import Teacher from "../models/teacherModel";
 import Student from "../models/studentModel";
 import Fee from "../models/feeModel";
 import Class from "../models/classModel";
+import contactModel from "../models/contactModel";
 
 // adding a new teacher
 export const addTeacher = async (req: Request, res: Response) => {
@@ -131,6 +132,29 @@ export const deleteTeacher = async (req: Request, res: Response) => {
     console.error("Error deleting teacher:", error);
     res.status(512).json({ message: "Internal server error" });
   }
+};
+
+export const ContactMessages = async (req: Request, res: Response) => {
+
+  try {
+    const page = parseInt(req.query.page as string) || 1; // Default to page 1 if not provided
+    const limit = parseInt(req.query.limit as string) || 20; // Default to 20 items per page if not provided
+  
+    const skip = (page - 1) * limit;
+
+    const messages = await contactModel.find().skip(skip).limit(limit);
+    const totalMessages = await contactModel.countDocuments();
+
+      res.json({
+        messages,
+          totalMessages,
+          totalPages: Math.ceil(totalMessages / limit),
+          currentPage: page,   
+      });
+    } catch (error) {
+      console.error("Error getting Student:", error);
+      res.status(512).json({ message: "Internal server error" });
+    }
 };
 
 export const updateAdmissionStatus = async (req: Request, res: Response) => {
