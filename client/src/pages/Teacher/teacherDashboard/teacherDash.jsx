@@ -24,7 +24,6 @@ const TeacherDashboard = () => {
   };
 
   const toggleSidebar = () => {
-    console.log("toggle clicked");
     setIsSidebarOpen(!isSidebarOpen);
   };
 
@@ -48,11 +47,17 @@ const TeacherDashboard = () => {
   return (
     <div className="overflow-x-hidden" style={{ display: "flex" }}>
       {/* Sidebar */}
-      <TeacherSidebar
-        setSelectedContent={setSelectedContent}
-        isSidebarOpen={isSidebarOpen}
-        className={"absolute"}
-      />
+
+      <div
+        className={`${
+          !isSidebarOpen ? "hidden" : "absolute inset-y-0 lg:top-0 top-10"
+        } lg:relative lg:flex`}
+      >
+        <TeacherSidebar
+          setSelectedContent={setSelectedContent}
+          isSidebarOpen={isSidebarOpen}
+        />
+      </div>
 
       {!isSidebarOpen ? (
         <CiMenuBurger

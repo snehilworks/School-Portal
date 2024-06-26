@@ -1,5 +1,5 @@
 import { Button, ThemeProvider, createTheme } from "@mui/material";
-import { blue, cyan, deepPurple, green } from "@mui/material/colors";
+import { blue, cyan, deepPurple, green, red } from "@mui/material/colors";
 import React from "react";
 
 const PrimaryButton = ({
@@ -15,6 +15,7 @@ const PrimaryButton = ({
       default: { main: blue["700"], contrastText: "#fff" },
       student: { main: green["500"], contrastText: "#fff" },
       teacher: { main: deepPurple["400"], contrastText: "#fff" },
+      logout: { main: red["500"], contrastText: "#fff" },
     },
     components: {
       MuiButton: {
