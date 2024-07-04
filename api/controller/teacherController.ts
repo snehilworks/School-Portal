@@ -39,6 +39,22 @@ export const getDashboard = async (req: Request, res: Response) => {
   }
 };
 
+export const getTeacher = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const teacherDetail = await Teacher.findById(id);
+    if (!teacherDetail) {
+      return res.status(404).json({ message: "Teacher not found" });
+    }
+    res.json({
+      data: teacherDetail,
+    });
+  } catch (error) {
+    console.error("Error getting teacher:", error);
+    res.status(512).json({ message: "Internal server error" });
+  }
+};
+
 export const login = async (req: Request, res: Response) => {
   try {
     //validate the user data for login
@@ -72,7 +88,7 @@ export const login = async (req: Request, res: Response) => {
       JWT_SECRET,
       { expiresIn: '1h' }
     );
-
+    
     res.cookie("sps", token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
 
     return res.status(200).json({ token });
