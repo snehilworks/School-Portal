@@ -5,6 +5,11 @@ import Student from "../models/studentModel";
 import Fee from "../models/feeModel";
 import Class from "../models/classModel";
 import contactModel from "../models/contactModel";
+import { loginSchema } from "../validations/loginValidation";
+import Admin from "../models/adminModel";
+import jwt from "jsonwebtoken";
+
+const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 
 // adding a new teacher
 export const addTeacher = async (req: Request, res: Response) => {
@@ -155,6 +160,48 @@ export const ContactMessages = async (req: Request, res: Response) => {
       console.error("Error getting Student:", error);
       res.status(512).json({ message: "Internal server error" });
     }
+};
+
+export const adminLogin = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = loginSchema.parse(req.body);
+
+    if (!email || !password) {
+      return res
+        .status(422)
+        .json({ message: "Email and password are required." });
+    }
+
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      return res.status(401).json({ message: "Teacher Data not Found!" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      admin.password
+    );
+
+    if (!isPasswordValid) {
+      return res.status(422).json({ message: "Invalid email or password" });
+    }
+
+    const adminId = admin._id;
+    const token = jwt.sign(
+      {
+        id: adminId,
+      },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+    
+    res.cookie("sps", token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+
+    return res.status(200).json({ token });
+  } catch (error) {
+    console.error("Error during admin login:", error);
+    res.status(512).json({ message: "Something went wrong" });
+  }
 };
 
 export const updateAdmissionStatus = async (req: Request, res: Response) => {
