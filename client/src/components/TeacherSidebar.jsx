@@ -16,7 +16,7 @@ const TeacherSidebar = ({ setSelectedContent, isSidebarOpen }) => {
 
   return (
     <div
-      className={`sm:absolute lg:relative h-screen sm:z-10 bg-gray-700 text-white ${
+      className={`sm:absolute lg:relative min-h-[91.5vh] sm:z-10 bg-gray-700 text-white pt-5 ${
         !isSidebarOpen ? "hidden" : "block"
       }`}
     >
@@ -26,7 +26,7 @@ const TeacherSidebar = ({ setSelectedContent, isSidebarOpen }) => {
           style={{ cursor: "pointer" }}
         >
           <ListItemIcon>
-            <PlaylistAddCheckIcon />
+            <PlaylistAddCheckIcon style={{ fontSize: "28px" }} />
           </ListItemIcon>
           <ListItemText primary="Manage Attendance" />
         </ListItem>
