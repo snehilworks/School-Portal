@@ -12,13 +12,17 @@ export const CreateOrder = async (req: Request, res: Response) => {
           throw new Error('Razorpay key_id and key_secret must be set in the environment variables.');
         }
 
-      const amount = req.body.amount;
+        const { amount, studentName, studentClass } = req.body;
       
       const options = {
         amount: amount,  
         currency: "INR",
         receipt: "receipt#1",
-        payment_capture: '1'
+        payment_capture: '1',
+        notes: {  
+          studentName,
+          studentClass
+        }
       };
       const order = await razor.orders.create(options);
     
@@ -33,20 +37,38 @@ export const CreateOrder = async (req: Request, res: Response) => {
     }
 };
 
-export const FetchOrderList = async (req: Request, res: Response) => {
-    try {
-        if (!process.env.RAZORPAY_ID_KEY || !process.env.RAZORPAY_SECRET_KEY) {
-            throw new Error('Razorpay key_id and key_secret must be set in the environment variables.');
-        }
+const fetchOrders = async (skip:number, limit:number) => {
+  const ordersResponse = await razor.orders.all({
+    count: limit,
+    skip: skip,
+  });
+  return ordersResponse.items;
+};
 
-        const orders = await razor.orders.all();
-
-        res.send(orders);
-    } catch (err) {
-      console.log(err);
-      res.status(512).send("Error");
+export const FetchOrderList = async (req: Request, res:Response) => {
+  try {
+    if (!process.env.RAZORPAY_ID_KEY || !process.env.RAZORPAY_SECRET_KEY) {
+      throw new Error('Razorpay key_id and key_secret must be set in the environment variables.');
     }
-}
+
+    const page = parseInt(req.query.page as string, 10) || 1;
+    const limit = parseInt(req.query.limit as string, 10) || 10;
+    const skip = (page - 1) * limit;
+
+    const orders = await fetchOrders(skip, limit);
+
+    res.json({
+      items: orders,
+      currentPage: page,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(512).send('Error fetching orders');
+  }
+};
+
+
+
 
 export const FetchSpecificOrder = async (req: Request, res: Response) => {
   try {
