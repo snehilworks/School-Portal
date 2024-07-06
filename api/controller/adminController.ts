@@ -14,7 +14,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 // adding a new teacher
 export const addTeacher = async (req: Request, res: Response) => {
   try {
-    const { password, ...teacherData } = req.body;
+    const { password,  classId, ...teacherData } = req.body;
 
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -22,6 +22,7 @@ export const addTeacher = async (req: Request, res: Response) => {
     const newTeacher = new Teacher({
       ...teacherData,
       password: hashedPassword,
+      class: classId || null,
     });
 
     await newTeacher.save();
@@ -104,8 +105,17 @@ export const getSpecificStudent = async (req: Request, res: Response) => {
 // Updating teacher details
 export const updateTeacher = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const { password, classId, ...teacherData } = req.body;
+
   try {
-    const updatedTeacher = await Teacher.findByIdAndUpdate(id, req.body, {
+    if (password) {
+      const saltRounds = 10;
+      teacherData.password = await bcrypt.hash(password, saltRounds);
+    }
+
+    teacherData.classId = classId || null;
+
+    const updatedTeacher = await Teacher.findByIdAndUpdate(id, teacherData, {
       new: true,
     });
     if (!updatedTeacher) {
