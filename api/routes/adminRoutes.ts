@@ -23,6 +23,8 @@ router.put("/students/:id", AdminController.updateAdmissionStatus);
 //get contact messages
 router.get('/contact-messages', AdminController.ContactMessages);
 
+router.post('/login', AdminController.adminLogin);
+
 // Fees Routes
 router.get("/fees", AdminController.getFees);
 router.post('/set-fees', AdminController.setFees);
