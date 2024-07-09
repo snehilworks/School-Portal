@@ -22,6 +22,7 @@ import TRegister from "./pages/Teacher/teacherRegister/teacherRegister";
 import TProfile from "./pages/Teacher/teacherProfile/teacherProfile";
 import TeacherDash from "./pages/Teacher/teacherDashboard/teacherDash";
 import AdminDash from "./pages/Admin/AdminDashboard/adminDash";
+import AdminLogin from "./pages/Admin/AdminLogin/adminLogin";
 
 // import TAttendanceList from "./pages/Teacher/TAttendanceList/TAttendanceList";
 // import TeacherDash from "./pages/Teacher/";
@@ -42,6 +43,7 @@ const routes = [
     path: "/admin/dashboard",
     element: <AdminDash />,
   },
+  { path: "/admin/login", element: <AdminLogin /> },
 
   // Student Routes
   { path: "/student/login", element: <Login /> },

@@ -8,6 +8,7 @@ const PrimaryButton = ({
   color,
   extra_styles,
   onClick,
+  className,
   disabled = false,
 }) => {
   const theme = createTheme({
@@ -15,6 +16,7 @@ const PrimaryButton = ({
       default: { main: blue["700"], contrastText: "#fff" },
       student: { main: green["500"], contrastText: "#fff" },
       teacher: { main: deepPurple["400"], contrastText: "#fff" },
+      admin: { main: blue["500"], contrastText: "#fff" },
       logout: { main: red["500"], contrastText: "#fff" },
     },
     components: {
@@ -45,6 +47,7 @@ const PrimaryButton = ({
           disabled={disabled}
           variant={variant || "contained"}
           color={color || "default"}
+          className={className}
           style={{ ...extra_styles }}
           onClick={onClick}
         >

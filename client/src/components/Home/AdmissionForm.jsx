@@ -35,7 +35,7 @@ const AdmissionForm = ({ open, onClose }) => {
   const receiptId = "OrderReceipt 1";
 
   const handlePay = async (e) => {
-    const response = await axios.post(`${process.env.API_URL}/order`, {
+    const response = await axios.post(`${process.env.API_URL}/api/pay/order`, {
       amount,
       currency,
       receipt: receiptId,

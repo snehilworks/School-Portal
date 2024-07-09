@@ -3,7 +3,12 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import PrimaryButton from "./ui/PrimaryButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChalkboardTeacher, faGraduationCap, faSchool } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChalkboardTeacher,
+  faGraduationCap,
+  faSchool,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const Landing = () => {
   const navigate = useNavigate();
@@ -12,7 +17,9 @@ export const Landing = () => {
       <div className="component-container flex items-start laptop:items-center justify-center">
         <div className="w-full flex flex-col laptop:flex-row items-center justify-between gap-4">
           <div className="order-2 laptop:order-1 h-fit laptop:h-full flex flex-col items-center justify-between">
-            <p className="text-[20px] laptop:text-[46px] font-semibold">Shivam Public School, Aarni</p>
+            <p className="text-[20px] laptop:text-[46px] font-semibold">
+              Shivam Public School, Aarni
+            </p>
 
             <div className="btns mt-4 laptop:mt-8 w-fit flex flex-col mx-auto items-center laptop:items-start gap-4">
               <PrimaryButton
@@ -22,7 +29,10 @@ export const Landing = () => {
                 }}
               >
                 <div className="flex items-center gap-2 px-4 py-2">
-                  <FontAwesomeIcon icon={faSchool} className="text-[20px] laptop:text-[36px]" />
+                  <FontAwesomeIcon
+                    icon={faSchool}
+                    className="text-[20px] laptop:text-[36px]"
+                  />
                   <p className="text-lg laptop:text-xl">Register</p>
                 </div>
               </PrimaryButton>
@@ -33,7 +43,10 @@ export const Landing = () => {
                 }}
               >
                 <div className="flex items-center gap-2 px-4 py-2">
-                  <FontAwesomeIcon icon={faGraduationCap} className="text-[20px] laptop:text-[36px]" />
+                  <FontAwesomeIcon
+                    icon={faGraduationCap}
+                    className="text-[20px] laptop:text-[36px]"
+                  />
                   <p className="text-lg laptop:text-xl">Login for Students</p>
                 </div>
               </PrimaryButton>
@@ -44,8 +57,26 @@ export const Landing = () => {
                 }}
               >
                 <div className="flex items-center gap-2 px-4 py-2">
-                  <FontAwesomeIcon icon={faChalkboardTeacher} className="text-[20px] laptop:text-[36px]" />
+                  <FontAwesomeIcon
+                    icon={faChalkboardTeacher}
+                    className="text-[20px] laptop:text-[36px]"
+                  />
                   <p className="text-lg laptop:text-xl">Login for Faculties</p>
+                </div>
+              </PrimaryButton>
+              <PrimaryButton
+                color={"admin"}
+                onClick={() => {
+                  navigate("/admin/login");
+                }}
+                className="hidden md:block"
+              >
+                <div className="flex items-center gap-2 px-4 py-2">
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    className="text-[20px] md:text-[36px]"
+                  />
+                  <p className="text-lg md:text-xl">Admin Login</p>
                 </div>
               </PrimaryButton>
             </div>
