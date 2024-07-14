@@ -12,36 +12,62 @@ dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 
-export const getDashboard = async (req: Request, res: Response) => {
+interface JwtPayload {
+  id: string;
+}
+
+// export const getDashboard = async (req: Request, res: Response) => {
+//   try {
+//     // Get teacher's information
+//     // const teacher = await Teacher.findById(req.id);
+
+//     // Get classes taught by the teacher
+//     // const classes = await Class.find({ teacher: req.user.id });
+
+//     // Get students enrolled in the teacher's classes
+//     // const students = await Student.find({
+//     //   class: { $in: classes.map((cls) => cls._id) },
+//     // });
+
+//     // Other data retrieval and processing as needed...
+
+//     res.status(200).json({
+//       //   teacher,
+//       //   classes,
+//       //   students,
+//       // Other data to be included in the dashboard
+//     });
+//   } catch (error) {
+//     console.error("Error fetching teacher dashboard:", error);
+//     res.status(512).json({ message: "Internal server error" });
+//   }
+// };
+
+export const getMeApi = async (req: Request, res: Response) => {
   try {
-    // Get teacher's information
-    // const teacher = await Teacher.findById(req.id);
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) {
+      return res.status(401).json({ message: 'No token provided' });
+    }
 
-    // Get classes taught by the teacher
-    // const classes = await Class.find({ teacher: req.user.id });
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    const teacherId = decoded.id;
 
-    // Get students enrolled in the teacher's classes
-    // const students = await Student.find({
-    //   class: { $in: classes.map((cls) => cls._id) },
-    // });
-
-    // Other data retrieval and processing as needed...
-
-    res.status(200).json({
-      //   teacher,
-      //   classes,
-      //   students,
-      // Other data to be included in the dashboard
-    });
+    return res.status(200).json({teacherId});
   } catch (error) {
-    console.error("Error fetching teacher dashboard:", error);
-    res.status(512).json({ message: "Internal server error" });
+    console.error('Error getting me api teacher:', error);
+    return res.status(512).json({ message: 'Internal server error' });
   }
 };
 
 export const getTeacher = async (req: Request, res: Response) => {
-  const { id } = req.params;
   try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid teacher ID' });
+    }
+
     const teacherDetail = await Teacher.findById(id);
     if (!teacherDetail) {
       return res.status(404).json({ message: "Teacher not found" });
