@@ -9,6 +9,7 @@ import { Landing } from "./components/Landing.jsx";
 //student imports
 import Register from "./pages/Student/studentRegister/Register";
 import StPays from "./pages/Student/StPays/StPays";
+import CompleteProfile from "./pages/Student/CompleteProfile/CompleteProfile";
 import SEvents from "./pages/Student/SEvents/SEvents";
 import SGrade from "./pages/Student/SGrade/SGrade";
 import SHostel from "./pages/Student/SHostel/SHostel";
@@ -55,6 +56,10 @@ const routes = [
         <StudentDash />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: "/student/complete/profile",
+    element: <CompleteProfile />,
   },
   {
     path: "/student/:id",
