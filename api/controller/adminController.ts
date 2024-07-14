@@ -72,7 +72,14 @@ export const getAllStudents = async (req: Request, res: Response) => {
 export const getSpecificTeacher = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const teacherDetail = await Teacher.findById(id);
+    const teacherDetail = await Teacher.findById(id, {
+      name: 1,
+      email: 1,
+      subjects: 1,
+      phone: 1,
+      classes: 1,
+      ClassTeacher: 1,
+    });
     if (!teacherDetail) {
       return res.status(404).json({ message: "Teacher not found" });
     }
