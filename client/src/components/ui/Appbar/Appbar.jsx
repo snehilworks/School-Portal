@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import "./Appbar.css";
 import PrimaryButton from "../PrimaryButton";
 import { indigo } from "@mui/material/colors";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 
 // Custom styled components for Menu and MenuItem
@@ -29,10 +29,47 @@ const GradientMenuItem = styled(MenuItem)(({ theme }) => ({
   },
 }));
 
+const LogoutMenuItem = styled(MenuItem)(({ theme }) => ({
+  color: "#fff",
+  fontWeight: "bold",
+  backgroundColor: "red",
+  border: "1px solid red",
+  borderRadius: "7%",
+  "&:hover": {
+    backgroundColor: "red",
+  },
+}));
+
+const RegisterMenuItem = styled(MenuItem)(({ theme }) => ({
+  color: "cyan",
+  fontWeight: "bold",
+  // border: "1px solid white",
+  // borderRadius: "7%",
+  "&:hover": {
+    backgroundColor: "red",
+  },
+}));
+
+const LoginMenuItem = styled(MenuItem)(({ theme }) => ({
+  color: "black",
+  fontWeight: "bold",
+  // border: "1px solid white",
+  // borderRadius: "7%",
+  "&:hover": {
+    backgroundColor: "red",
+  },
+}));
+
 function Appbar({}) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+  }, []);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -40,6 +77,12 @@ function Appbar({}) {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    navigate("/student/login");
   };
 
   return (
@@ -78,15 +121,25 @@ function Appbar({}) {
               </p>
             </div>
             <div className="appbar-buttons hidden md:flex">
-              <PrimaryButton
-                color="student"
-                onClick={() => navigate("/student/register")}
-              >
-                Register
-              </PrimaryButton>
-              <PrimaryButton onClick={() => navigate("/student/login")}>
-                Login
-              </PrimaryButton>
+              {isAuthenticated ? (
+                <>
+                  <PrimaryButton color="logout" onClick={handleLogout}>
+                    Logout
+                  </PrimaryButton>
+                </>
+              ) : (
+                <>
+                  <PrimaryButton
+                    color="student"
+                    onClick={() => navigate("/student/register")}
+                  >
+                    Register
+                  </PrimaryButton>
+                  <PrimaryButton onClick={() => navigate("/student/login")}>
+                    Login
+                  </PrimaryButton>
+                </>
+              )}
             </div>
             <div className="md:hidden">
               <IconButton
@@ -153,22 +206,36 @@ function Appbar({}) {
                 >
                   Contact
                 </GradientMenuItem>
-                <GradientMenuItem
-                  onClick={() => {
-                    navigate("/student/register");
-                    handleClose();
-                  }}
-                >
-                  Register
-                </GradientMenuItem>
-                <GradientMenuItem
-                  onClick={() => {
-                    navigate("/student/login");
-                    handleClose();
-                  }}
-                >
-                  Login
-                </GradientMenuItem>
+                {isAuthenticated ? (
+                  <LogoutMenuItem
+                    onClick={() => {
+                      handleLogout();
+                      handleClose();
+                    }}
+                  >
+                    Logout
+                  </LogoutMenuItem>
+                ) : (
+                  <>
+                    <RegisterMenuItem
+                      onClick={() => {
+                        navigate("/student/register");
+                        handleClose();
+                      }}
+                    >
+                      Register
+                    </RegisterMenuItem>
+                    <LoginMenuItem
+                      color="red"
+                      onClick={() => {
+                        navigate("/student/login");
+                        handleClose();
+                      }}
+                    >
+                      Login
+                    </LoginMenuItem>
+                  </>
+                )}
               </GradientMenu>
             </div>
           </div>

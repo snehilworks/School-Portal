@@ -22,9 +22,11 @@ import TRegister from "./pages/Teacher/teacherRegister/teacherRegister";
 import TProfile from "./pages/Teacher/teacherProfile/teacherProfile";
 import TeacherDash from "./pages/Teacher/teacherDashboard/teacherDash";
 import AdminDash from "./pages/Admin/AdminDashboard/adminDash";
+import AdminLogin from "./pages/Admin/AdminLogin/adminLogin";
 
 // import TAttendanceList from "./pages/Teacher/TAttendanceList/TAttendanceList";
 // import TeacherDash from "./pages/Teacher/";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 import NotFoundPage from "./components/NotFoundPage";
 
@@ -37,12 +39,23 @@ const routes = [
   { path: "/contact", element: <Contact /> },
 
   //Admin Routes
-  { path: "/admin/dashboard", element: <AdminDash /> },
+  {
+    path: "/admin/dashboard",
+    element: <AdminDash />,
+  },
+  { path: "/admin/login", element: <AdminLogin /> },
 
   // Student Routes
   { path: "/student/login", element: <Login /> },
   { path: "/student/register", element: <Register /> },
-  { path: "/student/dashboard", element: <StudentDash /> },
+  {
+    path: "/student/dashboard",
+    element: (
+      <ProtectedRoute>
+        <StudentDash />
+      </ProtectedRoute>
+    ),
+  },
   {
     path: "/student/:id",
     element: (
@@ -55,18 +68,60 @@ const routes = [
       />
     ),
   },
-  { path: "/student/payment", element: <StPays /> },
-  { path: "/student/attendance", element: <SAttendance /> },
-  { path: "/student/grades", element: <SGrade /> },
+  {
+    path: "/student/payment",
+    element: (
+      <ProtectedRoute>
+        <StPays />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/student/attendance",
+    element: (
+      <ProtectedRoute>
+        <SAttendance />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/student/grades",
+    element: (
+      <ProtectedRoute>
+        <SGrade />
+      </ProtectedRoute>
+    ),
+  },
 
-  { path: "/student/events", element: <SEvents /> },
+  {
+    path: "/student/events",
+    element: (
+      <ProtectedRoute>
+        <SEvents />
+      </ProtectedRoute>
+    ),
+  },
   { path: "/student/hostel", element: <SHostel /> },
 
   // Teacher Routes
   { path: "/teacher/login", element: <TLogin /> },
   { path: "/teacher/register", element: <TRegister /> },
-  { path: "/teacher/dashboard", element: <TeacherDash /> },
-  { path: "/teacher/profile", element: <TProfile /> },
+  {
+    path: "/teacher/dashboard",
+    element: (
+      <ProtectedRoute>
+        <TeacherDash />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/teacher/profile",
+    element: (
+      <ProtectedRoute>
+        <TProfile />
+      </ProtectedRoute>
+    ),
+  },
   // { path: "/teacher/attendancelist", element: <TAttendanceList /> },
 
   // 404 Not Found Route

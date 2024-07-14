@@ -9,7 +9,7 @@ const UpdateMarksContent = () => {
   useEffect(() => {
     // Fetch student data from API
     axios
-      .get("https://api.example.com/students")
+      .get(`${process.env.API_URL}/api/teacher/students`)
       .then((response) => {
         setStudents(response.data);
       })

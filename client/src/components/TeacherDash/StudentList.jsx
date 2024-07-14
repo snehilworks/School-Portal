@@ -45,30 +45,38 @@ const StudentListContent = () => {
       <div className="bg-white rounded-lg shadow-md p-6">
         <h1 className="text-2xl font-bold mb-4 text-gray-800">Student List</h1>
         <div className="overflow-x-auto">
-          <table className="w-full table-auto md:table-fixed">
-            <thead>
-              <tr className="bg-blue-500 text-white">
-                <th className="px-4 py-2 w-1/4 md:w-auto">Name</th>
-                <th className="px-4 py-2 w-1/4 md:w-auto">Roll Number</th>
-                <th className="px-4 py-2 w-1/4 md:w-auto">Pay Status</th>
-                <th className="px-4 py-2 w-1/4 md:w-auto">Details</th>
+          <table className="min-w-full lg:table-fixed divide-y divide-gray-200">
+            <thead className="bg-blue-500 text-white">
+              <tr>
+                <th className="px-4 py-2 text-left text-xs lg:text-sm font-medium">
+                  Name
+                </th>
+                <th className="px-4 py-2 text-left text-xs lg:text-sm font-medium">
+                  Roll Number
+                </th>
+                <th className="px-4 py-2 text-left text-xs lg:text-sm font-medium">
+                  Pay Status
+                </th>
+                <th className="px-4 py-2 text-left text-xs lg:text-sm font-medium hidden lg:table-cell">
+                  Details
+                </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white divide-y divide-gray-200">
               {students.map((student) => (
                 <tr
                   key={student.id}
-                  className="border-b border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out"
+                  className="hover:bg-gray-100 transition duration-300 ease-in-out"
                 >
-                  <td className="px-4 py-2 whitespace-nowrap truncate md:whitespace-normal md:max-w-xs">
+                  <td className="px-4 py-2 whitespace-nowrap text-xs lg:text-sm">
                     {student.name}
                   </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
+                  <td className="px-4 py-2 whitespace-nowrap text-xs lg:text-sm">
                     {student.rollNumber}
                   </td>
-                  <td className="px-4 py-2 whitespace-nowrap">
+                  <td className="px-4 py-2 whitespace-nowrap text-xs lg:text-sm">
                     <span
-                      className={`px-2 py-1 rounded-full font-semibold ${
+                      className={`px-2 py-1 rounded-full font-semibold text-xs lg:text-sm ${
                         student.payStatus === "Paid"
                           ? "bg-green-200 text-green-800"
                           : "bg-red-200 text-red-800"
@@ -77,7 +85,7 @@ const StudentListContent = () => {
                       {student.payStatus}
                     </span>
                   </td>
-                  <td className="px-4 py-2 truncate md:whitespace-normal md:max-w-xs">
+                  <td className="px-4 py-2 text-xs lg:text-sm truncate hidden lg:table-cell">
                     {student.details}
                   </td>
                 </tr>

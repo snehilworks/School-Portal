@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 const GradebookContent = () => {
   const [students, setStudents] = useState([]);
 
-  // Dummy data for demonstration
   const dummyStudents = [
     { id: 1, name: "John Doe", rollNumber: "001", grade: "A" },
     { id: 2, name: "Jane Smith", rollNumber: "002", grade: "B" },
@@ -22,30 +21,34 @@ const GradebookContent = () => {
         <h1 className="text-2xl font-bold mb-6 text-gray-800 text-center">
           Gradebook
         </h1>
-        <div className="overflow-x-auto rounded-lg">
-          <table className="w-full table-auto md:table-fixed border-collapse">
-            <thead>
-              <tr className="bg-blue-500 text-white uppercase text-sm leading-normal">
-                <th className="py-3 px-6 text-left">Name</th>
-                <th className="py-3 px-6 text-left">Roll Number</th>
-                <th className="py-3 px-6 text-left">
+        <div className="overflow-x-auto">
+          <table className="min-w-full border-collapse divide-y divide-gray-200">
+            <thead className="bg-blue-500 text-white">
+              <tr>
+                <th className="py-3 px-4 text-left text-xs sm:text-sm lg:text-base font-medium">
+                  Name
+                </th>
+                <th className="py-3 px-4 text-left text-xs sm:text-sm lg:text-base font-medium">
+                  Roll Number
+                </th>
+                <th className="py-3 px-4 text-left text-xs sm:text-sm lg:text-base font-medium sm:hidden lg:table-cell">
                   Grade (Till Last Semester)
                 </th>
               </tr>
             </thead>
-            <tbody className="text-gray-700 text-sm font-light">
+            <tbody className="bg-white divide-y divide-gray-200">
               {students.map((student) => (
                 <tr
                   key={student.id}
-                  className="border-b border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out"
+                  className="hover:bg-gray-100 transition duration-300 ease-in-out"
                 >
-                  <td className="py-3 px-6 text-left whitespace-nowrap truncate md:whitespace-normal md:max-w-xs">
+                  <td className="py-3 px-4 text-xs sm:text-sm lg:text-base truncate">
                     {student.name}
                   </td>
-                  <td className="py-3 px-6 text-left whitespace-nowrap">
+                  <td className="py-3 px-4 text-xs sm:text-sm lg:text-base">
                     {student.rollNumber}
                   </td>
-                  <td className="py-3 px-6 text-left whitespace-nowrap">
+                  <td className="py-3 px-4 text-xs sm:text-sm lg:text-base sm:hidden lg:table-cell">
                     <span
                       className={`px-3 py-1 rounded-full font-semibold ${
                         student.grade === "A"

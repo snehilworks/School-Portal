@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Typography, Grid } from "@mui/material";
 
 import "./teacherDash.css";
@@ -14,19 +14,33 @@ import GradebookContent from "../../../components/TeacherDash/Gradebook";
 import TeacherSidebar from "../../../components/TeacherSidebar";
 import { CiMenuBurger } from "react-icons/ci";
 import { RxCross1 } from "react-icons/rx";
+import { useLocation } from "react-router-dom";
 
 const TeacherDashboard = () => {
   const [selectedContent, setSelectedContent] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const location = useLocation();
 
   const handleItemClick = (content) => {
     setSelectedContent(content);
   };
 
   const toggleSidebar = () => {
-    console.log("toggle clicked");
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  // if (location.pathname === "/teacher/dashboard") {
+  //   window.location.reload();
+  // }
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   console.log(location.pathname);
+  //   // Check if we have a token and we are on /teacher/dashboard
+  //   if (token && location.pathname === "/teacher/dashboard") {
+  //     window.location.reload();
+  //   }
+  // }, []);
 
   const renderContent = () => {
     switch (selectedContent) {
@@ -46,13 +60,18 @@ const TeacherDashboard = () => {
   };
 
   return (
-    <div className="overflow-x-hidden" style={{ display: "flex" }}>
+    <div className="overflow-x-hidden " style={{ display: "flex" }}>
       {/* Sidebar */}
-      <TeacherSidebar
-        setSelectedContent={setSelectedContent}
-        isSidebarOpen={isSidebarOpen}
-        className={"absolute"}
-      />
+      <div
+        className={`${
+          !isSidebarOpen ? "hidden" : "absolute inset-y-0  lg:top-0 top-14"
+        } min-h-[91.5vh] lg:relative lg:flex`}
+      >
+        <TeacherSidebar
+          setSelectedContent={setSelectedContent}
+          isSidebarOpen={isSidebarOpen}
+        />
+      </div>
 
       {!isSidebarOpen ? (
         <CiMenuBurger
@@ -61,14 +80,14 @@ const TeacherDashboard = () => {
         />
       ) : (
         <RxCross1
-          className="z-100 p-0.4 left-22 lg:hidden sm:block absolute text-red-400 text-2xl"
+          className="z-100 p-0.4 left-48 lg:hidden sm:block absolute text-red-400 text-2xl"
           onClick={toggleSidebar}
         />
       )}
 
       {/* Main Content */}
       <div
-        className="bg-gradient-to-r min-h-screen from-blue-100 to-blue-300"
+        className="bg-gradient-to-r min-h-[91.5vh] from-blue-100 to-blue-300"
         style={{ flex: 1 }}
       >
         <Container maxWidth="lg">
