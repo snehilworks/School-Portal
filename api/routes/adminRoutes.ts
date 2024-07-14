@@ -10,10 +10,10 @@ router.get("/", (req, res) => {
 
 // Teachers Routes
 router.get("/teachers", AdminController.getAllTeachers);
-router.post("/teachers", AdminController.addTeacher);
-router.get("/teachers/:id", AdminController.getSpecificTeacher);
-router.put("/teachers/:id", AdminController.updateTeacher);
-router.delete("/teachers/:id", AdminController.deleteTeacher);
+router.post("/teacher", AdminController.addTeacher);
+router.get("/teacher/:id", AdminController.getSpecificTeacher);
+router.put("/teacher/:id", AdminController.updateTeacher);
+router.delete("/teacher/:id", AdminController.deleteTeacher);
 
 // Students Routes
 router.get("/students", AdminController.getAllStudents);

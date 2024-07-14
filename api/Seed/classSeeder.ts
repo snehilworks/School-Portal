@@ -46,8 +46,9 @@ async function seedClassesData() {
       // Clear existing data from the classes collection
       await ClassModel.deleteMany({});
 
-      // Insert seed data into the classes collection
-      await ClassModel.insertMany(classData);
+      for (const classEntry of classData) {
+        await ClassModel.create(classEntry);
+      }
 
       console.log("Class seed data inserted successfully.");
 
