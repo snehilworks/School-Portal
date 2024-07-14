@@ -75,6 +75,10 @@ function Appbar({}) {
     setAnchorEl(event.currentTarget);
   };
 
+  //cookies - 45 min session done ... cookies will delete jwt expiry time and cookie expiry time should be same
+  //localstorage forever -> (first thing this is fine)
+  //session storage .. only for 1 tab and 1 session
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -128,17 +132,7 @@ function Appbar({}) {
                   </PrimaryButton>
                 </>
               ) : (
-                <>
-                  <PrimaryButton
-                    color="student"
-                    onClick={() => navigate("/student/register")}
-                  >
-                    Register
-                  </PrimaryButton>
-                  <PrimaryButton onClick={() => navigate("/student/login")}>
-                    Login
-                  </PrimaryButton>
-                </>
+                <></>
               )}
             </div>
             <div className="md:hidden">
