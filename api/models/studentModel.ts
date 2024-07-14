@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { string } from "zod";
 
 export interface Student extends Document {
   name: string;
@@ -12,6 +13,8 @@ export interface Student extends Document {
   class?: string;
   section?: string;
   admission: boolean;
+  placeName?: string;
+  address?: string;
 }
 
 const studentSchema: Schema = new Schema({
@@ -26,6 +29,8 @@ const studentSchema: Schema = new Schema({
   class: { type: String },
   section: { type: String },
   admission: { type: Boolean, default: false },
+  placeName: {type : String },
+  address : { type: String }
 });
 
 export default mongoose.model<Student>("Student", studentSchema);
