@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Payment } from "@mui/icons-material";
+import axios from "axios";
 
 const PaymentsPage = () => {
   const [amount, setAmount] = useState("");
@@ -48,8 +49,55 @@ const PaymentsPage = () => {
   const currency = "INR";
   const receiptId = "OrderReceipt 1";
 
+  // const handlePayment = async (e) => {
+  //   const response = await axios.post(`${process.env.API_URL}/api/pay/order`, {
+  //     amount,
+  //     currency,
+  //     receipt: receiptId,
+  //   });
+  //   const order = response.data;
+
+  //   var options = {
+  //     key: import.meta.env.VITE_RAZORPAY_KEY || "",
+  //     amount,
+  //     currency,
+  //     name: "Shivam Public",
+  //     description: "Test Transaction",
+  //     image: "https://example.com/your_logo",
+  //     order_id: order.id,
+  //     handler: function (response) {
+  //       alert(response.razorpay_payment_id);
+  //       alert(response.razorpay_order_id);
+  //       alert(response.razorpay_signature);
+  //     },
+  //     prefill: {
+  //       name: formData.studentName,
+  //       email: formData.email,
+  //       contact: formData.fatherPhone,
+  //     },
+  //     notes: {
+  //       address: formData.address,
+  //     },
+  //     theme: {
+  //       color: "#3399cc",
+  //     },
+  //   };
+  //   var rzp1 = new window.Razorpay(options);
+  //   rzp1.on("payment.failed", function (response) {
+  //     alert(response.error.code);
+  //     alert(response.error.description);
+  //     alert(response.error.source);
+  //     alert(response.error.step);
+  //     alert(response.error.reason);
+  //     alert(response.error.metadata.order_id);
+  //     alert(response.error.metadata.payment_id);
+  //   });
+  //   rzp1.open();
+  //   e.preventDefault();
+  // };
+
   const handlePayment = async (e) => {
-    const response = await axios.post(`${process.env.API_URL}/order`, {
+    const response = await axios.post(`${process.env.API_URL}/api/pay/order`, {
       amt,
       currency,
       receipt: receiptId,
@@ -192,8 +240,9 @@ const PaymentsPage = () => {
           )}
 
           <button
+            id="rzp-button1"
             onClick={handlePayment}
-            className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="w-full py-2 px-4 mt-4 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors duration-300"
           >
             Pay Now
           </button>

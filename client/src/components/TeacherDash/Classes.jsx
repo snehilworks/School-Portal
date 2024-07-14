@@ -1,20 +1,57 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const ClassesContent = () => {
   const [teacherClasses, setTeacherClasses] = useState([]);
-
-  // Dummy data for demonstration
-  const dummyClasses = [
-    { id: 1, className: "Class 1st", subject: "Mathematics" },
-    { id: 2, className: "Class 3rd-eng", subject: "Science" },
-    { id: 3, className: "Class 4th-hindi", subject: "History" },
-    { id: 4, className: "Class 3rd-hindi", subject: "English" },
-  ];
+  const [teacherSubjects, setTeacherSubjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Set dummy data to state variable
-    setTeacherClasses(dummyClasses);
+    const fetchTeacherData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No token found");
+        }
+
+        // Get the teacher ID from the /api/teacher/me endpoint
+        const meResponse = await axios.get(
+          "http://localhost:4000/api/teacher/me",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const teacherId = meResponse.data.teacherId;
+
+        // Get the teacher's details using the retrieved teacher ID
+        const teacherResponse = await axios.get(
+          `http://localhost:4000/api/teacher/${teacherId}`
+        );
+        const teacherData = teacherResponse.data.data; // Assuming teacherData is structured as { data: { classes: [...] } }
+
+        // Set the teacher classes to state
+        setTeacherClasses(teacherData.classes);
+        setTeacherSubjects(teacherData.subjects);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchTeacherData();
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="bg-gradient-to-br from-blue-900 to-blue-600 text-white rounded-lg shadow-lg p-6">
@@ -23,12 +60,12 @@ const ClassesContent = () => {
         <div>
           <h2 className="text-2xl font-semibold mb-4">Classes</h2>
           <ul>
-            {teacherClasses.map((classInfo) => (
+            {teacherClasses.map((className, index) => (
               <li
-                key={classInfo.id}
+                key={index}
                 className="py-2 hover:bg-blue-700 transition duration-300 ease-in-out rounded-md px-4"
               >
-                <p className="text-lg font-semibold">{classInfo.className}</p>
+                <p className="text-lg font-semibold">{className}</p>
               </li>
             ))}
           </ul>
@@ -36,12 +73,12 @@ const ClassesContent = () => {
         <div>
           <h2 className="text-2xl font-semibold mb-4">Subjects</h2>
           <ul>
-            {teacherClasses.map((classInfo) => (
+            {teacherSubjects.map((Subject, index) => (
               <li
-                key={classInfo.id}
+                key={index}
                 className="py-2 hover:bg-blue-700 transition duration-300 ease-in-out rounded-md px-4"
               >
-                <p className="text-lg font-semibold">{classInfo.subject}</p>
+                <p className="text-lg font-semibold">{Subject}</p>
               </li>
             ))}
           </ul>
