@@ -70,7 +70,14 @@ const AdminDashboard = () => {
       >
         <Typography
           variant="h4"
-          style={{ marginBottom: "32px", marginTop: "32px" }}
+          style={{
+            marginBottom: "32px",
+            marginTop: "32px",
+            alignItems: "center",
+            textAlign: "center",
+            fontWeight: "bold",
+            fontFamily: "serif",
+          }}
         >
           Admin Dashboard
         </Typography>

@@ -14,41 +14,31 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 const GradientMenu = styled(Menu)(({ theme }) => ({
   "& .MuiPaper-root": {
-    backgroundImage: "linear-gradient(to right, #667eea, #764ba2)",
-    borderRadius: 8,
-    padding: 8,
+    borderRadius: "0.75rem", // Rounded corners for a sleek look
+    padding: theme.spacing(1),
+    background: "linear-gradient(to right, #4b6cb7, #182848)", // Custom gradient colors
+    minWidth: "12rem", // Minimum width for desktop
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
+    [theme.breakpoints.down("sm")]: {
+      minWidth: "10rem", // Adjust for mobile responsiveness
+    },
   },
 }));
 
 const GradientMenuItem = styled(MenuItem)(({ theme }) => ({
-  color: "#fff",
+  color: "#fff", // White text for contrast
+  fontWeight: "500", // Slightly bold text for emphasis
   "&:hover": {
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    backgroundColor: "rgba(255, 255, 255, 0.1)", // Lighter background on hover
   },
 }));
 
 const LogoutMenuItem = styled(MenuItem)(({ theme }) => ({
-  color: "#fff",
+  color: "#D22B2B",
   fontWeight: "bold",
-  backgroundColor: "red",
-  border: "1px solid red",
-  borderRadius: "7%",
-  "&:hover": {
-    backgroundColor: "red",
-  },
-}));
-
-const RegisterMenuItem = styled(MenuItem)(({ theme }) => ({
-  color: "cyan",
-  fontWeight: "bold",
-  "&:hover": {
-    backgroundColor: "red",
-  },
-}));
-
-const LoginMenuItem = styled(MenuItem)(({ theme }) => ({
-  color: "black",
-  fontWeight: "bold",
+  // backgroundColor: "#8B0000",
+  // border: "0.1px solid #fff",
+  borderRadius: "4%",
   "&:hover": {
     backgroundColor: "red",
   },
@@ -125,7 +115,11 @@ function Appbar() {
           </div>
           <div className="appbar-buttons hidden md:flex">
             {isAuthenticated ? (
-              <PrimaryButton color="logout" onClick={handleLogout}>
+              <PrimaryButton
+                color="logout"
+                extra_styles={{ fontFamily: "serif", padding: "9.5px" }}
+                onClick={handleLogout}
+              >
                 Logout
               </PrimaryButton>
             ) : (
@@ -207,24 +201,7 @@ function Appbar() {
                   Logout
                 </LogoutMenuItem>
               ) : (
-                <>
-                  <RegisterMenuItem
-                    onClick={() => {
-                      navigate("/student/register");
-                      handleClose();
-                    }}
-                  >
-                    Register
-                  </RegisterMenuItem>
-                  <LoginMenuItem
-                    onClick={() => {
-                      navigate("/student/login");
-                      handleClose();
-                    }}
-                  >
-                    Login
-                  </LoginMenuItem>
-                </>
+                <></>
               )}
             </GradientMenu>
           </div>

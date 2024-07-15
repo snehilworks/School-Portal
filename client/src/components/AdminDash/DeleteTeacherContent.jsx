@@ -49,14 +49,15 @@ const DeleteTeacherComponent = () => {
     try {
       console.log("Deleting teacher with ID:", selectedTeacherId);
       await axios.delete(
-        `${process.env.API_URL}/api/admin/teachers/${selectedTeacherId}`
+        `${process.env.API_URL}/api/admin/teacher/${selectedTeacherId}`
       );
-      // Update the teachers state to remove the deleted teacher
-      setTeachers(
-        teachers.filter((teacher) => teacher.id !== selectedTeacherId)
-      );
+
+      // Fetch updated list of teachers after deletion
+      await fetchTeachers();
+
       // Close confirmation dialog
       setConfirmationDialogOpen(false);
+
       // Clear selected teacher ID
       setSelectedTeacherId("");
     } catch (error) {
@@ -71,10 +72,11 @@ const DeleteTeacherComponent = () => {
   return (
     <Card
       sx={{
-        maxWidth: 500,
+        maxWidth: 600,
         margin: "auto",
-        borderRadius: 4,
+        borderRadius: 8,
         boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.1)",
+        padding: "24px",
       }}
     >
       <CardContent>
@@ -86,24 +88,17 @@ const DeleteTeacherComponent = () => {
         >
           Delete Teacher
         </Typography>
-        <FormControl fullWidth>
-          <InputLabel id="teacher-select-label" sx={{ fontWeight: 500 }}>
-            Select Teacher
-          </InputLabel>
+        <FormControl fullWidth style={{ marginBottom: "24px" }}>
+          <InputLabel id="teacher-select-label">Select Teacher</InputLabel>
           <Select
             labelId="teacher-select-label"
             id="teacher-select"
             value={selectedTeacherId}
             onChange={handleSelectChange}
             fullWidth
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "text.primary",
-              },
-            }}
           >
             {teachers.map((teacher) => (
-              <MenuItem key={teacher.id} value={teacher.id}>
+              <MenuItem key={teacher._id} value={teacher._id}>
                 {teacher.name}
               </MenuItem>
             ))}
