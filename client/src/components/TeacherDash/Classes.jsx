@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import header from "../../headers";
 
 const ClassesContent = () => {
   const [teacherClasses, setTeacherClasses] = useState([]);
@@ -15,20 +16,16 @@ const ClassesContent = () => {
           throw new Error("No token found");
         }
 
-        // Get the teacher ID from the /api/teacher/me endpoint
         const meResponse = await axios.get(
           "http://localhost:4000/api/teacher/me",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          header
         );
         const teacherId = meResponse.data.teacherId;
 
         // Get the teacher's details using the retrieved teacher ID
         const teacherResponse = await axios.get(
-          `http://localhost:4000/api/teacher/${teacherId}`
+          `http://localhost:4000/api/teacher/${teacherId}`,
+          header
         );
         const teacherData = teacherResponse.data.data; // Assuming teacherData is structured as { data: { classes: [...] } }
 

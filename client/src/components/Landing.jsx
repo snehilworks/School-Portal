@@ -1,6 +1,5 @@
-import { Grid, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import PrimaryButton from "./ui/PrimaryButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,12 +11,27 @@ import {
 
 export const Landing = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const studentToken = localStorage.getItem("studentToken");
+    const teacherToken = localStorage.getItem("teacherToken");
+    const adminToken = localStorage.getItem("token");
+
+    if (studentToken) {
+      navigate("/student/dashboard");
+    } else if (teacherToken) {
+      navigate("/teacher/dashboard");
+    } else if (adminToken) {
+      navigate("/admin/dashboard");
+    }
+  }, [navigate]);
+
   return (
     <div className="w-full h-full bg-white">
       <div className="component-container flex items-start laptop:items-center justify-center">
         <div className="w-full flex flex-col laptop:flex-row items-center justify-between gap-4">
           <div className="order-2 laptop:order-1 h-fit laptop:h-full flex flex-col items-center justify-between">
-            <p className="text-[20px] laptop:text-[46px] font-semibold">
+            <p className="text-center text-[30px] laptop:text-[48px] font-extrabold text-gray-900 leading-tight">
               Shivam Public School, Aarni
             </p>
 
@@ -52,6 +66,9 @@ export const Landing = () => {
               </PrimaryButton>
               <PrimaryButton
                 color={"teacher"}
+                extra_styles={{
+                  border: "2px solid cyan",
+                }}
                 onClick={() => {
                   navigate("/teacher/login");
                 }}
@@ -66,17 +83,21 @@ export const Landing = () => {
               </PrimaryButton>
               <PrimaryButton
                 color={"admin"}
+                extra_styles={{
+                  width: "100%",
+                  border: "2px solid gray",
+                }}
+                className="hidden md:flex"
                 onClick={() => {
                   navigate("/admin/login");
                 }}
-                className="hidden md:block"
               >
                 <div className="flex items-center gap-2 px-4 py-2">
                   <FontAwesomeIcon
                     icon={faUser}
-                    className="text-[20px] md:text-[36px]"
+                    className="text-[20px] laptop:text-[36px] md:text-[36px]"
                   />
-                  <p className="text-lg md:text-xl">Admin Login</p>
+                  <p className="text-lg laptop:text-xl">Admin Login</p>
                 </div>
               </PrimaryButton>
             </div>

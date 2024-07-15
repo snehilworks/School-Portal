@@ -1,5 +1,3 @@
-import { Button, ThemeProvider, createTheme } from "@mui/material";
-import { blue, cyan, deepPurple, green, red } from "@mui/material/colors";
 import React from "react";
 
 const PrimaryButton = ({
@@ -11,53 +9,36 @@ const PrimaryButton = ({
   className,
   disabled = false,
 }) => {
-  const theme = createTheme({
-    palette: {
-      default: { main: blue["700"], contrastText: "#fff" },
-      student: { main: green["500"], contrastText: "#fff" },
-      teacher: { main: deepPurple["400"], contrastText: "#fff" },
-      admin: { main: blue["500"], contrastText: "#fff" },
-      logout: { main: red["500"], contrastText: "#fff" },
-    },
-    components: {
-      MuiButton: {
-        defaultProps: {
-          // disableElevation: true,
-        },
-        styleOverrides: {
-          root: {
-            textTransform: "none",
-            fontFamily: "Poppins",
-            borderRadius: "8px",
-            transition: "all 0.3s ease",
-            "&:hover": {
-              transform: "translateY(-2px)",
-              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-            },
-          },
-        },
-      },
-    },
-  });
+  let buttonColorClasses = "";
+  let hoverColorClasses = "";
+
+  // Determine background and text colors based on the 'color' prop
+  if (color === "admin") {
+    buttonColorClasses = "bg-gray-800 text-white";
+    hoverColorClasses = "hover:bg-gray-700";
+  } else if (color === "student") {
+    buttonColorClasses = "bg-green-600 text-white";
+    hoverColorClasses = "hover:bg-green-700";
+  } else if (color === "teacher") {
+    buttonColorClasses = "bg-cyan-500 text-white";
+    hoverColorClasses = "hover:bg-cyan-600";
+  } else if (color === "logout") {
+    buttonColorClasses = "bg-red-500 text-white";
+    hoverColorClasses = "hover:bg-red-600";
+  } else {
+    buttonColorClasses = "bg-blue-900 text-white";
+    hoverColorClasses = "hover:bg-blue-800";
+  }
 
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <Button
-          disabled={disabled}
-          variant={variant || "contained"}
-          color={color || "default"}
-          className={className}
-          style={{ ...extra_styles }}
-          onClick={onClick}
-        >
-          <span className="relative">
-            {children}
-            <span className="absolute top-0 left-0 w-full h-full rounded-lg transition-all duration-300 ease-in-out bg-gradient-to-r from-transparent to-white opacity-0 hover:opacity-10"></span>
-          </span>
-        </Button>
-      </ThemeProvider>
-    </>
+    <button
+      disabled={disabled}
+      onClick={onClick}
+      className={`text-lg lg:text-xl px-6 py-3 flex items-center justify-center gap-2 rounded-lg shadow-md transition-transform transform hover:scale-105 ${buttonColorClasses} ${hoverColorClasses} ${className}`}
+      style={{ ...extra_styles }}
+    >
+      {children}
+    </button>
   );
 };
 

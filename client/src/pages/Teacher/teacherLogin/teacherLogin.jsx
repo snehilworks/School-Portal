@@ -21,7 +21,7 @@ function TeacherLogin() {
       
       if (response.status === 200) {
         const data = response.data;
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("teacherToken", data.token);
         setUser({ userEmail: email, isLoading: false });
         navigate("/teacher/dashboard");
       } else {

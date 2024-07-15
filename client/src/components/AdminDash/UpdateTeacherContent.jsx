@@ -70,13 +70,13 @@ const UpdateTeacherContent = () => {
         `${process.env.API_URL}/api/admin/teacher/${selectedId}`
       );
       const { data } = response;
-      console.log("Received Teacher Details:", data); // Check the received teacher details
+      // console.log("Received Teacher Details:", data); // Check the received teacher details
       // console.log(response.data.name);
-      console.log(data.data.name);
-      console.log(data.data.email);
-      // console.log(data.phone);
-      console.log(data.data.classes.join(", "));
-      console.log(data.data.subjects.join(", "));
+      // console.log(data.data.name);
+      // console.log(data.data.email);
+      // // console.log(data.phone);
+      // console.log(data.data.classes.join(", "));
+      // console.log(data.data.subjects.join(", "));
       const updatedTeacherDetails = {
         name: data.data.name || "",
         email: data.data.email || "",
@@ -177,7 +177,6 @@ const UpdateTeacherContent = () => {
                   value={teacherDetails.password}
                   onChange={handleChange}
                   fullWidth
-                  required
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
