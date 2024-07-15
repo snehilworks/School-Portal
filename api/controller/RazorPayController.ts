@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Razorpay from "razorpay";
+import Payment from "../models/PaymentModel";
 
 const razor = new Razorpay({
   key_id: process.env.RAZORPAY_ID_KEY as string,
@@ -67,9 +68,6 @@ export const FetchOrderList = async (req: Request, res:Response) => {
   }
 };
 
-
-
-
 export const FetchSpecificOrder = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.id;
@@ -81,6 +79,42 @@ export const FetchSpecificOrder = async (req: Request, res: Response) => {
     const order = await razor.orders.fetch(orderId);
 
     return res.status(200).json(order);
+  } catch (err) {
+    console.log(err);
+    res.status(512).send("Error");
+  }
+};
+
+export const CapturePayment = async (req: Request, res: Response) => {
+  const { paymentId, amount, currency, studentId, feeType } = req.body;
+
+  try {
+    const captureResponse = await razor.payments.capture(paymentId, amount, currency);
+
+    const payment = new Payment({
+      paymentId: captureResponse.id,
+      studentId,
+      feeType,
+      amount: captureResponse.amount,
+      currency: captureResponse.currency,
+      status: captureResponse.status,
+      captured: captureResponse.captured,
+      createdAt: captureResponse.created_at
+    });
+    await payment.save();
+
+    return res.status(200).json(captureResponse);
+  } catch (err) {
+    console.log(err);
+    res.status(512).send("Error");
+  }
+};
+
+export const FetchPaymentDetails = async (req:Request, res: Response) => {
+  const { paymentId } = req.params;
+  try {
+    const paymentDetails = await razor.payments.fetch(paymentId);
+    return res.status(200).json(paymentDetails);
   } catch (err) {
     console.log(err);
     res.status(512).send("Error");
