@@ -1,6 +1,5 @@
-import { Grid, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import PrimaryButton from "./ui/PrimaryButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,6 +11,21 @@ import {
 
 export const Landing = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const studentToken = localStorage.getItem("studentToken");
+    const teacherToken = localStorage.getItem("teacherToken");
+    const adminToken = localStorage.getItem("token");
+
+    if (studentToken) {
+      navigate("/student/dashboard");
+    } else if (teacherToken) {
+      navigate("/teacher/dashboard");
+    } else if (adminToken) {
+      navigate("/admin/dashboard");
+    }
+  }, [navigate]);
+
   return (
     <div className="w-full h-full bg-white">
       <div className="component-container flex items-start laptop:items-center justify-center">
@@ -52,6 +66,9 @@ export const Landing = () => {
               </PrimaryButton>
               <PrimaryButton
                 color={"teacher"}
+                extra_styles={{
+                  border: "2px solid cyan",
+                }}
                 onClick={() => {
                   navigate("/teacher/login");
                 }}

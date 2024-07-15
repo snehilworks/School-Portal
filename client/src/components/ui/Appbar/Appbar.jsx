@@ -7,13 +7,11 @@ import {
   styled,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import "./Appbar.css";
 import PrimaryButton from "../PrimaryButton";
 import { indigo } from "@mui/material/colors";
 import { useState, useEffect } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 
-// Custom styled components for Menu and MenuItem
 const GradientMenu = styled(Menu)(({ theme }) => ({
   "& .MuiPaper-root": {
     backgroundImage: "linear-gradient(to right, #667eea, #764ba2)",
@@ -43,8 +41,6 @@ const LogoutMenuItem = styled(MenuItem)(({ theme }) => ({
 const RegisterMenuItem = styled(MenuItem)(({ theme }) => ({
   color: "cyan",
   fontWeight: "bold",
-  // border: "1px solid white",
-  // borderRadius: "7%",
   "&:hover": {
     backgroundColor: "red",
   },
@@ -53,189 +49,188 @@ const RegisterMenuItem = styled(MenuItem)(({ theme }) => ({
 const LoginMenuItem = styled(MenuItem)(({ theme }) => ({
   color: "black",
   fontWeight: "bold",
-  // border: "1px solid white",
-  // borderRadius: "7%",
   "&:hover": {
     backgroundColor: "red",
   },
 }));
 
-function Appbar({}) {
+function Appbar() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const open = Boolean(anchorEl);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
+    const studentToken = localStorage.getItem("studentToken");
+    const teacherToken = localStorage.getItem("teacherToken");
+    const adminToken = localStorage.getItem("token");
+
+    if (studentToken) {
+      setIsAuthenticated(true);
+    } else if (teacherToken) {
+      setIsAuthenticated(true);
+    } else if (adminToken) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
   }, []);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  //cookies - 45 min session done ... cookies will delete jwt expiry time and cookie expiry time should be same
-  //localstorage forever -> (first thing this is fine)
-  //session storage .. only for 1 tab and 1 session
-
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("studentToken");
+    localStorage.removeItem("teacherToken");
     localStorage.removeItem("token");
     setIsAuthenticated(false);
-    navigate("/student/login");
+    navigate("/");
   };
 
   return (
-    <>
-      <AppBar
-        position="sticky"
-        sx={{ backgroundColor: indigo["800"] }}
-        elevation={0}
-      >
-        <Toolbar className="w-full max-w-[1440px] mx-auto">
-          <div className="w-full flex items-center justify-between font-poppins">
-            <div onClick={() => navigate("/")} className="flex items-center">
-              <p>Shivam Public</p>
-            </div>
-            <div
-              className="appbar-buttons hidden md:flex"
-              style={{ gap: "2rem" }}
+    <AppBar
+      position="sticky"
+      sx={{ backgroundColor: indigo["800"] }}
+      elevation={0}
+    >
+      <Toolbar className="w-full max-w-[1440px] mx-auto">
+        <div className="w-full flex items-center justify-between font-poppins">
+          <div onClick={() => navigate("/")} className="flex items-center">
+            <p>Shivam Public</p>
+          </div>
+          <div
+            className="appbar-buttons hidden md:flex"
+            style={{ gap: "2rem" }}
+          >
+            <p className="appbar-link" onClick={() => navigate("/")}>
+              Home
+            </p>
+            <p className="appbar-link" onClick={() => navigate("/about")}>
+              About Us
+            </p>
+            <p className="appbar-link" onClick={() => navigate("/academics")}>
+              Academics
+            </p>
+            <p className="appbar-link" onClick={() => navigate("/admissions")}>
+              Admissions
+            </p>
+            <p className="appbar-link" onClick={() => navigate("/contact")}>
+              Contact
+            </p>
+          </div>
+          <div className="appbar-buttons hidden md:flex">
+            {isAuthenticated ? (
+              <PrimaryButton color="logout" onClick={handleLogout}>
+                Logout
+              </PrimaryButton>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className="md:hidden">
+            <IconButton
+              aria-label="open menu"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleClick}
+              color="inherit"
             >
-              <p className="appbar-link" onClick={() => navigate("/")}>
+              <MenuIcon />
+            </IconButton>
+            <GradientMenu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={open}
+              onClose={handleClose}
+            >
+              <GradientMenuItem
+                onClick={() => {
+                  navigate("/");
+                  handleClose();
+                }}
+              >
                 Home
-              </p>
-              <p className="appbar-link" onClick={() => navigate("/about")}>
+              </GradientMenuItem>
+              <GradientMenuItem
+                onClick={() => {
+                  navigate("/about");
+                  handleClose();
+                }}
+              >
                 About Us
-              </p>
-              <p className="appbar-link" onClick={() => navigate("/academics")}>
+              </GradientMenuItem>
+              <GradientMenuItem
+                onClick={() => {
+                  navigate("/academics");
+                  handleClose();
+                }}
+              >
                 Academics
-              </p>
-              <p
-                className="appbar-link"
-                onClick={() => navigate("/admissions")}
+              </GradientMenuItem>
+              <GradientMenuItem
+                onClick={() => {
+                  navigate("/admissions");
+                  handleClose();
+                }}
               >
                 Admissions
-              </p>
-              <p className="appbar-link" onClick={() => navigate("/contact")}>
+              </GradientMenuItem>
+              <GradientMenuItem
+                onClick={() => {
+                  navigate("/contact");
+                  handleClose();
+                }}
+              >
                 Contact
-              </p>
-            </div>
-            <div className="appbar-buttons hidden md:flex">
+              </GradientMenuItem>
               {isAuthenticated ? (
-                <>
-                  <PrimaryButton color="logout" onClick={handleLogout}>
-                    Logout
-                  </PrimaryButton>
-                </>
+                <LogoutMenuItem
+                  onClick={() => {
+                    handleLogout();
+                    handleClose();
+                  }}
+                >
+                  Logout
+                </LogoutMenuItem>
               ) : (
-                <></>
-              )}
-            </div>
-            <div className="md:hidden">
-              <IconButton
-                aria-label="open menu"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleClick}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <GradientMenu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <GradientMenuItem
-                  onClick={() => {
-                    navigate("/");
-                    handleClose();
-                  }}
-                >
-                  Home
-                </GradientMenuItem>
-                <GradientMenuItem
-                  onClick={() => {
-                    navigate("/about");
-                    handleClose();
-                  }}
-                >
-                  About Us
-                </GradientMenuItem>
-                <GradientMenuItem
-                  onClick={() => {
-                    navigate("/academics");
-                    handleClose();
-                  }}
-                >
-                  Academics
-                </GradientMenuItem>
-                <GradientMenuItem
-                  onClick={() => {
-                    navigate("/admissions");
-                    handleClose();
-                  }}
-                >
-                  Admissions
-                </GradientMenuItem>
-                <GradientMenuItem
-                  onClick={() => {
-                    navigate("/contact");
-                    handleClose();
-                  }}
-                >
-                  Contact
-                </GradientMenuItem>
-                {isAuthenticated ? (
-                  <LogoutMenuItem
+                <>
+                  <RegisterMenuItem
                     onClick={() => {
-                      handleLogout();
+                      navigate("/student/register");
                       handleClose();
                     }}
                   >
-                    Logout
-                  </LogoutMenuItem>
-                ) : (
-                  <>
-                    <RegisterMenuItem
-                      onClick={() => {
-                        navigate("/student/register");
-                        handleClose();
-                      }}
-                    >
-                      Register
-                    </RegisterMenuItem>
-                    <LoginMenuItem
-                      color="red"
-                      onClick={() => {
-                        navigate("/student/login");
-                        handleClose();
-                      }}
-                    >
-                      Login
-                    </LoginMenuItem>
-                  </>
-                )}
-              </GradientMenu>
-            </div>
+                    Register
+                  </RegisterMenuItem>
+                  <LoginMenuItem
+                    onClick={() => {
+                      navigate("/student/login");
+                      handleClose();
+                    }}
+                  >
+                    Login
+                  </LoginMenuItem>
+                </>
+              )}
+            </GradientMenu>
           </div>
-        </Toolbar>
-      </AppBar>
-    </>
+        </div>
+      </Toolbar>
+    </AppBar>
   );
 }
 
