@@ -85,6 +85,17 @@ export const FetchSpecificOrder = async (req: Request, res: Response) => {
   }
 };
 
+export const FetchAllPayments = async (req: Request, res: Response) => {
+  try {
+    const AllPayments = await razor.payments.all();
+
+    return res.status(200).json(AllPayments);
+  } catch (err) {
+    console.log(err);
+    res.status(512).send("Error");
+  }
+};
+
 export const CapturePayment = async (req: Request, res: Response) => {
   const { paymentId, amount, currency, studentId, feeType } = req.body;
 
