@@ -13,6 +13,8 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import axios from "axios";
 
@@ -29,7 +31,9 @@ const UpdateTeacherContent = () => {
     classes: "",
     classId: "",
   });
-  const [classes, setClasses] = useState([]); // State to hold class options
+  const [classes, setClasses] = useState([]);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   useEffect(() => {
     fetchTeachers();
@@ -57,26 +61,15 @@ const UpdateTeacherContent = () => {
       console.error("Error fetching classes:", error);
     }
   };
-  // useEffect(() => {
-  //   console.log("Updated Teacher Details:", teacherDetails);
-  // }, [teacherDetails]);
 
   const handleSelectChange = async (event) => {
     const selectedId = event.target.value;
-    console.log("Selected Teacher ID:", selectedId); // Check if selectedId is correct
     setSelectedTeacherId(selectedId);
     try {
       const response = await axios.get(
         `${process.env.API_URL}/api/admin/teacher/${selectedId}`
       );
       const { data } = response;
-      // console.log("Received Teacher Details:", data); // Check the received teacher details
-      // console.log(response.data.name);
-      // console.log(data.data.name);
-      // console.log(data.data.email);
-      // // console.log(data.phone);
-      // console.log(data.data.classes.join(", "));
-      // console.log(data.data.subjects.join(", "));
       const updatedTeacherDetails = {
         name: data.data.name || "",
         email: data.data.email || "",
@@ -85,11 +78,10 @@ const UpdateTeacherContent = () => {
         phone: data.data.phone || "",
         classTeacher: data.data.classTeacher || false,
         classes: data.data.classes ? data.data.classes.join(", ") : "",
-        classId: data.data.class ? data.data.class._id : "", // Assuming classId is fetched from class._id
+        classId: data.data.class ? data.data.class._id : "",
       };
 
       setTeacherDetails(updatedTeacherDetails);
-      console.log("Updated Teacher Details:", updatedTeacherDetails); // Check the updated teacherDetails state
     } catch (error) {
       console.error("Error fetching teacher details:", error);
     }
@@ -115,10 +107,15 @@ const UpdateTeacherContent = () => {
         `${process.env.API_URL}/api/admin/teacher/${selectedTeacherId}`,
         payload
       );
-      console.log("Teacher details updated successfully:", response.data);
+      setSuccessMessage("Teacher Details updated successfully");
+      setOpenSnackbar(true);
     } catch (error) {
       console.error("Error updating teacher details:", error);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -260,6 +257,21 @@ const UpdateTeacherContent = () => {
           </form>
         </CardContent>
       </Card>
+      {/* Success Snackbar */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {successMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

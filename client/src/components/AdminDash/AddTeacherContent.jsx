@@ -93,7 +93,7 @@ const AddTeacherContent = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.API_URL}/api/admin/teachers`,
+        `${process.env.API_URL}/api/admin/teacher`,
         payload
       );
       console.log("Teacher details submitted successfully:", response.data);
@@ -268,7 +268,9 @@ const AddTeacherContent = () => {
             <CloseIcon fontSize="small" />
           </IconButton>
         }
-        style={{ backgroundColor: "#4caf50" }}
+        ContentProps={{
+          style: { backgroundColor: "#4caf50" },
+        }}
       />
     </Card>
   );
