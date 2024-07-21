@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Typography, Card, CardContent, Container } from "@mui/material";
 import { Event as EventIcon } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 function EventsPage() {
   const sampleEventsData = [
@@ -26,6 +27,7 @@ function EventsPage() {
   ];
 
   const [events, setEvents] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +40,13 @@ function EventsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-300 to-yellow-500 py-8">
       <Container maxWidth="lg">
+        <button
+          onClick={() => navigate(-1)}
+          className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mb-8 hover:bg-blue-700 transition duration-200"
+        >
+          ← Back
+        </button>
+
         <Typography
           variant="h3"
           className="text-center text-3xl font-bold text-gray-800 mb-8"

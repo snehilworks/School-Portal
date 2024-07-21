@@ -11,10 +11,12 @@ import PrimaryButton from "../PrimaryButton";
 import { indigo } from "@mui/material/colors";
 import { useState, useEffect } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
+import { authState } from "../../../store/atoms/auth";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 const GradientMenu = styled(Menu)(({ theme }) => ({
   "& .MuiPaper-root": {
-    borderRadius: "0.75rem", // Rounded corners for a sleek look
+    borderRadius: "0.75rem",
     padding: theme.spacing(1),
     background: "linear-gradient(to right, #4b6cb7, #182848)", // Custom gradient colors
     minWidth: "12rem", // Minimum width for desktop
@@ -45,8 +47,9 @@ const LogoutMenuItem = styled(MenuItem)(({ theme }) => ({
 function Appbar() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const open = Boolean(anchorEl);
+  const auth = useRecoilValue(authState);
+  const setAuthState = useSetRecoilState(authState);
 
   useEffect(() => {
     const studentToken = localStorage.getItem("studentToken");
@@ -54,11 +57,11 @@ function Appbar() {
     const adminToken = localStorage.getItem("token");
 
     if (studentToken || teacherToken || adminToken) {
-      setIsAuthenticated(true);
+      setAuthState({ isAuthenticated: true });
     } else {
-      setIsAuthenticated(false);
+      setAuthState({ isAuthenticated: false });
     }
-  }, []);
+  }, [setAuthState]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -72,7 +75,7 @@ function Appbar() {
     localStorage.removeItem("studentToken");
     localStorage.removeItem("teacherToken");
     localStorage.removeItem("token");
-    setIsAuthenticated(false);
+    setAuthState({ isAuthenticated: false });
     navigate("/");
   };
 
@@ -108,7 +111,7 @@ function Appbar() {
             </p>
           </div>
           <div className="appbar-buttons hidden md:flex">
-            {isAuthenticated ? (
+            {auth.isAuthenticated ? (
               <PrimaryButton
                 color="logout"
                 extra_styles={{ fontFamily: "serif", padding: "9.5px" }}
@@ -192,7 +195,7 @@ function Appbar() {
                 >
                   Contact
                 </GradientMenuItem>,
-                isAuthenticated && (
+                auth.isAuthenticated && (
                   <LogoutMenuItem
                     key="logout"
                     onClick={() => {

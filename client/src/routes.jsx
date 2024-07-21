@@ -43,7 +43,11 @@ const routes = [
   //Admin Routes
   {
     path: "/admin/dashboard",
-    element: <AdminDash />,
+    element: (
+      <ProtectedRoute>
+        <AdminDash />
+      </ProtectedRoute>
+    ),
   },
   { path: "/admin/login", element: <AdminLogin /> },
 
@@ -67,15 +71,11 @@ const routes = [
     element: <FeeStructure />,
   },
   {
-    path: "/student/:id",
+    path: "/student/profile",
     element: (
-      <StudentProfile
-        name="One"
-        rollNo="1"
-        classTeacher="john"
-        classNo="X"
-        section="A"
-      />
+      <ProtectedRoute>
+        <StudentProfile />
+      </ProtectedRoute>
     ),
   },
   {

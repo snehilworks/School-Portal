@@ -86,6 +86,12 @@ const PaymentsPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-400 to-blue-500 flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
+      <button
+        onClick={() => navigate(-1)}
+        className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mb-8 hover:bg-blue-700 transition duration-200"
+      >
+        ← Back
+      </button>
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 space-y-6">
         <div className="text-center mb-6">
           <Payment className="text-6xl text-blue-600 mb-4" />

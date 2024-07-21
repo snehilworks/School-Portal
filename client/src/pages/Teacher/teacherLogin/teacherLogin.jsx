@@ -4,6 +4,7 @@ import { useSetRecoilState } from "recoil";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { userState } from "../../../store/atoms/user";
+import { authState } from "../../../store/atoms/auth";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 function TeacherLogin() {
@@ -11,18 +12,23 @@ function TeacherLogin() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
+  const setAuthState = useSetRecoilState(authState);
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${process.env.API_URL}/api/teacher/login`, {
-        email: email,
-        password: password,
-      });
-      
+      const response = await axios.post(
+        `${process.env.API_URL}/api/teacher/login`,
+        {
+          email: email,
+          password: password,
+        }
+      );
+
       if (response.status === 200) {
         const data = response.data;
         localStorage.setItem("teacherToken", data.token);
         setUser({ userEmail: email, isLoading: false });
+        setAuthState({ isAuthenticated: true });
         navigate("/teacher/dashboard");
       } else {
         console.error("Login failed:", response.data.message);
@@ -51,9 +57,31 @@ function TeacherLogin() {
               handleLogin();
             }}
           >
-            <TextField fullWidth label="Teacher's Email" variant="outlined" margin="normal" value={email} onChange={(event) => setEmail(event.target.value)} />
-            <TextField fullWidth label="Teacher's Password" variant="outlined" type="password" margin="normal" value={password} onChange={(event) => setPassword(event.target.value)} />
-            <Button fullWidth type="submit" variant="contained" size="large" sx={{ mt: 2 }} style={{ backgroundColor: "#00bcd4", color: "#fff" }}>
+            <TextField
+              fullWidth
+              label="Teacher's Email"
+              variant="outlined"
+              margin="normal"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Teacher's Password"
+              variant="outlined"
+              type="password"
+              margin="normal"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <Button
+              fullWidth
+              type="submit"
+              variant="contained"
+              size="large"
+              sx={{ mt: 2 }}
+              style={{ backgroundColor: "#00bcd4", color: "#fff" }}
+            >
               Login
             </Button>
           </form>

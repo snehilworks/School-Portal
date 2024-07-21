@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../utils/axiosInstance";
 
 const FeeStructure = () => {
@@ -6,6 +7,7 @@ const FeeStructure = () => {
   const [classData, setClassData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +50,13 @@ const FeeStructure = () => {
   return (
     <div className="pt-2 pb-2 px-4 mb-20 sm:px-6 lg:px-8 min-h-screen">
       <div className="mx-auto max-w-7xl min-h-screen">
+        <button
+          onClick={() => navigate(-1)}
+          className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mb-8 hover:bg-blue-700 transition duration-200"
+        >
+          ← Back
+        </button>
+
         <div className="text-center mb-32">
           <h1 className="text-4xl lg:text-5xl font-extrabold mb-4 text-gray-900">
             Fee Structure Overview
@@ -56,6 +65,7 @@ const FeeStructure = () => {
             Comprehensive details on the annual and hostel fee structures.
           </p>
         </div>
+
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-12">
           {/* Annual Fee Structure */}
           <div className="bg-white border border-gray-300 rounded-lg shadow-lg">
