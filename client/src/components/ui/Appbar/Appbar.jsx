@@ -53,11 +53,7 @@ function Appbar() {
     const teacherToken = localStorage.getItem("teacherToken");
     const adminToken = localStorage.getItem("token");
 
-    if (studentToken) {
-      setIsAuthenticated(true);
-    } else if (teacherToken) {
-      setIsAuthenticated(true);
-    } else if (adminToken) {
+    if (studentToken || teacherToken || adminToken) {
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
