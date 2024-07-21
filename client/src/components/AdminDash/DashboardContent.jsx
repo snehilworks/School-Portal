@@ -13,12 +13,12 @@ import {
   EventAvailable as EventIcon,
   Person as PersonIcon,
 } from "@mui/icons-material";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 
 const DashboardContent = () => {
   const handleClick = async () => {
     try {
-      await axios.get(`${process.env.API_URL}/api/admin/teachers`);
+      await axiosInstance.get(`/api/admin/teachers`);
       // Handle successful response (optional)
       console.log("Request to /api/admin/teachers successful");
     } catch (error) {

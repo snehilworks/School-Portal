@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { CheckCircleOutlineOutlined as SuccessIcon } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 
 const AddTeacherContent = () => {
   const [teacherDetails, setTeacherDetails] = useState({
@@ -42,9 +42,7 @@ const AddTeacherContent = () => {
 
   const fetchClasses = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.API_URL}/api/admin/classes`
-      );
+      const response = await axiosInstance.get(`/api/admin/classes`);
       setClassesList(response.data);
     } catch (error) {
       console.error("Error fetching classes:", error);
@@ -92,10 +90,7 @@ const AddTeacherContent = () => {
     }
 
     try {
-      const response = await axios.post(
-        `${process.env.API_URL}/api/admin/teacher`,
-        payload
-      );
+      const response = await axiosInstance.post(`/api/admin/teacher`, payload);
       console.log("Teacher details submitted successfully:", response.data);
 
       // Reset form fields after successful submission

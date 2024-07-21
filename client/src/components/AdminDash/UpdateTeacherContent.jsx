@@ -16,7 +16,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 
 const UpdateTeacherContent = () => {
   const [teachers, setTeachers] = useState([]);
@@ -42,9 +42,7 @@ const UpdateTeacherContent = () => {
 
   const fetchTeachers = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.API_URL}/api/admin/teachers`
-      );
+      const response = await axiosInstance.get(`/api/admin/teachers`);
       setTeachers(response.data);
     } catch (error) {
       console.error("Error fetching teachers:", error);
@@ -53,9 +51,7 @@ const UpdateTeacherContent = () => {
 
   const fetchClasses = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.API_URL}/api/admin/classes`
-      );
+      const response = await axiosInstance.get(`/api/admin/classes`);
       setClasses(response.data);
     } catch (error) {
       console.error("Error fetching classes:", error);
@@ -66,8 +62,8 @@ const UpdateTeacherContent = () => {
     const selectedId = event.target.value;
     setSelectedTeacherId(selectedId);
     try {
-      const response = await axios.get(
-        `${process.env.API_URL}/api/admin/teacher/${selectedId}`
+      const response = await axiosInstance.get(
+        `/api/admin/teacher/${selectedId}`
       );
       const { data } = response;
       const updatedTeacherDetails = {
@@ -103,8 +99,8 @@ const UpdateTeacherContent = () => {
     };
 
     try {
-      const response = await axios.put(
-        `${process.env.API_URL}/api/admin/teacher/${selectedTeacherId}`,
+      const response = await axiosInstance.put(
+        `/api/admin/teacher/${selectedTeacherId}`,
         payload
       );
       setSuccessMessage("Teacher Details updated successfully");

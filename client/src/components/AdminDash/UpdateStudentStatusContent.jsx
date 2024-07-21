@@ -6,7 +6,7 @@ import {
   DialogActions,
   Snackbar,
 } from "@mui/material";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 import PrimaryButton from "../ui/PrimaryButton";
 
 const UpdateStudentStatusContent = () => {
@@ -23,9 +23,7 @@ const UpdateStudentStatusContent = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.API_URL}/api/admin/students`
-      );
+      const response = await axiosInstance.get(`/api/admin/students`);
       console.log("Fetched students:", response.data.students);
       setStudents(response.data.students || []);
     } catch (error) {
@@ -50,8 +48,8 @@ const UpdateStudentStatusContent = () => {
 
     try {
       // Make API call to update student status with selectedStudentId and admissionStatus
-      const response = await axios.put(
-        `${process.env.API_URL}/api/admin/students/${selectedStudentId}`,
+      const response = await axiosInstance.put(
+        `/api/admin/students/${selectedStudentId}`,
         { admissionStatus }
       );
       console.log("Update status response:", response.data);

@@ -17,7 +17,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 
 const DeleteTeacherComponent = () => {
   const [teachers, setTeachers] = useState([]);
@@ -32,9 +32,7 @@ const DeleteTeacherComponent = () => {
 
   const fetchTeachers = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.API_URL}/api/admin/teachers`
-      );
+      const response = await axiosInstance.get(`/api/admin/teachers`);
       setTeachers(response.data);
     } catch (error) {
       console.error("Error fetching teachers:", error);
@@ -52,9 +50,7 @@ const DeleteTeacherComponent = () => {
   const handleDeleteConfirmed = async () => {
     try {
       console.log("Deleting teacher with ID:", selectedTeacherId);
-      await axios.delete(
-        `${process.env.API_URL}/api/admin/teacher/${selectedTeacherId}`
-      );
+      await axiosInstance.delete(`/api/admin/teacher/${selectedTeacherId}`);
 
       // Fetch updated list of teachers after deletion
       await fetchTeachers();

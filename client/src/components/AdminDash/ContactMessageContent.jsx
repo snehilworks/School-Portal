@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 
 const ContactMessageContent = () => {
   const [messages, setMessages] = useState([]);
@@ -9,8 +9,8 @@ const ContactMessageContent = () => {
   useEffect(() => {
     const fetchMessages = async (page) => {
       try {
-        const response = await axios.get(
-          `${process.env.API_URL}/api/admin/contact-messages`,
+        const response = await axiosInstance.get(
+          `/api/admin/contact-messages`,
           {
             params: { page, limit: 20 },
           }
