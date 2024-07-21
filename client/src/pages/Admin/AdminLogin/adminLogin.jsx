@@ -13,12 +13,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { userState } from "../../../store/atoms/user";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { authState } from "../../../store/atoms/auth";
 
 function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
+  const setAuthState = useSetRecoilState(authState);
 
   const handleLogin = async () => {
     try {
@@ -34,6 +36,7 @@ function AdminLogin() {
         const data = response.data;
         localStorage.setItem("token", data.token);
         setUser({ userEmail: email, isLoading: false });
+        setAuthState({ isAuthenticated: true });
         navigate("/admin/dashboard");
       } else {
         console.error("Login failed:", response.data.message);

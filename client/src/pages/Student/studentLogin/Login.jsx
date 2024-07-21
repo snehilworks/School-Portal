@@ -7,12 +7,14 @@ import { useSetRecoilState } from "recoil";
 import axios from "axios"; // Import axios
 import { useNavigate } from "react-router-dom";
 import { userState } from "../../../store/atoms/user";
+import { authState } from "../../../store/atoms/auth";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
+  const setAuthState = useSetRecoilState(authState);
 
   const handleLogin = async () => {
     try {
@@ -28,6 +30,7 @@ function Login() {
         const data = response.data;
         localStorage.setItem("studentToken", data.token);
         setUser({ userEmail: email, isLoading: false });
+        setAuthState({ isAuthenticated: true });
 
         console.log("Navigating to /student/dashboard");
         navigate("/student/dashboard");
@@ -51,15 +54,42 @@ function Login() {
               Welcome Back! Please Login
             </Typography>
           </Box>
-          <TextField fullWidth label="Email" variant="outlined" margin="normal" value={email} onChange={(event) => setEmail(event.target.value)} />
-          <TextField fullWidth label="Password" variant="outlined" type="password" margin="normal" value={password} onChange={(event) => setPassword(event.target.value)} />
-          <Button fullWidth variant="contained" size="large" color="primary" sx={{ mt: 2 }} onClick={handleLogin}>
+          <TextField
+            fullWidth
+            label="Email"
+            variant="outlined"
+            margin="normal"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <TextField
+            fullWidth
+            label="Password"
+            variant="outlined"
+            type="password"
+            margin="normal"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <Button
+            fullWidth
+            variant="contained"
+            size="large"
+            color="primary"
+            sx={{ mt: 2 }}
+            onClick={handleLogin}
+          >
             Login
           </Button>
           <Box display="flex" justifyContent="center" mt={2}>
             <Typography variant="body2">
               Don't have an account?{" "}
-              <Button variant="text" size="small" style={{ color: "#00008B" }} onClick={() => navigate("/student/register")}>
+              <Button
+                variant="text"
+                size="small"
+                style={{ color: "#00008B" }}
+                onClick={() => navigate("/student/register")}
+              >
                 Register
               </Button>
             </Typography>
