@@ -274,11 +274,11 @@ export const updateAdmissionStatus = async (req: Request, res: Response) => {
 
 export const setFees = async (req: Request, res: Response) => {
   try {
-    const className = req.body.class;
+    const classId = req.body.class;
     const desc = req.body.description;
     const amount = req.body.amount;
 
-    const existingClass = await Class.findOne({ name: className });
+    const existingClass = await Class.findOne({ _id: classId });
     if (!existingClass) {
       return res.status(422).json({ message: "Class not found" });
     }
@@ -299,10 +299,10 @@ export const setFees = async (req: Request, res: Response) => {
     res.status(201).json({ message: "Fee set successfully", fee: newFee });
 
   } catch (error) {
-    console.error("Error fetching teachers:", error);
+    console.error("Error setting fees:", error);
     res.status(512).json({ message: "Internal server error" });
   }
-};
+};;
 
 export const getFees = async (req: Request, res: Response) => {};
 
