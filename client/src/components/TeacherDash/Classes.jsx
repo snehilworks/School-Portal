@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 import header from "../../headers";
 
 const ClassesContent = () => {
@@ -11,21 +11,17 @@ const ClassesContent = () => {
   useEffect(() => {
     const fetchTeacherData = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("teacherToken");
         if (!token) {
           throw new Error("No token found");
         }
 
-        const meResponse = await axios.get(
-          "http://localhost:4000/api/teacher/me",
-          header
-        );
+        const meResponse = await axiosInstance.get(`/api/teacher/me`);
         const teacherId = meResponse.data.teacherId;
 
         // Get the teacher's details using the retrieved teacher ID
-        const teacherResponse = await axios.get(
-          `http://localhost:4000/api/teacher/${teacherId}`,
-          header
+        const teacherResponse = await axiosInstance.get(
+          `/api/teacher/${teacherId}`
         );
         const teacherData = teacherResponse.data.data; // Assuming teacherData is structured as { data: { classes: [...] } }
 
