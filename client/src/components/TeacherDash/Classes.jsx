@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../utils/axiosInstance";
-import header from "../../headers";
 
 const ClassesContent = () => {
   const [teacherClasses, setTeacherClasses] = useState([]);
