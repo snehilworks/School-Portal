@@ -78,7 +78,8 @@ export const getSpecificTeacher = async (req: Request, res: Response) => {
       subjects: 1,
       phone: 1,
       classes: 1,
-      ClassTeacher: 1,
+      classTeacher: 1,
+      class: 1,
     });
     if (!teacherDetail) {
       return res.status(404).json({ message: "Teacher not found" });
