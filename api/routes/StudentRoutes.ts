@@ -14,6 +14,7 @@ router.post("/register", StudentController.register);
 router.post("/login", StudentController.login);
 
 // Route to access student profile page
+router.get('/me', StudentController.getMeApi);
 router.get("/profile", StudentController.getProfile);
 
 // Route to access student Hostel Related information

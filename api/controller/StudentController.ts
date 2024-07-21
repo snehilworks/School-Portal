@@ -12,7 +12,9 @@ dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 
-export const getDashboard = async (req: Request, res: Response) => {};
+interface JwtPayload {
+  id: string;
+}
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -169,4 +171,28 @@ export const completeStudentProfile = async (req: Request<{}, {}, CompleteStuden
     console.error("Error fetching user profile:", error);
     res.status(512).json({ message: "Internal Server Error" });
   }
-} 
+};
+
+export const getMeApi = async (req: Request, res: Response) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) {
+      return res.status(403).json({ message: 'UnAuthorized!' });
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    const studentId = decoded.id;
+
+    if (!mongoose.Types.ObjectId.isValid(studentId)) {
+      return res.status(422).json({ message: 'Invalid student ID' });
+    }
+    const studentDetail = await Student.findById(studentId);
+    if (!studentDetail) {
+      return res.status(422).json({ message: "Student not found" });
+    }
+  } catch (error) {
+    console.error('Error getting me api student:', error);
+    return res.status(512).json({ message: 'Internal server error' });
+  }
+};
