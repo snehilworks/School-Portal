@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import Fee from "../models/feeModel";
 import Student from "../models/studentModel";
 import { loginSchema } from "../validations/loginValidation";
+import { CompleteStudentProfileRequestBody } from "../types/completeProfile";
 
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -103,13 +104,7 @@ export const getFeeStructure = async (req: Request, res: Response) => {
   }
 };
 
-export const getHostel = async (req: Request, res: Response) => {};
-
-export const getSchedule = async (req: Request, res: Response) => {};
-
-export const getActivities = async (req: Request, res: Response) => {};
-
-export const getExams = async (req: Request, res: Response) => {};
+// export const getHostel = async (req: Request, res: Response) => {};
 
 export const getClass = async (req: Request, res: Response) => {
   try {
@@ -158,3 +153,20 @@ export const getProfile = async (req: Request, res: Response) => {
     res.status(512).json({ message: "Internal Server Error" });
   }
 };
+
+const saveStudentProfile = async (data: CompleteStudentProfileRequestBody) => {
+  const newStudent = new Student(data);
+  return await newStudent.save();
+};
+
+export const completeStudentProfile = async (req: Request<{}, {}, CompleteStudentProfileRequestBody>, res: Response) => {
+  try {
+    const studentData: CompleteStudentProfileRequestBody = req.body;
+
+    const savedStudent = await saveStudentProfile(studentData);
+    res.status(201).json({ message: "Student profile completed successfully", student: savedStudent });
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    res.status(512).json({ message: "Internal Server Error" });
+  }
+} 
