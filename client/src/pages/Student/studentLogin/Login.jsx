@@ -26,7 +26,7 @@ function Login() {
 
       if (response.status === 200) {
         const data = response.data;
-        localStorage.setItem("studentToken", data.token);
+        localStorage.setItem("token", data.token);
         // Assuming setUser is defined somewhere and used for setting user context/state
         setUser({ userEmail: email, isLoading: false });
 

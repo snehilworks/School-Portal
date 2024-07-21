@@ -25,6 +25,9 @@ const PrimaryButton = ({
   } else if (color === "logout") {
     buttonColorClasses = "bg-red-500 text-white";
     hoverColorClasses = "hover:bg-red-600";
+  } else if (color === "fee-structure") {
+    buttonColorClasses = "bg-blue-900 text-white";
+    hoverColorClasses = "hover:bg-black";
   } else {
     buttonColorClasses = "bg-blue-900 text-white";
     hoverColorClasses = "hover:bg-blue-800";

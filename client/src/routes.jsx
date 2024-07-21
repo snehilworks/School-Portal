@@ -30,6 +30,7 @@ import AdminLogin from "./pages/Admin/AdminLogin/adminLogin";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 import NotFoundPage from "./components/NotFoundPage";
+import FeeStructure from "./pages/Student/FeeStructure/FeeStructure";
 
 const routes = [
   // Homepage Routes
@@ -60,6 +61,10 @@ const routes = [
   {
     path: "/student/complete/profile",
     element: <CompleteProfile />,
+  },
+  {
+    path: "/student/fee-structure",
+    element: <FeeStructure />,
   },
   {
     path: "/student/:id",
