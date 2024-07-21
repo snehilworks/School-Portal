@@ -21,6 +21,8 @@ router.get("/hostel", StudentController.getHostel);
 
 router.get('/class', StudentController.getClass);
 
+router.get('/fee-structure', StudentController.getFeeStructure);
+
 // Route to access student dashboard
 // router.get("/dashboard", StudentController.getDashboard);
 

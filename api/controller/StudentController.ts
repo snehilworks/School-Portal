@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import Fee from "../models/feeModel";
 import Student from "../models/studentModel";
 import { loginSchema } from "../validations/loginValidation";
 
@@ -87,6 +88,17 @@ export const login = async (req: Request, res: Response) => {
     return res.status(200).json({ token });
   } catch (error) {
     console.error("Error during login:", error);
+    return res.status(512).json({ message: "Something went wrong" });
+  }
+};
+
+export const getFeeStructure = async (req: Request, res: Response) => {
+  try {
+    const fee = await Fee.find().populate('class', 'className')
+    .exec();
+    return res.status(201).json(fee);
+  } catch (error) {
+    console.error("Error during Fee Structure:", error);
     return res.status(512).json({ message: "Something went wrong" });
   }
 };
