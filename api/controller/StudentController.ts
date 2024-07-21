@@ -2,15 +2,19 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import Fee from "../models/feeModel";
 import Student from "../models/studentModel";
 import { loginSchema } from "../validations/loginValidation";
+import { CompleteStudentProfileRequestBody } from "../types/completeProfile";
 
 import * as dotenv from "dotenv";
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 
-export const getDashboard = async (req: Request, res: Response) => {};
+interface JwtPayload {
+  id: string;
+}
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -91,13 +95,18 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const getHostel = async (req: Request, res: Response) => {};
+export const getFeeStructure = async (req: Request, res: Response) => {
+  try {
+    const fee = await Fee.find().populate('class', 'className')
+    .exec();
+    return res.status(201).json(fee);
+  } catch (error) {
+    console.error("Error during Fee Structure:", error);
+    return res.status(512).json({ message: "Something went wrong" });
+  }
+};
 
-export const getSchedule = async (req: Request, res: Response) => {};
-
-export const getActivities = async (req: Request, res: Response) => {};
-
-export const getExams = async (req: Request, res: Response) => {};
+// export const getHostel = async (req: Request, res: Response) => {};
 
 export const getClass = async (req: Request, res: Response) => {
   try {
@@ -144,5 +153,46 @@ export const getProfile = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error fetching user profile:", error);
     res.status(512).json({ message: "Internal Server Error" });
+  }
+};
+
+const saveStudentProfile = async (data: CompleteStudentProfileRequestBody) => {
+  const newStudent = new Student(data);
+  return await newStudent.save();
+};
+
+export const completeStudentProfile = async (req: Request<{}, {}, CompleteStudentProfileRequestBody>, res: Response) => {
+  try {
+    const studentData: CompleteStudentProfileRequestBody = req.body;
+
+    const savedStudent = await saveStudentProfile(studentData);
+    res.status(201).json({ message: "Student profile completed successfully", student: savedStudent });
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    res.status(512).json({ message: "Internal Server Error" });
+  }
+};
+
+export const getMeApi = async (req: Request, res: Response) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) {
+      return res.status(403).json({ message: 'UnAuthorized!' });
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    const studentId = decoded.id;
+
+    if (!mongoose.Types.ObjectId.isValid(studentId)) {
+      return res.status(422).json({ message: 'Invalid student ID' });
+    }
+    const studentDetail = await Student.findById(studentId);
+    if (!studentDetail) {
+      return res.status(422).json({ message: "Student not found" });
+    }
+  } catch (error) {
+    console.error('Error getting me api student:', error);
+    return res.status(512).json({ message: 'Internal server error' });
   }
 };

@@ -14,23 +14,16 @@ router.post("/register", StudentController.register);
 router.post("/login", StudentController.login);
 
 // Route to access student profile page
+router.get('/me', StudentController.getMeApi);
 router.get("/profile", StudentController.getProfile);
 
 // Route to access student Hostel Related information
-router.get("/hostel", StudentController.getHostel);
+// router.get("/hostel", StudentController.getHostel);
 
 router.get('/class', StudentController.getClass);
 
-// Route to access student dashboard
-// router.get("/dashboard", StudentController.getDashboard);
+router.get('/fee-structure', StudentController.getFeeStructure);
 
-// Route to access activities
-router.get("/activities", StudentController.getActivities);
-
-// Route to access schedule
-router.get("/schedule", StudentController.getSchedule);
-
-// Route to access exams
-router.get("/exams", StudentController.getExams);
+router.post('/complete-student-profile', StudentController.completeStudentProfile);
 
 export default router;
