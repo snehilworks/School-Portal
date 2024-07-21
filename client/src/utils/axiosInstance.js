@@ -6,8 +6,15 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    // Retrieve all token types
+    const studentToken = localStorage.getItem("studentToken");
+    const teacherToken = localStorage.getItem("teacherToken");
+    const adminToken = localStorage.getItem("token");
 
+    // Determine which token to use
+    const token = studentToken || teacherToken || adminToken;
+
+    // If a token is present, set it in the Authorization header
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

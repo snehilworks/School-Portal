@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../../../utils/axiosInstance";
 
 const CompleteProfile = () => {
   const [formData, setFormData] = useState({
@@ -20,9 +20,7 @@ const CompleteProfile = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.API_URL}/api/admin/classes`
-        );
+        const response = await axiosInstance.get(`/api/admin/classes`);
         setClassList(response.data);
         setLoading(false);
       } catch (error) {

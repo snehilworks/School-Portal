@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Payment } from "@mui/icons-material";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PrimaryButton from "../../../components/ui/PrimaryButton"; // Adjust the import path as needed
+import axiosInstance from "../../../utils/axiosInstance";
 
 const PaymentsPage = () => {
   const [amount, setAmount] = useState("");
@@ -45,7 +45,7 @@ const PaymentsPage = () => {
 
   const handlePayment = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
-    const response = await axios.post(`${process.env.API_URL}/api/pay/order`, {
+    const response = await axiosInstance.post(`/api/pay/order`, {
       amount: amount * (1 - discount / 100), // Apply discount to amount
       currency: "INR",
       receipt: "OrderReceipt1",
