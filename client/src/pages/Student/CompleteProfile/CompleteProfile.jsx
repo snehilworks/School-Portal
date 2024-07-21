@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../../../utils/axiosInstance";
+import PrimaryButton from "../../../components/ui/PrimaryButton";
 
 const CompleteProfile = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,8 @@ const CompleteProfile = () => {
     class: "",
     villageName: "",
     address: "",
+    aadharCardNumber: "",
+    previousSchoolTCNumber: "",
   });
 
   const [classList, setClassList] = useState([]);
@@ -20,9 +23,7 @@ const CompleteProfile = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.API_URL}/api/admin/classes`
-        );
+        const response = await axiosInstance.get(`/api/admin/classes`);
         setClassList(response.data);
         setLoading(false);
       } catch (error) {
@@ -49,22 +50,22 @@ const CompleteProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center px-4">
-      <div className="bg-white shadow-md rounded-lg p-8 max-w-2xl w-full">
-        <h2 className="text-3xl font-bold text-center mb-8">
-          Student Registration
+    <div className="min-h-screen bg-gradient-to-br from-green-200 to-blue-500 flex items-center justify-center px-4">
+      <div className="bg-gray-100 border-stone-800 mt-10 mb-10 shadow-lg rounded-lg p-8 max-w-4xl w-full">
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-900">
+          Complete Your Profile
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-gray-700 text-sm font-semibold mb-2"
                 htmlFor="name"
               >
-                Name:
+                Name
               </label>
               <input
-                className="form-input block w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                className="form-input block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
                 id="name"
                 type="text"
                 name="name"
@@ -75,13 +76,13 @@ const CompleteProfile = () => {
             </div>
             <div>
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-gray-700 text-sm font-semibold mb-2"
                 htmlFor="phone"
               >
-                Phone:
+                Phone Number
               </label>
               <input
-                className="form-input block w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                className="form-input block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
                 id="phone"
                 type="tel"
                 name="phone"
@@ -93,13 +94,13 @@ const CompleteProfile = () => {
             </div>
             <div>
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-gray-700 text-sm font-semibold mb-2"
                 htmlFor="dob"
               >
-                Date of Birth:
+                Date of Birth
               </label>
               <input
-                className="form-input block w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                className="form-input block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
                 id="dob"
                 type="date"
                 name="dob"
@@ -109,13 +110,13 @@ const CompleteProfile = () => {
             </div>
             <div>
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-gray-700 text-sm font-semibold mb-2"
                 htmlFor="gender"
               >
-                Gender:
+                Gender
               </label>
               <select
-                className="form-select block w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                className="form-select block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
                 id="gender"
                 name="gender"
                 value={formData.gender}
@@ -128,32 +129,65 @@ const CompleteProfile = () => {
             </div>
             <div>
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-gray-700 text-sm font-semibold mb-2"
                 htmlFor="guardianName"
               >
-                Guardian Name:
+                Father Name
               </label>
               <input
-                className="form-input block w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
-                id="guardianName"
+                className="form-input block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                id="fatherName"
                 type="text"
-                name="guardianName"
-                value={formData.guardianName}
+                name="fatherName"
+                value={formData.fatherName}
                 onChange={handleChange}
               />
             </div>
             <div>
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="guardianPhone"
+                className="block text-gray-700 text-sm font-semibold mb-2"
+                htmlFor="fatherPhone"
               >
-                Guardian Phone:
+                Father Phone Number
               </label>
               <input
-                className="form-input block w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
-                id="guardianPhone"
+                className="form-input block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                id="fatherPhone"
                 type="tel"
-                name="guardianPhone"
+                name="fatherPhone"
+                pattern="[0-9]{10}"
+                value={formData.fatherPhone}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label
+                className="block text-gray-700 text-sm font-semibold mb-2"
+                htmlFor="motherName"
+              >
+                Mother Name
+              </label>
+              <input
+                className="form-input block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                id="motherName"
+                type="text"
+                name="motherName"
+                value={formData.motherName}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label
+                className="block text-gray-700 text-sm font-semibold mb-2"
+                htmlFor="motherPhone"
+              >
+                Mother Phone Number
+              </label>
+              <input
+                className="form-input block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                id="motherPhone"
+                type="tel"
+                name="motherPhone"
                 pattern="[0-9]{10}"
                 value={formData.guardianPhone}
                 onChange={handleChange}
@@ -161,16 +195,16 @@ const CompleteProfile = () => {
             </div>
             <div className="md:col-span-2">
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-gray-700 text-sm font-semibold mb-2"
                 htmlFor="class"
               >
-                Class:
+                Class
               </label>
               {loading ? (
                 <p className="text-gray-500">Loading classes...</p>
               ) : (
                 <select
-                  className="form-select block w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                  className="form-select block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
                   id="class"
                   name="class"
                   value={formData.class}
@@ -187,13 +221,13 @@ const CompleteProfile = () => {
             </div>
             <div className="md:col-span-2">
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-gray-700 text-sm font-semibold mb-2"
                 htmlFor="villageName"
               >
-                Village Name:
+                Village Name
               </label>
               <input
-                className="form-input block w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                className="form-input block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
                 id="villageName"
                 type="text"
                 name="villageName"
@@ -203,27 +237,61 @@ const CompleteProfile = () => {
             </div>
             <div className="md:col-span-2">
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-gray-700 text-sm font-semibold mb-2"
                 htmlFor="address"
               >
-                Address:
+                Address
               </label>
               <textarea
-                className="form-textarea block w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500 resize-y"
+                className="form-textarea block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500 resize-y"
                 id="address"
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
               />
             </div>
+            <div>
+              <label
+                className="block text-gray-700 text-sm font-semibold mb-2"
+                htmlFor="aadharCardNumber"
+              >
+                Aadhar Card Number
+              </label>
+              <input
+                className="form-input block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                id="aadharCardNumber"
+                type="text"
+                name="aadharCardNumber"
+                pattern="[0-9]{12}"
+                value={formData.aadharCardNumber}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label
+                className="block text-gray-700 text-sm font-semibold mb-2"
+                htmlFor="previousSchoolTCNumber"
+              >
+                Previous School TC Number
+              </label>
+              <input
+                className="form-input block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                id="previousSchoolTCNumber"
+                type="text"
+                name="previousSchoolTCNumber"
+                value={formData.previousSchoolTCNumber}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-          <div className="flex justify-center">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline"
+          <div className="flex justify-center mt-8">
+            <PrimaryButton
+              color="student"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               type="submit"
             >
               Register
-            </button>
+            </PrimaryButton>
           </div>
         </form>
       </div>

@@ -27,7 +27,6 @@ function Login() {
       if (response.status === 200) {
         const data = response.data;
         localStorage.setItem("studentToken", data.token);
-        // Assuming setUser is defined somewhere and used for setting user context/state
         setUser({ userEmail: email, isLoading: false });
 
         console.log("Navigating to /student/dashboard");
@@ -39,7 +38,6 @@ function Login() {
       console.error("Login failed:", error);
     }
   };
-  
 
   return (
     <Grid container justifyContent="center" alignItems="center" height="100vh">

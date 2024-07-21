@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
 import Snackbar from "./Snackbar";
+import axiosInstance from "../../utils/axiosInstance";
 
 const HostelFeesForm = ({ isOpen, onClose }) => {
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -21,7 +21,7 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
 
   const handlePay = async (e) => {
     e.preventDefault();
-    const response = await axios.post(`${process.env.API_URL}/order`, {
+    const response = await axiosInstance.post(`/order`, {
       amount,
       currency,
       receipt: receiptId,

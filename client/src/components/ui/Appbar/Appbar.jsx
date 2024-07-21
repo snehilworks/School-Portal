@@ -36,8 +36,6 @@ const GradientMenuItem = styled(MenuItem)(({ theme }) => ({
 const LogoutMenuItem = styled(MenuItem)(({ theme }) => ({
   color: "#D22B2B",
   fontWeight: "bold",
-  // backgroundColor: "#8B0000",
-  // border: "0.1px solid #fff",
   borderRadius: "4%",
   "&:hover": {
     backgroundColor: "red",
@@ -55,11 +53,7 @@ function Appbar() {
     const teacherToken = localStorage.getItem("teacherToken");
     const adminToken = localStorage.getItem("token");
 
-    if (studentToken) {
-      setIsAuthenticated(true);
-    } else if (teacherToken) {
-      setIsAuthenticated(true);
-    } else if (adminToken) {
+    if (studentToken || teacherToken || adminToken) {
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
@@ -151,58 +145,65 @@ function Appbar() {
               open={open}
               onClose={handleClose}
             >
-              <GradientMenuItem
-                onClick={() => {
-                  navigate("/");
-                  handleClose();
-                }}
-              >
-                Home
-              </GradientMenuItem>
-              <GradientMenuItem
-                onClick={() => {
-                  navigate("/about");
-                  handleClose();
-                }}
-              >
-                About Us
-              </GradientMenuItem>
-              <GradientMenuItem
-                onClick={() => {
-                  navigate("/academics");
-                  handleClose();
-                }}
-              >
-                Academics
-              </GradientMenuItem>
-              <GradientMenuItem
-                onClick={() => {
-                  navigate("/admissions");
-                  handleClose();
-                }}
-              >
-                Admissions
-              </GradientMenuItem>
-              <GradientMenuItem
-                onClick={() => {
-                  navigate("/contact");
-                  handleClose();
-                }}
-              >
-                Contact
-              </GradientMenuItem>
-              {isAuthenticated ? (
-                <LogoutMenuItem
+              {[
+                // Provide an array instead of Fragment
+                <GradientMenuItem
+                  key="home"
                   onClick={() => {
-                    handleLogout();
+                    navigate("/");
                     handleClose();
                   }}
                 >
-                  Logout
-                </LogoutMenuItem>
-              ) : (
-                <></>
-              )}
+                  Home
+                </GradientMenuItem>,
+                <GradientMenuItem
+                  key="about"
+                  onClick={() => {
+                    navigate("/about");
+                    handleClose();
+                  }}
+                >
+                  About Us
+                </GradientMenuItem>,
+                <GradientMenuItem
+                  key="academics"
+                  onClick={() => {
+                    navigate("/academics");
+                    handleClose();
+                  }}
+                >
+                  Academics
+                </GradientMenuItem>,
+                <GradientMenuItem
+                  key="admissions"
+                  onClick={() => {
+                    navigate("/admissions");
+                    handleClose();
+                  }}
+                >
+                  Admissions
+                </GradientMenuItem>,
+                <GradientMenuItem
+                  key="contact"
+                  onClick={() => {
+                    navigate("/contact");
+                    handleClose();
+                  }}
+                >
+                  Contact
+                </GradientMenuItem>,
+                isAuthenticated && (
+                  <LogoutMenuItem
+                    key="logout"
+                    onClick={() => {
+                      handleLogout();
+                      handleClose();
+                    }}
+                  >
+                    Logout
+                  </LogoutMenuItem>
+                ),
+              ]}
             </GradientMenu>
           </div>
         </div>

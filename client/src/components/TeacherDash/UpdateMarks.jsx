@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 
 const UpdateMarksContent = () => {
   const [students, setStudents] = useState([]);
@@ -8,8 +8,8 @@ const UpdateMarksContent = () => {
 
   useEffect(() => {
     // Fetch student data from API
-    axios
-      .get(`${process.env.API_URL}/api/teacher/students`)
+    axiosInstance
+      .get(`/api/teacher/students`)
       .then((response) => {
         setStudents(response.data);
       })

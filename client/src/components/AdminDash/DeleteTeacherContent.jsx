@@ -14,13 +14,17 @@ import {
   DialogContentText,
   DialogTitle,
   Box,
+  Snackbar,
+  Alert,
 } from "@mui/material";
-import axios from "axios";
+import axiosInstance from "../../utils/axiosInstance";
 
 const DeleteTeacherComponent = () => {
   const [teachers, setTeachers] = useState([]);
   const [selectedTeacherId, setSelectedTeacherId] = useState("");
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   useEffect(() => {
     fetchTeachers();
@@ -28,9 +32,7 @@ const DeleteTeacherComponent = () => {
 
   const fetchTeachers = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.API_URL}/api/admin/teachers`
-      );
+      const response = await axiosInstance.get(`/api/admin/teachers`);
       setTeachers(response.data);
     } catch (error) {
       console.error("Error fetching teachers:", error);
@@ -48,9 +50,7 @@ const DeleteTeacherComponent = () => {
   const handleDeleteConfirmed = async () => {
     try {
       console.log("Deleting teacher with ID:", selectedTeacherId);
-      await axios.delete(
-        `${process.env.API_URL}/api/admin/teacher/${selectedTeacherId}`
-      );
+      await axiosInstance.delete(`/api/admin/teacher/${selectedTeacherId}`);
 
       // Fetch updated list of teachers after deletion
       await fetchTeachers();
@@ -60,6 +60,10 @@ const DeleteTeacherComponent = () => {
 
       // Clear selected teacher ID
       setSelectedTeacherId("");
+
+      // Show success message
+      setSuccessMessage("Teacher Details Deleted Successfully");
+      setOpenSnackbar(true);
     } catch (error) {
       console.error("Error deleting teacher:", error);
     }
@@ -67,6 +71,10 @@ const DeleteTeacherComponent = () => {
 
   const handleDeleteCanceled = () => {
     setConfirmationDialogOpen(false);
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -160,6 +168,21 @@ const DeleteTeacherComponent = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Success Snackbar */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {successMessage}
+        </Alert>
+      </Snackbar>
     </Card>
   );
 };
