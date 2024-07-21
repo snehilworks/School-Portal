@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function GradesPage() {
   const sampleGradesData = [
@@ -12,6 +13,7 @@ function GradesPage() {
   ];
 
   const [gradesData, setGradesData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,6 +28,13 @@ function GradesPage() {
   return (
     <div className="bg-gradient-to-br from-gray-200 via-blue-300 to-gray-400 min-h-screen flex justify-center items-center">
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-3xl w-full">
+        <button
+          onClick={() => navigate(-1)}
+          className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mb-8 hover:bg-blue-700 transition duration-200"
+        >
+          ← Back
+        </button>
+
         <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
           My Grades
         </h1>

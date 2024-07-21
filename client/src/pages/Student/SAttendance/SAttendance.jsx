@@ -8,6 +8,7 @@ import {
   TableRow,
   TableCell,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function StudentAttendance() {
   const sampleAttendanceData = [
@@ -21,6 +22,7 @@ function StudentAttendance() {
 
   const [attendanceData, setAttendanceData] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Simulated API call to fetch attendance data (replace with actual API call)
@@ -42,6 +44,13 @@ function StudentAttendance() {
   return (
     <div className="bg-gradient-to-br from-yellow-200 via-yellow-300 to-yellow-400 min-h-screen flex justify-center items-center">
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-xl w-full">
+        <button
+          onClick={() => navigate(-1)}
+          className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mb-8 hover:bg-blue-700 transition duration-200"
+        >
+          ← Back
+        </button>
+
         <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
           My Attendance for the Last 30 Days
         </h1>

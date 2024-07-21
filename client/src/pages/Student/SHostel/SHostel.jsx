@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import HostelFeesForm from "../../../components/StudentDash/HostelFeesForm"; // Adjust the import path as needed
 
 function HostelDetailsPage() {
@@ -15,6 +16,7 @@ function HostelDetailsPage() {
   });
 
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchHostelDetails = async () => {
@@ -37,7 +39,12 @@ function HostelDetailsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-500 to-indigo-600 py-8">
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 mt-30">
-        {" "}
+        <button
+          onClick={() => navigate(-1)}
+          className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mb-8 hover:bg-blue-700 transition duration-200"
+        >
+          ← Back
+        </button>
         {/* Adjusted margin-top */}
         <h1 className="text-3xl font-bold text-indigo-600 mb-6">
           {hostelDetails.name}
