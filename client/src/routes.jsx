@@ -43,7 +43,11 @@ const routes = [
   //Admin Routes
   {
     path: "/admin/dashboard",
-    element: <AdminDash />,
+    element: (
+      <ProtectedRoute>
+        <AdminDash />
+      </ProtectedRoute>
+    ),
   },
   { path: "/admin/login", element: <AdminLogin /> },
 
