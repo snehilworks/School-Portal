@@ -6,6 +6,7 @@ import {
   Typography,
   TextField,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
@@ -14,21 +15,26 @@ import { useNavigate } from "react-router-dom";
 import { userState } from "../../../store/atoms/user";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { authState } from "../../../store/atoms/auth";
+import ErrorModal from "../../../components/ErrorModal";
 
 function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
   const setAuthState = useSetRecoilState(authState);
 
   const handleLogin = async () => {
+    setLoading(true);
+    setError(null);
     try {
       const response = await axios.post(
         `${process.env.API_URL}/api/admin/login`,
         {
-          email: email,
-          password: password,
+          email,
+          password,
         }
       );
 
@@ -42,7 +48,13 @@ function AdminLogin() {
         console.error("Login failed:", response.data.message);
       }
     } catch (error) {
-      console.error("Login failed:", error);
+      if (error.response && error.response.status === 422) {
+        setError(error.response.data.message);
+      } else {
+        console.error("Login failed:", error);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,6 +83,7 @@ function AdminLogin() {
               margin="normal"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
+              disabled={loading}
             />
             <TextField
               fullWidth
@@ -80,6 +93,7 @@ function AdminLogin() {
               margin="normal"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
+              disabled={loading}
             />
             <Button
               fullWidth
@@ -88,12 +102,18 @@ function AdminLogin() {
               size="large"
               sx={{ mt: 2 }}
               style={{ backgroundColor: "#252525", color: "#fff" }}
+              disabled={loading}
             >
-              Login
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Login"
+              )}
             </Button>
           </form>
         </Paper>
       </Grid>
+      <ErrorModal error={error} onClose={() => setError(null)} />
     </Grid>
   );
 }

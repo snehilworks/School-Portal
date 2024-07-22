@@ -1,22 +1,35 @@
-import { Card, Typography, Grid, Box, Paper, Avatar } from "@mui/material";
+import {
+  Card,
+  Typography,
+  Grid,
+  Box,
+  Paper,
+  Avatar,
+  CircularProgress,
+} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
-import axios from "axios"; // Import axios
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { userState } from "../../../store/atoms/user";
 import { authState } from "../../../store/atoms/auth";
+import ErrorModal from "../../../components/ErrorModal";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const setUser = useSetRecoilState(userState);
   const setAuthState = useSetRecoilState(authState);
 
   const handleLogin = async () => {
+    setLoading(true);
+    setError(null); // Clear any previous errors
     try {
       const response = await axios.post(
         `${process.env.API_URL}/api/student/login`,
@@ -38,7 +51,13 @@ function Login() {
         console.error("Login failed:", response.data.message);
       }
     } catch (error) {
-      console.error("Login failed:", error);
+      if (error.response && error.response.status === 422) {
+        setError(error.response.data.message); // Set the error message
+      } else {
+        console.error("Login failed:", error);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,6 +80,7 @@ function Login() {
             margin="normal"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
+            disabled={loading} // Disable input when loading
           />
           <TextField
             fullWidth
@@ -70,6 +90,7 @@ function Login() {
             margin="normal"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            disabled={loading} // Disable input when loading
           />
           <Button
             fullWidth
@@ -78,8 +99,9 @@ function Login() {
             color="primary"
             sx={{ mt: 2 }}
             onClick={handleLogin}
+            disabled={loading} // Disable button when loading
           >
-            Login
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
           </Button>
           <Box display="flex" justifyContent="center" mt={2}>
             <Typography variant="body2">
@@ -89,6 +111,7 @@ function Login() {
                 size="small"
                 style={{ color: "#00008B" }}
                 onClick={() => navigate("/student/register")}
+                disabled={loading} // Disable button when loading
               >
                 Register
               </Button>
@@ -96,6 +119,7 @@ function Login() {
           </Box>
         </Paper>
       </Grid>
+      <ErrorModal error={error} onClose={() => setError(null)} />
     </Grid>
   );
 }
