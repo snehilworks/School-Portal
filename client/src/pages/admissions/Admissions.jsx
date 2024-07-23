@@ -35,28 +35,45 @@ const AdmissionsPage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white">
-      <div className="component-container max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <h2 className="mb-4 font-bold text-2xl md:text-4xl">Admissions</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full table-auto">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="px-4 py-2 text-left">Class</th>
-                <th className="px-4 py-2 text-left">Seats Available</th>
-                <th className="px-4 py-2 text-left">Action</th>
+    <div className="w-full min-h-screen bg-red-300 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="mb-8 font-extrabold text-2xl text-center sm:text-3xl md:text-4xl text-gray-900">
+          Admissions
+        </h2>
+        <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-2 py-3 sm:px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Class
+                </th>
+                <th className="px-2 py-3 sm:px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Seats Available
+                </th>
+                <th className="px-2 py-3 sm:px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Action
+                </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white divide-y divide-gray-200 text-center">
               {seatAvailability.map((row) => (
-                <tr key={row.class} className="odd:bg-gray-100">
-                  <td className="px-4 py-2 font-medium">{`Class ${row.class}`}</td>
-                  <td className="px-4 py-2">{row.seatsAvailable}</td>
-                  <td className="px-4 py-2">
+                <tr key={row.class}>
+                  <td className="px-2 py-4 sm:px-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {`Class ${row.class}`}
+                  </td>
+                  <td className="px-2 py-4 sm:px-4 whitespace-nowrap text-sm text-gray-500">
+                    {row.seatsAvailable}
+                  </td>
+                  <td className="px-2 py-4 sm:px-4 whitespace-nowrap text-sm text-gray-500">
                     <PrimaryButton
                       onClick={handleOpenModal}
                       color={"student"}
                       disabled={row.seatsAvailable === 0}
+                      className={`px-2 py-1 text-sm sm:px-3 sm:py-1.5 sm:text-base md:px-4 md:py-2 md:text-lg rounded-md ${
+                        row.seatsAvailable === 0
+                          ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                          : "bg-blue-600 text-white hover:bg-blue-700"
+                      }`}
                     >
                       {row.seatsAvailable > 0 ? "Take Admission" : "Full"}
                     </PrimaryButton>

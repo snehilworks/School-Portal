@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Container, Grid, Paper, Typography, TextField, Button, Snackbar } from "@mui/material";
+import { TextField, Button, Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
-import "./Contact.css";
 import axios from "axios";
 
 const ContactPage = () => {
@@ -17,7 +16,6 @@ const ContactPage = () => {
         email,
         message,
       });
-      // Optionally, you can clear the input fields after sending
       setName("");
       setEmail("");
       setMessage("");
@@ -32,81 +30,97 @@ const ContactPage = () => {
   };
 
   return (
-    // <Container className="contact-container">
-    //   <Grid container spacing={3}>
-    //     <Grid item xs={12} sm={6}>
-    //       <Paper className="contact-form" elevation={3}>
-    //         <Typography variant="h5" component="div">
-    //           Contact Us
-    //         </Typography>
-    //         <form>
-    //           <TextField label="Name" variant="outlined" fullWidth style={{ margin: 5 }} value={name} onChange={(e) => setName(e.target.value)} />
-    //           <TextField label="Email" variant="outlined" fullWidth style={{ margin: 5 }} value={email} onChange={(e) => setEmail(e.target.value)} />
-    //           <TextField label="Send Us Message" variant="outlined" multiline rows={5} fullWidth style={{ margin: 5 }} value={message} onChange={(e) => setMessage(e.target.value)} />
-    //           <Button variant="contained" color="primary" style={{ margin: 10 }} onClick={handleSend}>
-    //             Send
-    //           </Button>
-    //         </form>
-    //       </Paper>
-    //     </Grid>
-    //     <Grid item xs={12} sm={6}>
-    //       <Paper className="contact-info" elevation={3}>
-    //         <Typography variant="h5" component="div">
-    //           Contact Information
-    //         </Typography>
-    //         <Typography>
-    //           <b>Email</b>: shivampublicschool@gmail.com
-    //         </Typography>
-    //         <Typography>
-    //           <b>Phone</b>: (123) 456-7890
-    //         </Typography>
-    //         <Typography>
-    //           <b>Address</b>: 123 School Street, City
-    //         </Typography>
-    //       </Paper>
-    //     </Grid>
-    //   </Grid>
-    //   <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-    //     <MuiAlert elevation={6} variant="filled" onClose={handleCloseSnackbar} severity="success">
-    //       Message sent successfully!
-    //     </MuiAlert>
-    //   </Snackbar>
-    // </Container>
+    <div className="w-full min-h-screen bg-yellow-100 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-3xl font-extrabold text-gray-800 text-center mb-8">
+          Contact Us
+        </h2>
 
-    <div className="w-full h-full bg-white">
-      <div className="component-container flex flex-col gap-2 items-start">
-        <p className="mb-2 laptop:mb-4 font-bold text-[30px] laptop:text-[40px]">Admissions</p>
-
-        <div className="w-full grid gap-4 grid-cols-1 tablet:grid-cols-2">
-          <div>
-            {" "}
-            <Paper className="w-full contact-form" elevation={3}>
-              <p className="font-semibold text-[18px] tablet:text-[24px]">Contact Us</p>
-              <form>
-                <TextField label="Name" variant="outlined" fullWidth style={{ margin: 5 }} value={name} onChange={(e) => setName(e.target.value)} />
-                <TextField label="Email" variant="outlined" fullWidth style={{ margin: 5 }} value={email} onChange={(e) => setEmail(e.target.value)} />
-                <TextField label="Send Us Message" variant="outlined" multiline rows={5} fullWidth style={{ margin: 5 }} value={message} onChange={(e) => setMessage(e.target.value)} />
-                <Button variant="contained" color="primary" style={{ margin: 10 }} onClick={handleSend}>
-                  Send
-                </Button>
-              </form>
-            </Paper>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          {/* Contact Form */}
+          <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300">
+            <h3 className="text-xl text-center font-semibold text-gray-700 mb-6">
+              Get in Touch
+            </h3>
+            <form className="space-y-4">
+              <div>
+                <TextField
+                  label="Name"
+                  variant="outlined"
+                  fullWidth
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="bg-gray-50"
+                />
+              </div>
+              <div>
+                <TextField
+                  label="Email"
+                  variant="outlined"
+                  fullWidth
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-gray-50"
+                />
+              </div>
+              <div>
+                <TextField
+                  label="Message"
+                  variant="outlined"
+                  multiline
+                  rows={5}
+                  fullWidth
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="bg-gray-50"
+                />
+              </div>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                onClick={handleSend}
+                className="bg-blue-600 hover:bg-blue-700 transition-colors duration-300"
+              >
+                Send
+              </Button>
+            </form>
           </div>
-          <div>
-            <Paper className="w-full contact-info" elevation={3}>
-              <p className="font-semibold text-[18px] tablet:text-[24px]">Contact Information</p>
-              <p>
-                <span className="font-semibold mr-4">Email:</span> shivampublicschool@gmail.com
-              </p>
-              <p>
-                <span className="font-semibold mr-4">Phone:</span> (123) 456-7890
-              </p>
-              <p>
-                <span className="font-semibold mr-4">Address:</span> 123 School Street, City
-              </p>
-            </Paper>
+
+          {/* Contact Information */}
+          <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300">
+            <h3 className="text-xl font-semibold text-gray-700 mb-6">
+              Contact Information
+            </h3>
+            <p className="text-gray-600 mb-4">
+              <span className="font-semibold">Email:</span>{" "}
+              shivampublicschool@gmail.com
+            </p>
+            <p className="text-gray-600 mb-4">
+              <span className="font-semibold">Phone:</span> (123) 456-7890
+            </p>
+            <p className="text-gray-600">
+              <span className="font-semibold">Address:</span> 123 School Street,
+              City
+            </p>
           </div>
         </div>
+
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          className="mt-4"
+        >
+          <MuiAlert
+            elevation={6}
+            variant="filled"
+            onClose={handleCloseSnackbar}
+            severity="success"
+          >
+            Message sent successfully!
+          </MuiAlert>
+        </Snackbar>
       </div>
     </div>
   );
