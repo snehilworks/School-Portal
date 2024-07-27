@@ -1,10 +1,19 @@
-import React from "react";
-import { Modal, Fade, Typography } from "@mui/material";
+import { useState, useEffect } from "react";
+import {
+  Modal,
+  Fade,
+  Typography,
+  Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import axios from "axios";
-import "./AdmissionForm.css"; // Add any additional styles here if needed
+import "./AdmissionForm.css";
 
 const AdmissionForm = ({ open, onClose }) => {
-  const [formData, setFormData] = React.useState({
+  const [formData, setFormData] = useState({
     studentName: "",
     fatherName: "",
     motherName: "",
@@ -15,6 +24,8 @@ const AdmissionForm = ({ open, onClose }) => {
     address: "",
     email: "",
   });
+  const [classesList, setClassesList] = useState([]);
+  const [isClassesFetched, setIsClassesFetched] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,6 +33,20 @@ const AdmissionForm = ({ open, onClose }) => {
       ...prevFormData,
       [name]: value,
     }));
+  };
+
+  const handleOpenClassesDropdown = async () => {
+    if (!isClassesFetched) {
+      try {
+        const response = await axios.get(
+          `${process.env.API_URL}/api/home/classes`
+        );
+        setClassesList(response.data);
+        setIsClassesFetched(true);
+      } catch (error) {
+        console.error("Error fetching classes:", error);
+      }
+    }
   };
 
   const handleSubmit = (e) => {
@@ -180,15 +205,15 @@ const AdmissionForm = ({ open, onClose }) => {
                   className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
                   value={formData.selectedClass}
                   onChange={handleChange}
+                  onClick={handleOpenClassesDropdown}
                   required
                 >
                   <option value="">Select Class</option>
-                  <option value="Nursery">Nursery</option>
-                  <option value="LKG">LKG</option>
-                  <option value="UKG">UKG</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  {/* Add more class options */}
+                  {classesList.map((classItem) => (
+                    <option key={classItem._id} value={classItem.className}>
+                      {classItem.className}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="w-full md:w-1/2">
@@ -238,11 +263,11 @@ const AdmissionForm = ({ open, onClose }) => {
             <div className="flex flex-col md:flex-row md:space-x-4">
               <div className="w-full">
                 <label className="block text-gray-700">Address</label>
-                <input
+                <textarea
                   id="address"
                   name="address"
-                  type="text"
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+                  rows="3" // You can set the initial number of rows
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary resize-y" // `resize-y` allows vertical resizing
                   value={formData.address}
                   onChange={handleChange}
                   required
