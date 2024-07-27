@@ -1,4 +1,13 @@
-import { Grid, Box, Paper, Avatar, Typography, TextField, Button } from "@mui/material";
+import {
+  Grid,
+  Box,
+  Paper,
+  Avatar,
+  Typography,
+  TextField,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import axios from "axios";
@@ -6,21 +15,26 @@ import { useNavigate } from "react-router-dom";
 import { userState } from "../../../store/atoms/user";
 import { authState } from "../../../store/atoms/auth";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import ErrorModal from "../../../components/ErrorModal";
 
 function TeacherLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
   const setAuthState = useSetRecoilState(authState);
 
   const handleLogin = async () => {
+    setLoading(true);
+    setError(null);
     try {
       const response = await axios.post(
         `${process.env.API_URL}/api/teacher/login`,
         {
-          email: email,
-          password: password,
+          email,
+          password,
         }
       );
 
@@ -32,10 +46,15 @@ function TeacherLogin() {
         navigate("/teacher/dashboard");
       } else {
         console.error("Login failed:", response.data.message);
-        // Handle login failure, such as displaying an error message to the user
       }
     } catch (error) {
-      console.error("Login failed:", error);
+      if (error.response && error.response.status === 422) {
+        setError(error.response.data.message);
+      } else {
+        console.error("Login failed:", error);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,6 +83,7 @@ function TeacherLogin() {
               margin="normal"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
+              disabled={loading}
             />
             <TextField
               fullWidth
@@ -73,6 +93,7 @@ function TeacherLogin() {
               margin="normal"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
+              disabled={loading}
             />
             <Button
               fullWidth
@@ -81,12 +102,18 @@ function TeacherLogin() {
               size="large"
               sx={{ mt: 2 }}
               style={{ backgroundColor: "#00bcd4", color: "#fff" }}
+              disabled={loading}
             >
-              Login
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Login"
+              )}
             </Button>
           </form>
         </Paper>
       </Grid>
+      <ErrorModal error={error} onClose={() => setError(null)} />
     </Grid>
   );
 }
