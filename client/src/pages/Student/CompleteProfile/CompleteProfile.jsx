@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../../utils/axiosInstance";
 import PrimaryButton from "../../../components/ui/PrimaryButton";
+import { useNavigate } from "react-router-dom";
 
 const CompleteProfile = () => {
   const [formData, setFormData] = useState({
@@ -8,17 +9,20 @@ const CompleteProfile = () => {
     phone: "",
     dob: "",
     gender: "",
-    guardianName: "",
-    guardianPhone: "",
+    fatherName: "",
+    fatherPhone: "",
+    motherName: "",
+    motherPhone: "",
     class: "",
-    villageName: "",
+    placeName: "",
     address: "",
-    aadharCardNumber: "",
-    previousSchoolTCNumber: "",
+    aadharNumber: "",
+    previousSchoolTC: "",
   });
 
   const [classList, setClassList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -42,16 +46,28 @@ const CompleteProfile = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form Data:", formData);
-    // Add your form submission logic here, such as sending the data to your server
+    try {
+      const response = await axiosInstance.post(
+        `/api/student/complete-student-profile`,
+        formData
+      );
+
+      if (response.status === 201) {
+        console.log("Profile completed successfully:", response.data);
+        navigate("/student/dashboard");
+      } else {
+        console.error("Profile completion failed:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Profile completion failed:", error);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-200 to-blue-500 flex items-center justify-center px-4">
-      <div className="bg-gray-100 border-stone-800 mt-10 mb-10 shadow-lg rounded-lg p-8 max-w-4xl w-full">
+    <div className="min-h-screen bg-gradient-to-br from-green-800 to-blue-300 flex items-center justify-center px-4">
+      <div className="bg-gradient-to-br from-blue-500 to-green-200  border-stone-800 mt-10 mb-10 shadow-lg rounded-lg p-8 max-w-4xl w-full">
         <h2 className="text-3xl font-bold text-center mb-6 text-gray-900">
           Complete Your Profile
         </h2>
@@ -130,7 +146,7 @@ const CompleteProfile = () => {
             <div>
               <label
                 className="block text-gray-700 text-sm font-semibold mb-2"
-                htmlFor="guardianName"
+                htmlFor="fatherName"
               >
                 Father Name
               </label>
@@ -189,7 +205,7 @@ const CompleteProfile = () => {
                 type="tel"
                 name="motherPhone"
                 pattern="[0-9]{10}"
-                value={formData.guardianPhone}
+                value={formData.motherPhone}
                 onChange={handleChange}
               />
             </div>
@@ -212,7 +228,7 @@ const CompleteProfile = () => {
                 >
                   <option value="">Select Class</option>
                   {classList.map((classItem) => (
-                    <option key={classItem.id} value={classItem.className}>
+                    <option key={classItem._id} value={classItem._id}>
                       {classItem.className}
                     </option>
                   ))}
@@ -222,16 +238,16 @@ const CompleteProfile = () => {
             <div className="md:col-span-2">
               <label
                 className="block text-gray-700 text-sm font-semibold mb-2"
-                htmlFor="villageName"
+                htmlFor="placeName"
               >
                 Village Name
               </label>
               <input
                 className="form-input block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
-                id="villageName"
+                id="placeName"
                 type="text"
-                name="villageName"
-                value={formData.villageName}
+                name="placeName"
+                value={formData.placeName}
                 onChange={handleChange}
               />
             </div>
@@ -253,33 +269,33 @@ const CompleteProfile = () => {
             <div>
               <label
                 className="block text-gray-700 text-sm font-semibold mb-2"
-                htmlFor="aadharCardNumber"
+                htmlFor="aadharNumber"
               >
                 Aadhar Card Number
               </label>
               <input
                 className="form-input block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
-                id="aadharCardNumber"
+                id="aadharNumber"
                 type="text"
-                name="aadharCardNumber"
+                name="aadharNumber"
                 pattern="[0-9]{12}"
-                value={formData.aadharCardNumber}
+                value={formData.aadharNumber}
                 onChange={handleChange}
               />
             </div>
             <div>
               <label
                 className="block text-gray-700 text-sm font-semibold mb-2"
-                htmlFor="previousSchoolTCNumber"
+                htmlFor="previousSchoolTC"
               >
                 Previous School TC Number
               </label>
               <input
                 className="form-input block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
-                id="previousSchoolTCNumber"
+                id="previousSchoolTC"
                 type="text"
-                name="previousSchoolTCNumber"
-                value={formData.previousSchoolTCNumber}
+                name="previousSchoolTC"
+                value={formData.previousSchoolTC}
                 onChange={handleChange}
               />
             </div>

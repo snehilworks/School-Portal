@@ -1,5 +1,4 @@
 import {
-  Card,
   Typography,
   Grid,
   Box,
@@ -41,24 +40,52 @@ function Login() {
 
       if (response.status === 200) {
         const data = response.data;
-        localStorage.setItem("studentToken", data.token);
+        const token = data.token;
+
+        localStorage.setItem("studentToken", token);
         setUser({ userEmail: email, isLoading: false });
         setAuthState({ isAuthenticated: true });
 
-        console.log("Navigating to /student/dashboard");
-        navigate("/student/dashboard");
+        const profileResponse = await axios.get(
+          `${process.env.API_URL}/api/student/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const studentProfile = profileResponse.data;
+
+        if (isProfileComplete(studentProfile)) {
+          console.log("Complete Profile");
+          navigate("/student/dashboard");
+        } else {
+          console.log("Profile not Complete");
+          navigate("/student/complete/profile");
+        }
       } else {
         console.error("Login failed:", response.data.message);
       }
     } catch (error) {
       if (error.response && error.response.status === 422) {
-        setError(error.response.data.message); // Set the error message
+        setError(error.response.data.message);
       } else {
         console.error("Login failed:", error);
       }
     } finally {
       setLoading(false);
     }
+  };
+
+  const isProfileComplete = (student) => {
+    const requiredFields = ["name", "phone", "dob", "gender", "admission"];
+
+    // Check if all required fields are present and not empty or undefined
+    return requiredFields.every((field) => {
+      const value = student[field];
+      return value !== undefined && value !== null && value !== "";
+    });
   };
 
   return (
