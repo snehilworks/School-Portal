@@ -19,7 +19,7 @@ const GradientMenu = styled(Menu)(({ theme }) => ({
     borderRadius: "0.75rem",
     padding: theme.spacing(1),
     background: "linear-gradient(to right, #4b6cb7, #182848)", // Custom gradient colors
-    minWidth: "12rem", // Minimum width for desktop
+    minWidth: "12rem",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
     [theme.breakpoints.down("sm")]: {
       minWidth: "10rem", // Adjust for mobile responsiveness
@@ -30,6 +30,7 @@ const GradientMenu = styled(Menu)(({ theme }) => ({
 const GradientMenuItem = styled(MenuItem)(({ theme }) => ({
   color: "#fff", // White text for contrast
   fontWeight: "500", // Slightly bold text for emphasis
+  cursor: "pointer",
   "&:hover": {
     backgroundColor: "rgba(255, 255, 255, 0.1)", // Lighter background on hover
   },
@@ -87,26 +88,44 @@ function Appbar() {
     >
       <Toolbar className="w-full max-w-[1440px] mx-auto">
         <div className="w-full flex items-center justify-between font-poppins">
-          <div onClick={() => navigate("/")} className="flex items-center">
+          <div
+            onClick={() => navigate("/")}
+            className="flex cursor-pointer items-center"
+          >
             <p>Shivam Public</p>
           </div>
           <div
             className="appbar-buttons hidden md:flex"
             style={{ gap: "2rem" }}
           >
-            <p className="appbar-link" onClick={() => navigate("/")}>
+            <p
+              className="appbar-link cursor-pointer"
+              onClick={() => navigate("/")}
+            >
               Home
             </p>
-            <p className="appbar-link" onClick={() => navigate("/about")}>
+            <p
+              className="appbar-link cursor-pointer"
+              onClick={() => navigate("/about")}
+            >
               About Us
             </p>
-            <p className="appbar-link" onClick={() => navigate("/academics")}>
+            <p
+              className="appbar-link cursor-pointer"
+              onClick={() => navigate("/academics")}
+            >
               Academics
             </p>
-            <p className="appbar-link" onClick={() => navigate("/admissions")}>
+            <p
+              className="appbar-link cursor-pointer"
+              onClick={() => navigate("/admissions")}
+            >
               Admissions
             </p>
-            <p className="appbar-link" onClick={() => navigate("/contact")}>
+            <p
+              className="appbar-link cursor-pointer"
+              onClick={() => navigate("/contact")}
+            >
               Contact
             </p>
           </div>
