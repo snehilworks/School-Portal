@@ -1,7 +1,5 @@
 export interface CompleteStudentProfileRequestBody {
     name: string;
-    email: string;
-    password: string;
     phone: number;
     dob?: Date;
     gender?: string;
@@ -10,8 +8,6 @@ export interface CompleteStudentProfileRequestBody {
     motherName?: string;
     motherPhone?: number;
     class?: string;
-    section?: string;
-    admission: boolean;
     placeName?: string;
     address?: string;
     aadharNumber?: string;
