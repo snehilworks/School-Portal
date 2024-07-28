@@ -1,14 +1,6 @@
 import { Request, Response } from "express";
 import ContactModel from "../models/contactModel";
-
-export const getAdmissions = async (req: Request, res: Response) => {
-  try {
-    //function to get admissions data from database to display on home
-  } catch (error) {
-    console.error("Error Getting admissions Data: " + error);
-    res.status(512).json({ message: "Internal Server Error" });
-  }
-};
+import Classes from "../models/classModel";
 
 export const contactMessage = async (req: Request, res: Response) => {
   try {
@@ -32,4 +24,13 @@ export const contactMessage = async (req: Request, res: Response) => {
   }
 };
 
-// export const getActivities = async (req: Request, res: Response) => {};
+export const getClasses = async (req: Request, res: Response) => {
+  try {
+    const classes = await Classes.find();
+
+    res.status(200).json(classes);
+  } catch (error) {
+    console.error("Error fetching all students:", error);
+    res.status(512).json({ message: "Internal server error" });
+  }
+};

@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface Student extends Document {
   name: string;
@@ -11,7 +11,7 @@ export interface Student extends Document {
   fatherPhone?: number;
   motherName?: string;
   motherPhone?: number;
-  class?: string;
+  class?: Types.ObjectId; 
   section?: string;
   admission: boolean;
   placeName?: string;
@@ -31,7 +31,7 @@ const studentSchema: Schema = new Schema({
   fatherPhone: { type: Number },
   motherName: { type: String },
   motherPhone: { type: Number },
-  class: { type: String },
+  class: { type: Types.ObjectId, ref: 'Class' }, 
   section: { type: String },
   admission: { type: Boolean, default: false },
   placeName: { type: String },

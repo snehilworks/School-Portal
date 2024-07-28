@@ -156,16 +156,38 @@ export const getProfile = async (req: Request, res: Response) => {
   }
 };
 
-const saveStudentProfile = async (data: CompleteStudentProfileRequestBody) => {
-  const newStudent = new Student(data);
-  return await newStudent.save();
-};
+// const saveStudentProfile = async (data: CompleteStudentProfileRequestBody) => {
+//   const newStudent = new Student(data);
+//   return await newStudent.save();
+// };
 
 export const completeStudentProfile = async (req: Request<{}, {}, CompleteStudentProfileRequestBody>, res: Response) => {
   try {
     const studentData: CompleteStudentProfileRequestBody = req.body;
 
-    const savedStudent = await saveStudentProfile(studentData);
+    const token = req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+      return res.status(403).json({ message: 'UnAuthorized!' });
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    const studentId = decoded.id;
+
+    if (!mongoose.Types.ObjectId.isValid(studentId)) {
+      return res.status(422).json({ message: 'Invalid student ID' });
+    }
+    const studentDetail = await Student.findById(studentId);
+    if (!studentDetail) {
+      return res.status(422).json({ message: 'Student not found' });
+    }
+    
+    //update current student
+    Object.assign(studentDetail, studentData);
+
+    // Save updated student profile
+    const savedStudent = await studentDetail.save();
+
     res.status(201).json({ message: "Student profile completed successfully", student: savedStudent });
   } catch (error) {
     console.error("Error fetching user profile:", error);
@@ -176,7 +198,7 @@ export const completeStudentProfile = async (req: Request<{}, {}, CompleteStuden
 export const getMeApi = async (req: Request, res: Response) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
-    
+
     if (!token) {
       return res.status(403).json({ message: 'UnAuthorized!' });
     }
@@ -191,6 +213,8 @@ export const getMeApi = async (req: Request, res: Response) => {
     if (!studentDetail) {
       return res.status(422).json({ message: "Student not found" });
     }
+    
+    return res.status(200).json(studentDetail);
   } catch (error) {
     console.error('Error getting me api student:', error);
     return res.status(512).json({ message: 'Internal server error' });
