@@ -18,7 +18,6 @@ interface JwtPayload {
 
 export const register = async (req: Request, res: Response) => {
   try {
-    // Validate the request
     const { email, password } = loginSchema.parse(req.body);
     // Validate if required fields are provided
     if (!email || !password) {
@@ -43,12 +42,20 @@ export const register = async (req: Request, res: Response) => {
     });
     // Save the new student record
     await newStudent.save();
-    console.log('student saved to db');
 
-    // Respond with success message and student data
-    res.status(201).json({
-      message: "Student registered successfully."
-    });
+    const studentId = newStudent._id;
+    const token = jwt.sign(
+      {
+        id: studentId,
+      },
+      JWT_SECRET,
+      { expiresIn: '1h' } // Optional: set token expiration
+    );
+
+    res.cookie("sps", token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+
+    // Send response with token
+    return res.status(201).json({ token });
   } catch (error) {
     console.error("Error registering student:", error);
     res.status(512).json({ message: "Something went wrong" });
