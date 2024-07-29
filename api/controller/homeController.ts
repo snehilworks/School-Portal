@@ -59,7 +59,9 @@ export const admissionForm = async (req: Request, res: Response) => {
 
 export const admissionFees = async (req: Request, res: Response) => {
   try {
-    const admissionFees = await  AdmissionFee.find({});
+    const { id } = req.params;
+
+    const admissionFees = await  AdmissionFee.find({ class: id});
     
     return res.status(201).json(admissionFees);
   } catch (error) {
