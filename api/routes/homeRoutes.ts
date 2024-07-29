@@ -9,4 +9,6 @@ router.get('/classes', homeController.getClasses);
 
 router.post('/admission-form', homeController.admissionForm);
 
+router.get('/admission-fees', homeController.admissionFees);
+
 export default router;
