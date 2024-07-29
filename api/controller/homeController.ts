@@ -38,8 +38,15 @@ export const getClasses = async (req: Request, res: Response) => {
 
 export const admissionForm = async (req: Request, res: Response) => {
   try {
-    const newAdmission = new Admission(req.body);
+    const { studentName, fatherName, email } = req.body;
 
+    const existingAdmission = await Admission.findOne({ studentName, fatherName, email });
+
+    if (existingAdmission) {
+      return res.status(422).json({ message: "Admission form with these details already exists" });
+    }
+
+    const newAdmission = new Admission(req.body);
     await newAdmission.save();
 
     res.status(201).json({ message: "Admission form submitted successfully" });
