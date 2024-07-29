@@ -4,6 +4,7 @@ import Teacher from "../models/teacherModel";
 import Student from "../models/studentModel";
 import Fee from "../models/feeModel";
 import Class from "../models/classModel";
+import Admission from "../models/admission";
 import contactModel from "../models/contactModel";
 import { loginSchema } from "../validations/loginValidation";
 import Admin from "../models/adminModel";
@@ -65,6 +66,51 @@ export const getAllStudents = async (req: Request, res: Response) => {
     res.status(201).json(response);
   } catch (error) {
     console.error("Error fetching students:", error);
+    res.status(512).json({ message: "Internal server error" });
+  }
+};
+
+export const getAllAdmissionForms = async (req: Request, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = 15;
+
+    const startIdx = (page - 1) * limit;
+
+    const totalAdmissionForms = await Admission.countDocuments(); 
+
+    const admissionForms = await Admission.find().skip(startIdx).limit(limit);
+
+    const response = {
+      data: admissionForms,
+      totalPages: Math.ceil(totalAdmissionForms / limit), 
+      currentPage: page
+    };
+
+    res.status(201).json(response);
+  } catch (error) {
+    console.error("Error getting admission forms:", error);
+    res.status(512).json({ message: "Internal server error" });
+  }
+};
+
+export const admissionFormReviewed = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params; 
+
+    const updatedAdmission = await Admission.findByIdAndUpdate(
+      id,
+      { review: true },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedAdmission) {
+      return res.status(404).json({ message: 'Admission form not found' });
+    }
+
+    return res.status(200).json(updatedAdmission);
+  } catch (error) {
+    console.error("Error setting review true for admission form:", error);
     res.status(512).json({ message: "Internal server error" });
   }
 };

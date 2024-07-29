@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import ContactModel from "../models/contactModel";
 import Classes from "../models/classModel";
+import Admission from "../models/admission";
 
 export const contactMessage = async (req: Request, res: Response) => {
   try {
@@ -31,6 +32,19 @@ export const getClasses = async (req: Request, res: Response) => {
     res.status(200).json(classes);
   } catch (error) {
     console.error("Error fetching all students:", error);
+    res.status(512).json({ message: "Internal server error" });
+  }
+};
+
+export const admissionForm = async (req: Request, res: Response) => {
+  try {
+    const newAdmission = new Admission(req.body);
+
+    await newAdmission.save();
+
+    res.status(201).json({ message: "Admission form submitted successfully" });
+  } catch (error) {
+    console.error("Error posting admission form data:", error);
     res.status(512).json({ message: "Internal server error" });
   }
 };

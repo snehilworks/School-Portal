@@ -35,7 +35,8 @@ router.put("/admission-seat/:id", AdminController.updateAdmissionSeats);
 router.put("/set-class-teacher/:id", AdminController.setClassTeacher);
 
 //Admission list get with the className
-// router.get("/admissions/list", getAdmissionList);
+router.get("/admission-forms-preview", AdminController.getAllAdmissionForms);
+router.put('/admission-form-reviewed/:id', AdminController.admissionFormReviewed)
 
 //Fee Routes
 router.post('/create-payment', FeeController.createPayment);
