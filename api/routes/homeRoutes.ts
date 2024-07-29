@@ -7,4 +7,6 @@ router.post("/contact", homeController.contactMessage);
 
 router.get('/classes', homeController.getClasses);
 
+router.post('/admission-form', homeController.admissionForm);
+
 export default router;
