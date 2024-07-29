@@ -18,7 +18,7 @@ const AdmissionForm = ({ open, onClose }) => {
     fatherName: "",
     motherName: "",
     dateOfBirth: "",
-    selectedClass: "",
+    class: "",
     fatherPhone: "",
     gender: "",
     address: "",
@@ -49,61 +49,82 @@ const AdmissionForm = ({ open, onClose }) => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // You can perform form submission or validation here
-    onClose();
+  const handleClassSelect = (e) => {
+    const selectedClassId = e.target.value;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      class: selectedClassId,
+    }));
   };
 
-  const amount = 499;
-  const currency = "INR";
-  const receiptId = "OrderReceipt 1";
-
-  const handlePay = async (e) => {
-    const response = await axios.post(`${process.env.API_URL}/api/pay/order`, {
-      amount,
-      currency,
-      receipt: receiptId,
-    });
-    const order = response.data;
-
-    var options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY || "",
-      amount,
-      currency,
-      name: "Shivam Public",
-      description: "Test Transaction",
-      image: "https://example.com/your_logo",
-      order_id: order.id,
-      handler: function (response) {
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature);
-      },
-      prefill: {
-        name: formData.studentName,
-        email: formData.email,
-        contact: formData.fatherPhone,
-      },
-      notes: {
-        address: formData.address,
-      },
-      theme: {
-        color: "#3399cc",
-      },
-    };
-    var rzp1 = new window.Razorpay(options);
-    rzp1.on("payment.failed", function (response) {
-      alert(response.error.code);
-      alert(response.error.description);
-      alert(response.error.source);
-      alert(response.error.step);
-      alert(response.error.reason);
-      alert(response.error.metadata.order_id);
-      alert(response.error.metadata.payment_id);
-    });
-    rzp1.open();
+  const handleSubmitAndPay = async (e) => {
     e.preventDefault();
+
+    try {
+      await axios.post(
+        `${process.env.API_URL}/api/home/admission-form`,
+        formData
+      );
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+
+    // Payment logic
+    const amount = 499 * 100; // Amount in smallest currency unit
+    const currency = "INR";
+    const receiptId = "OrderReceipt_1";
+
+    try {
+      const response = await axios.post(
+        `${process.env.API_URL}/api/pay/order`,
+        {
+          amount,
+          currency,
+          receipt: receiptId,
+        }
+      );
+      const order = response.data;
+
+      var options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY || "",
+        amount: order.amount,
+        currency: order.currency,
+        name: "Shivam Public",
+        description: "Admission Fee",
+        image: "https://example.com/your_logo",
+        order_id: order.id,
+        handler: function (response) {
+          alert(response.razorpay_payment_id);
+          alert(response.razorpay_order_id);
+          alert(response.razorpay_signature);
+        },
+        prefill: {
+          name: formData.studentName,
+          email: formData.email,
+          contact: formData.fatherPhone,
+        },
+        notes: {
+          address: formData.address,
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      var rzp1 = new window.Razorpay(options);
+      rzp1.on("payment.failed", function (response) {
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+      });
+      rzp1.open();
+    } catch (error) {
+      console.error("Error creating payment order:", error);
+    }
   };
 
   return (
@@ -143,7 +164,10 @@ const AdmissionForm = ({ open, onClose }) => {
           >
             Admission Form
           </Typography>
-          <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
+          <form
+            onSubmit={handleSubmitAndPay}
+            className="space-y-3 md:space-y-4"
+          >
             <div className="flex flex-col md:flex-row md:space-x-4">
               <div className="w-full md:w-1/2">
                 <label className="block text-gray-700">Student Name</label>
@@ -200,17 +224,17 @@ const AdmissionForm = ({ open, onClose }) => {
               <div className="w-full md:w-1/2">
                 <label className="block text-gray-700">Class</label>
                 <select
-                  id="selectedClass"
-                  name="selectedClass"
+                  id="class"
+                  name="class"
                   className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
-                  value={formData.selectedClass}
-                  onChange={handleChange}
+                  value={formData.class}
+                  onChange={handleClassSelect}
                   onClick={handleOpenClassesDropdown}
                   required
                 >
                   <option value="">Select Class</option>
                   {classesList.map((classItem) => (
-                    <option key={classItem._id} value={classItem.className}>
+                    <option key={classItem._id} value={classItem._id}>
                       {classItem.className}
                     </option>
                   ))}
@@ -275,19 +299,12 @@ const AdmissionForm = ({ open, onClose }) => {
               </div>
             </div>
             <button
-              type="submit"
-              className="w-full py-2 px-4 mt-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300"
+              id="rzp-button1"
+              className="w-full py-2 px-4 mt-4 bg-blue-500 border-blue-900 text-white rounded-md hover:bg-blue-700 transition-colors duration-300"
             >
-              Save
+              Save and Pay Now
             </button>
           </form>
-          <button
-            id="rzp-button1"
-            onClick={handlePay}
-            className="w-full py-2 px-4 mt-4 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors duration-300"
-          >
-            Pay Now
-          </button>
         </div>
       </Fade>
     </Modal>
