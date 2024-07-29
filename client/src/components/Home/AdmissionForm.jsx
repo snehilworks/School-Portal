@@ -25,6 +25,7 @@ const AdmissionForm = ({ open, onClose }) => {
     email: "",
   });
   const [classesList, setClassesList] = useState([]);
+  const [admissionFee, setAdmissionFee] = useState(0);
   const [isClassesFetched, setIsClassesFetched] = useState(false);
 
   const handleChange = (e) => {
@@ -49,12 +50,23 @@ const AdmissionForm = ({ open, onClose }) => {
     }
   };
 
-  const handleClassSelect = (e) => {
+  const handleClassSelect = async (e) => {
     const selectedClassId = e.target.value;
     setFormData((prevFormData) => ({
       ...prevFormData,
       class: selectedClassId,
     }));
+
+    if (selectedClassId) {
+      try {
+        const response = await axios.get(
+          `${process.env.API_URL}/api/home/admission-fee/${selectedClassId}`
+        );
+        setAdmissionFee(response.data.amount);
+      } catch (error) {
+        console.error("Error fetching admission fee:", error);
+      }
+    }
   };
 
   const handleSubmitAndPay = async (e) => {
@@ -69,8 +81,8 @@ const AdmissionForm = ({ open, onClose }) => {
       console.error("Error submitting form:", error);
     }
 
-    // Payment logic
-    const amount = 499 * 100; // Amount in smallest currency unit
+    // Pay
+    const amount = admissionFee * 100; // Amount in smallest currency unit
     const currency = "INR";
     const receiptId = "OrderReceipt_1";
 
@@ -295,6 +307,21 @@ const AdmissionForm = ({ open, onClose }) => {
                   value={formData.address}
                   onChange={handleChange}
                   required
+                />
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row md:space-x-4">
+              <div className="w-full">
+                <label className="block text-center text-gray-700">
+                  Admission Fee
+                </label>
+                <input
+                  id="admissionFee"
+                  name="admissionFee"
+                  type="text"
+                  className="mt-1 block text-center font-semibold w-full px-3 py-2 bg-green-100 border border-gray-300 rounded-md shadow-sm"
+                  value={`₹${admissionFee}`}
+                  readOnly
                 />
               </div>
             </div>
