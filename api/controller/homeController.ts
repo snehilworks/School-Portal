@@ -59,11 +59,14 @@ export const admissionForm = async (req: Request, res: Response) => {
 
 export const admissionFees = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { classId } = req.params;
 
-    const admissionFees = await  AdmissionFee.find({ class: id});
+    const admissionFee = await AdmissionFee.findOne({ classId: classId }).select('class amount');
+    if (!admissionFee) {
+        return res.status(404).json({ message: 'Admission fee not found' });
+    }
     
-    return res.status(201).json(admissionFees);
+    return res.status(201).json(admissionFee);
   } catch (error) {
     console.error("Error getting all the admission fees:", error);
     res.status(512).json({ message: "Internal server error" });
