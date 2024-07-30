@@ -26,4 +26,6 @@ router.get('/fee-structure', StudentController.getFeeStructure);
 
 router.post('/complete-student-profile', StudentController.completeStudentProfile);
 
+router.get('/class-fee/:id', StudentController.getFeeForClass);
+
 export default router;

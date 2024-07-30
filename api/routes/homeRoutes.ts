@@ -7,4 +7,8 @@ router.post("/contact", homeController.contactMessage);
 
 router.get('/classes', homeController.getClasses);
 
+router.post('/admission-form', homeController.admissionForm);
+
+router.get('/admission-fee/:classId', homeController.admissionFees);
+
 export default router;

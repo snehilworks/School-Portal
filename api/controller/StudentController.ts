@@ -227,3 +227,25 @@ export const getMeApi = async (req: Request, res: Response) => {
     return res.status(512).json({ message: 'Internal server error' });
   }
 };
+
+export const getFeeForClass = async (req: Request, res: Response)  => {
+  try {
+    const { id } = req.params;
+
+    const fee = await Fee.findOne({ class: id });
+    if (!fee) {
+      return res.status(422).json({ message: `Fee not found for class ${id}` });
+    }
+
+    const feeData = {
+      description: fee.description,
+      class: fee.class,
+      amount: fee.amount
+    };
+
+    return res.status(200).json(feeData);
+  } catch (error) {
+    console.error('Error getting fee for the particular class:', error);
+    return res.status(512).json({ message: 'Internal server error' });
+  }
+};
