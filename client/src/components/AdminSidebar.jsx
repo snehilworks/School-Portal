@@ -9,6 +9,7 @@ import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { FaRegMessage } from "react-icons/fa6";
+import { FaWpforms } from "react-icons/fa";
 
 const AdminSidebar = ({ setSelectedContent }) => {
   const sidebarStyle = {
@@ -40,6 +41,10 @@ const AdminSidebar = ({ setSelectedContent }) => {
 
   const handleContactMessages = () => {
     setSelectedContent("Contact Messages");
+  };
+
+  const handleAdmissionForms = () => {
+    setSelectedContent("Admission Form");
   };
 
   const handlePayments = () => {
@@ -103,6 +108,12 @@ const AdminSidebar = ({ setSelectedContent }) => {
             <FaRegMessage style={{ color: "#fff" }} />
           </ListItemIcon>
           <ListItemText primary="Contact Messages" />
+        </ListItem>
+        <ListItem onClick={handleAdmissionForms} style={{ cursor: "pointer" }}>
+          <ListItemIcon>
+            <FaWpforms style={{ color: "#fff" }} />
+          </ListItemIcon>
+          <ListItemText primary="Admission Forms" />
         </ListItem>
       </List>
     </div>
