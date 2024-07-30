@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Snackbar from "./Snackbar";
 import axiosInstance from "../../utils/axiosInstance";
 
@@ -19,6 +19,31 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
   const currency = "INR";
   const receiptId = "OrderReceipt 1";
 
+  useEffect(() => {
+    if (isOpen) {
+      // Fetch student data when the modal is opened
+      const fetchStudentData = async () => {
+        try {
+          const response = await axiosInstance.get(`/api/student/me`);
+          const studentData = response.data;
+          setFormData({
+            studentName: studentData.name || "",
+            studentId: studentData.id || "",
+            grade: studentData.class || "", // Assuming 'class' is the grade
+            parentContact: studentData.fatherPhone || "",
+            joiningDate: "", // Default or leave empty if not available
+            roomPreference: "", // Default or leave empty if not available
+            messFacilities: "", // Default or leave empty if not available
+            additionalNotes: "",
+          });
+        } catch (error) {
+          console.error("Error fetching student data:", error);
+        }
+      };
+      fetchStudentData();
+    }
+  }, [isOpen]);
+
   const handlePay = async (e) => {
     e.preventDefault();
     const response = await axiosInstance.post(`/order`, {
@@ -28,7 +53,7 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
     });
     const order = response.data;
 
-    var options = {
+    const options = {
       key: process.env.RAZORPAY_KEY || "",
       amount,
       currency,
@@ -52,7 +77,7 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
         color: "#3399cc",
       },
     };
-    var rzp1 = new window.Razorpay(options);
+    const rzp1 = new window.Razorpay(options);
     rzp1.on("payment.failed", function (response) {
       alert(response.error.code);
       alert(response.error.description);
@@ -80,8 +105,8 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg overflow-y-auto mt-30 md:mt-0">
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg overflow-y-auto relative z-60">
         <button
           className="absolute top-2 right-2 text-gray-600"
           onClick={onClose}
@@ -127,6 +152,8 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
                 type="text"
                 id="studentId"
                 className="w-full p-2 border rounded"
+                value={formData.studentId}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -138,6 +165,7 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
                 type="text"
                 id="grade"
                 className="w-full p-2 border rounded"
+                onChange={handleChange}
                 required
               />
             </div>
@@ -152,6 +180,8 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
                 type="tel"
                 id="parentContact"
                 className="w-full p-2 border rounded"
+                value={formData.parentContact}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -163,6 +193,8 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
                 type="date"
                 id="joiningDate"
                 className="w-full p-2 border rounded"
+                value={formData.joiningDate}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -173,22 +205,14 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
               >
                 Room Preference
               </label>
-              <select id="roomPreference" className="w-full p-2 border rounded">
+              <select
+                id="roomPreference"
+                className="w-full p-2 border rounded"
+                value={formData.roomPreference}
+                onChange={handleChange}
+              >
                 <option value="single">Single</option>
                 <option value="shared">Shared</option>
-              </select>
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 mb-2"
-                htmlFor="messFacilities"
-              >
-                Mess Facilities
-              </label>
-              <select id="messFacilities" className="w-full p-2 border rounded">
-                <option value="vegetarian">Vegetarian</option>
-                <option value="nonVegetarian">Non-Vegetarian</option>
-                <option value="both">Both</option>
               </select>
             </div>
             <div className="col-span-2 mb-4">
@@ -202,6 +226,8 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
                 id="additionalNotes"
                 className="w-full p-2 border rounded"
                 rows="3"
+                value={formData.additionalNotes}
+                onChange={handleChange}
               />
             </div>
             <div className="col-span-2 flex justify-end">

@@ -1,64 +1,147 @@
-import { Card, Typography, Grid, TextField, Button, Link, Box } from "@mui/material";
-import { useState } from "react";
-import axios from "axios"; // Import axios
-import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { userState } from "../../../store/atoms/user";
+import {
+  Typography,
+  Grid,
+  Box,
+  Paper,
+  Avatar,
+  CircularProgress,
+} from "@mui/material";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { useState } from "react";
+import { useSetRecoilState } from "recoil";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { userState } from "../../../store/atoms/user";
+import { authState } from "../../../store/atoms/auth";
+import ErrorModal from "../../../components/ErrorModal";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
+  const setAuthState = useSetRecoilState(authState);
 
   const handleRegister = async () => {
+    setLoading(true);
+    setError(null); // Clear any previous errors
     try {
+      console.log("Attempting to register...");
       const response = await axios.post(
         `${process.env.API_URL}/api/student/register`,
         {
-          email: email,
-          password: password,
+          email,
+          password,
         }
       );
-      const data = response.data;
+
+      console.log("Registration response:", response);
+
       if (response.status === 201) {
-        localStorage.setItem("token", data.token);
+        const data = response.data;
+        const token = data.token;
+
+        console.log("Registration successful, token received:", token);
+        localStorage.setItem("studentToken", token);
         setUser({ userEmail: email, isLoading: false });
-        navigate("/student/dashboard");
+        setAuthState({ isAuthenticated: true });
+
+        const profileResponse = await axios.get(
+          `${process.env.API_URL}/api/student/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const studentProfile = profileResponse.data;
+
+        console.log("Navigating to complete profile page");
+        navigate("/student/complete/profile");
       } else {
-        console.error("Registration failed:", data.message);
-        // Handle registration failure, such as displaying an error message to the user
+        console.error("Registration failed:", response.data.message);
+        setError(response.data.message);
       }
     } catch (error) {
-      console.error("Registration failed:", error);
-      // Handle registration failure, such as displaying an error message to the user
+      if (error.response && error.response.status === 422) {
+        setError(error.response.data.message);
+      } else {
+        console.error("Registration failed:", error);
+        setError("An unexpected error occurred.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Grid container justifyContent="center" alignItems="center" minHeight="100vh">
+    <Grid container justifyContent="center" alignItems="center" height="100vh">
       <Grid item xs={12} sm={8} md={6} lg={4}>
-        <Card variant="outlined" sx={{ p: 3, mx: { xs: 2 }, borderRadius: 4 }}>
-          <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-            <LockOutlinedIcon sx={{ fontSize: 48 }} />
+        <Paper elevation={3} sx={{ padding: 4, borderRadius: 4, mx: 2 }}>
+          <Box display="flex" flexDirection="column" alignItems="center" mb={2}>
+            <Avatar sx={{ bgcolor: "primary.main", mb: 2 }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography variant="h5" component="h1" mt={2}>
+              Create an Account
+            </Typography>
           </Box>
-          <Typography variant="h5" align="center" gutterBottom>
-            Create an Account
-          </Typography>
-          <TextField fullWidth label="Email" variant="outlined" margin="normal" value={email} onChange={(event) => setEmail(event.target.value)} />
-          <TextField fullWidth label="Password" variant="outlined" type="password" margin="normal" value={password} onChange={(event) => setPassword(event.target.value)} />
-          <Button fullWidth variant="contained" size="large" color="primary" sx={{ mt: 2 }} onClick={handleRegister}>
-            Register
+          <TextField
+            fullWidth
+            label="Email"
+            variant="outlined"
+            margin="normal"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            disabled={loading} // Disable input when loading
+          />
+          <TextField
+            fullWidth
+            label="Password"
+            variant="outlined"
+            type="password"
+            margin="normal"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            disabled={loading} // Disable input when loading
+          />
+          <Button
+            fullWidth
+            variant="contained"
+            size="large"
+            color="primary"
+            sx={{ mt: 2 }}
+            onClick={handleRegister}
+            disabled={loading} // Disable button when loading
+          >
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Register"
+            )}
           </Button>
-          <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-            Already have an account?{" "}
-            <Button variant="text" size="small" style={{ color: "#00008B" }} onClick={() => navigate("/student/login")}>
-              Login
-            </Button>
-          </Typography>
-        </Card>
+          <Box display="flex" justifyContent="center" mt={2}>
+            <Typography variant="body2">
+              Already have an account?{" "}
+              <Button
+                variant="text"
+                size="small"
+                style={{ color: "#00008B" }}
+                onClick={() => navigate("/student/login")}
+                disabled={loading} // Disable button when loading
+              >
+                Login
+              </Button>
+            </Typography>
+          </Box>
+        </Paper>
       </Grid>
+      <ErrorModal error={error} onClose={() => setError(null)} />
     </Grid>
   );
 }
