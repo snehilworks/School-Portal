@@ -6,6 +6,7 @@ import Fee from "../models/feeModel";
 import Class from "../models/classModel";
 import Admission from "../models/admission";
 import contactModel from "../models/contactModel";
+import classModel from "../models/classModel";
 import { loginSchema } from "../validations/loginValidation";
 import Admin from "../models/adminModel";
 import jwt from "jsonwebtoken";
@@ -81,9 +82,19 @@ export const getAllAdmissionForms = async (req: Request, res: Response) => {
 
     const admissionForms = await Admission.find().skip(startIdx).limit(limit);
 
+    // Fetch all classes to map IDs to names
+    const classes = await classModel.find({ _id: { $in: admissionForms.map(form => form.class) } });
+
+    // Create a map for class IDs to class names
+    const classMap = new Map(classes.map(cls => [cls._id.toString(), cls.className]));
+
+    // Map the admission forms to include class names
     const response = {
-      data: admissionForms,
-      totalPages: Math.ceil(totalAdmissionForms / limit), 
+      data: admissionForms.map(form => ({
+        ...form.toObject(),
+        class: classMap.get(form.class.toString()) || 'Unknown Class'
+      })),
+      totalPages: Math.ceil(totalAdmissionForms / limit),
       currentPage: page
     };
 
