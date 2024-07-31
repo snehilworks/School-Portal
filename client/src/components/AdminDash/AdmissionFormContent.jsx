@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import PrimaryButton from "../ui/PrimaryButton";
 import Modal from "../ui/Modal";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
 
 const AdmissionFormContent = () => {
   const [admissionForms, setAdmissionForms] = useState([]);
@@ -63,7 +64,7 @@ const AdmissionFormContent = () => {
       // Update the local state to reflect the change
       setAdmissionForms((prevForms) =>
         prevForms.map((form) =>
-          form._id === formToReview._id ? { ...form, reviewed: true } : form
+          form._id === formToReview._id ? { ...form, review: true } : form
         )
       );
       setFormToReview(null);
@@ -115,18 +116,25 @@ const AdmissionFormContent = () => {
                   <td className="p-4 text-gray-700">{form.class}</td>
                   <td className="p-4 text-gray-700">{form.email}</td>
                   <td className="p-4 text-gray-700">{form.fatherPhone}</td>
-                  <td className="p-4 text-center flex justify-center space-x-2">
+                  <td className="p-4 text-center flex justify-center items-center space-x-2">
+                    {form.review ? (
+                      <span className="flex items-center space-x-2 text-green-600">
+                        <CheckCircleIcon className="w-8 h-8" />
+                        <span className="text-lg font-medium">Reviewed</span>
+                      </span>
+                    ) : (
+                      <PrimaryButton
+                        className="bg-green-600 text-white hover:bg-green-700 transition-colors py-2 px-4 rounded-md shadow-md"
+                        onClick={() => handleReviewClick(form)}
+                      >
+                        Review Form
+                      </PrimaryButton>
+                    )}
                     <PrimaryButton
                       className="bg-blue-600 text-white hover:bg-blue-700 transition-colors py-2 px-4 rounded-md shadow-md"
                       onClick={() => handleViewDetails(form)}
                     >
                       View Details
-                    </PrimaryButton>
-                    <PrimaryButton
-                      className="bg-green-600 text-white hover:bg-green-700 transition-colors py-2 px-4 rounded-md shadow-md"
-                      onClick={() => handleReviewClick(form)}
-                    >
-                      Review Form
                     </PrimaryButton>
                   </td>
                 </tr>
@@ -213,18 +221,24 @@ const AdmissionFormContent = () => {
           onClose={() => setReviewModalOpen(false)}
           className="bg-white p-8 rounded-lg shadow-xl max-w-lg mx-auto"
         >
-          <h3 className="text-2xl font-semibold mb-4 text-gray-800">
-            Have you reviewed the admission form?
+          <h3 className="text-2xl font-bold mb-4 text-gray-800">
+            Confirm Review
           </h3>
-          <p className="text-gray-600 mb-6">
-            Please confirm if you have reviewed the admission form to proceed.
+          <p className="mb-6 text-gray-700">
+            Are you sure you want to mark this form as reviewed?
           </p>
-          <div className="flex justify-center">
+          <div className="flex justify-end space-x-4">
             <PrimaryButton
+              className="bg-green-600 text-white hover:bg-green-700"
               onClick={handleConfirmReview}
-              className="bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 transition-colors py-3 px-6 rounded-lg shadow-lg"
             >
-              Yes, Review
+              Confirm
+            </PrimaryButton>
+            <PrimaryButton
+              className="bg-gray-600 text-white hover:bg-gray-700"
+              onClick={() => setReviewModalOpen(false)}
+            >
+              Cancel
             </PrimaryButton>
           </div>
         </Modal>
