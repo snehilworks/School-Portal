@@ -10,6 +10,7 @@ import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { FaRegMessage } from "react-icons/fa6";
 import { FaWpforms } from "react-icons/fa";
+import { FaHotel } from "react-icons/fa";
 
 const AdminSidebar = ({ setSelectedContent }) => {
   const sidebarStyle = {
@@ -45,6 +46,10 @@ const AdminSidebar = ({ setSelectedContent }) => {
 
   const handleAdmissionForms = () => {
     setSelectedContent("Admission Form");
+  };
+
+  const handleHostelForms = () => {
+    setSelectedContent("Hostel Form");
   };
 
   const handlePayments = () => {
@@ -114,6 +119,12 @@ const AdminSidebar = ({ setSelectedContent }) => {
             <FaWpforms style={{ color: "#fff" }} />
           </ListItemIcon>
           <ListItemText primary="Admission Forms" />
+        </ListItem>
+        <ListItem onClick={handleHostelForms} style={{ cursor: "pointer" }}>
+          <ListItemIcon>
+            <FaHotel style={{ color: "#fff" }} />
+          </ListItemIcon>
+          <ListItemText primary="Hostel Forms" />
         </ListItem>
       </List>
     </div>

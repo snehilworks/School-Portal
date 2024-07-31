@@ -10,6 +10,7 @@ import PaymentsContent from "../../../components/AdminDash/PaymentsContent";
 import HandleFeesContent from "../../../components/AdminDash/HandleFeesContent";
 import ContactMessageContent from "../../../components/AdminDash/ContactMessageContent";
 import AdmissionFormContent from "../../../components/AdminDash/AdmissionFormContent";
+import HostelFormContent from "../../../components/AdminDash/HostelFormContent";
 
 import AdminSidebar from "../../../components/AdminSidebar";
 
@@ -56,6 +57,8 @@ const AdminDashboard = () => {
         return <ContactMessageContent />;
       case "Admission Form":
         return <AdmissionFormContent />;
+      case "Hostel Form":
+        return <HostelFormContent />;
       default:
         return null;
     }
