@@ -50,7 +50,7 @@ const AdminDashboard = () => {
         return <UpdateStudentStatusContent />;
       case "Payments":
         return <PaymentsContent />;
-      case "Fees":
+      case "Set-Fees":
         return <HandleFeesContent />;
       case "Contact Messages":
         return <ContactMessageContent />;

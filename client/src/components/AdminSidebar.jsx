@@ -52,7 +52,7 @@ const AdminSidebar = ({ setSelectedContent }) => {
   };
 
   const handleFees = () => {
-    setSelectedContent("Fees");
+    setSelectedContent("Set-Fees");
   };
 
   return (
@@ -95,7 +95,7 @@ const AdminSidebar = ({ setSelectedContent }) => {
           <ListItemIcon>
             <CurrencyRupeeIcon style={{ color: "#fff" }} />
           </ListItemIcon>
-          <ListItemText primary="Fees" />
+          <ListItemText primary="Set-Fees" />
         </ListItem>
         <ListItem onClick={handlePayments} style={{ cursor: "pointer" }}>
           <ListItemIcon>
