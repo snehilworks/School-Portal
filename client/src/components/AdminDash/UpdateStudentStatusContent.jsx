@@ -13,7 +13,6 @@ const UpdateStudentStatusContent = () => {
   const [students, setStudents] = useState([]);
   const [selectedStudentId, setSelectedStudentId] = useState("");
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [admissionStatus, setAdmissionStatus] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
@@ -24,7 +23,6 @@ const UpdateStudentStatusContent = () => {
   const fetchStudents = async () => {
     try {
       const response = await axiosInstance.get(`/api/admin/students`);
-      console.log("Fetched students:", response.data.students);
       setStudents(response.data.students || []);
     } catch (error) {
       console.error("Error fetching students:", error);
@@ -47,20 +45,12 @@ const UpdateStudentStatusContent = () => {
     if (!selectedStudentId) return;
 
     try {
-      // Make API call to update student status with selectedStudentId and admissionStatus
-      const response = await axiosInstance.put(
-        `/api/admin/students/${selectedStudentId}`,
-        { admissionStatus }
-      );
-      console.log("Update status response:", response.data);
+      await axiosInstance.put(`/api/admin/students/${selectedStudentId}`, {
+        admissionStatus: true,
+      });
 
-      // Optionally, fetch students again after updating
       fetchStudents();
-
-      // Close modal after updating
       setConfirmationDialogOpen(false);
-
-      // Show success snackbar
       setSnackbarMessage("Student admission status updated successfully.");
       setSnackbarOpen(true);
     } catch (error) {
@@ -73,8 +63,8 @@ const UpdateStudentStatusContent = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-8 p-6 bg-white shadow-lg rounded-lg">
-      <h1 className="text-2xl font-semibold mb-4">Update Student Status</h1>
+    <div className="max-w-3xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
+      <h1 className="text-3xl font-semibold mb-6">Update Student Status</h1>
       <div className="mb-6">
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
@@ -84,7 +74,7 @@ const UpdateStudentStatusContent = () => {
         </label>
         <select
           id="student-select"
-          className="w-full p-2 border border-gray-300 rounded-lg"
+          className="w-full p-3 border border-gray-300 rounded-lg"
           value={selectedStudentId}
           onChange={handleSelectChange}
         >
@@ -99,13 +89,17 @@ const UpdateStudentStatusContent = () => {
         </select>
       </div>
       <div className="flex justify-center">
-        <button
-          className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
+        <PrimaryButton
+          extra_styles={{
+            backgroundColor: "#1E40AF",
+            padding: "0.75rem 1.5rem",
+            borderRadius: "0.375rem",
+          }}
           onClick={handleOpenModal}
           disabled={!selectedStudentId}
         >
           Update Status
-        </button>
+        </PrimaryButton>
       </div>
 
       {/* Confirmation dialog */}
@@ -121,34 +115,29 @@ const UpdateStudentStatusContent = () => {
             Are you sure you want to update the admission status for this
             student?
           </p>
-          <div className="flex justify-center">
-            <PrimaryButton
-              extra_styles={{ backgroundColor: "green", margin: "15px" }}
-              onClick={() => {
-                setAdmissionStatus(true);
-                handleUpdateStatus();
-              }}
-            >
-              Yes
-            </PrimaryButton>
-            <PrimaryButton
-              extra_styles={{ backgroundColor: "red", margin: "15px" }}
-              onClick={() => {
-                setAdmissionStatus(false);
-                handleUpdateStatus();
-              }}
-            >
-              No
-            </PrimaryButton>
-          </div>
         </DialogContent>
-        <DialogActions>
-          <button
-            className="text-blue-500 font-bold"
+        <DialogActions className="flex justify-center pb-4">
+          <PrimaryButton
+            extra_styles={{
+              backgroundColor: "#10B981",
+              marginRight: "15px",
+              padding: "0.5rem 1rem",
+              borderRadius: "0.375rem",
+            }}
+            onClick={handleUpdateStatus}
+          >
+            Confirm
+          </PrimaryButton>
+          <PrimaryButton
+            extra_styles={{
+              backgroundColor: "#F87171",
+              padding: "0.5rem 1rem",
+              borderRadius: "0.375rem",
+            }}
             onClick={handleCloseModal}
           >
             Cancel
-          </button>
+          </PrimaryButton>
         </DialogActions>
       </Dialog>
 
