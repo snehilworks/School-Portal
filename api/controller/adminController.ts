@@ -6,6 +6,7 @@ import Fee from "../models/feeModel";
 import Class from "../models/classModel";
 import Admission from "../models/admission";
 import contactModel from "../models/contactModel";
+import classModel from "../models/classModel";
 import { loginSchema } from "../validations/loginValidation";
 import Admin from "../models/adminModel";
 import jwt from "jsonwebtoken";
@@ -50,12 +51,28 @@ export const getAllStudents = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = 15;
+    const searchQuery = req.query.search as string || '';
 
     const startIdx = (page - 1) * limit;
 
-    const totalStudents = await Student.countDocuments(); //total number of students
+    // Define the filter criteria
+    const filter: any = {
+      admission: false,
+      $or: [
+        { name: { $ne: null } },
+        { phone: { $ne: null } },
+        { dob: { $ne: null } }
+      ]
+    };
 
-    const students = await Student.find().skip(startIdx).limit(limit);
+    // Add name search condition if searchQuery is provided
+    if (searchQuery) {
+      filter.name = { $regex: searchQuery, $options: 'i' }; // Case-insensitive search
+    }
+
+    const totalStudents = await Student.countDocuments(filter); //total number of students
+
+    const students = await Student.find(filter).skip(startIdx).limit(limit);
 
     const response = {
       students: students,
@@ -81,9 +98,19 @@ export const getAllAdmissionForms = async (req: Request, res: Response) => {
 
     const admissionForms = await Admission.find().skip(startIdx).limit(limit);
 
+    // Fetch all classes to map IDs to names
+    const classes = await classModel.find({ _id: { $in: admissionForms.map(form => form.class) } });
+
+    // Create a map for class IDs to class names
+    const classMap = new Map(classes.map(cls => [cls._id.toString(), cls.className]));
+
+    // Map the admission forms to include class names
     const response = {
-      data: admissionForms,
-      totalPages: Math.ceil(totalAdmissionForms / limit), 
+      data: admissionForms.map(form => ({
+        ...form.toObject(),
+        class: classMap.get(form.class.toString()) || 'Unknown Class'
+      })),
+      totalPages: Math.ceil(totalAdmissionForms / limit),
       currentPage: page
     };
 
@@ -269,18 +296,13 @@ export const adminLogin = async (req: Request, res: Response) => {
 };
 
 export const updateAdmissionStatus = async (req: Request, res: Response) => {
-  const { id } = req.params; //student id
-  const { admissionStatus } = req.body; //new admission status
-  try {
-    if (typeof admissionStatus !== "boolean") {
-      return res
-        .status(400)
-        .json({ message: "Invalid admission status. Must be true or false." });
-    }
+  const { id } = req.params;
 
+  try {
+    // Update the student's admission status to true
     const updatedStudent = await Student.findByIdAndUpdate(
       id,
-      { admission: admissionStatus },
+      { admission: true },
       { new: true } // Returns the updated document
     );
 
@@ -293,8 +315,8 @@ export const updateAdmissionStatus = async (req: Request, res: Response) => {
       student: updatedStudent,
     });
   } catch (error) {
-    console.log("Error Updating admission status: ", error);
-    res.status(512).json({ message: "Internal server error" });
+    console.log("Error updating admission status: ", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
