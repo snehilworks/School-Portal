@@ -68,6 +68,29 @@ export const FetchOrderList = async (req: Request, res:Response) => {
   }
 };
 
+export const FetchPaidPayments = async (req: Request, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string, 10) || 1;
+    const limit = parseInt(req.query.limit as string, 10) || 10;
+    const skip = (page - 1) * limit;
+
+    const payments = await razor.payments.all({
+      count: limit,
+      skip: skip,
+    });
+
+    const paidPayments = payments.items.filter(payment => payment.status === "authorized");
+
+    return res.status(201).json({
+      items: paidPayments,
+      currentPage: page,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(512).send('Error fetching Paid payments');
+  }
+}
+
 export const FetchSpecificOrder = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.id;

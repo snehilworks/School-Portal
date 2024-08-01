@@ -17,5 +17,6 @@ router.get('/order/:id', RazorPayController.FetchSpecificOrder);
 router.get('/payments', RazorPayController.FetchAllPayments);
 router.post('/capture-payment',RazorPayController.CapturePayment);
 router.get('/payment-details/:paymentId', RazorPayController.FetchPaymentDetails);
+router.get('/paid-payments', RazorPayController.FetchPaidPayments);
 
 export default router;
