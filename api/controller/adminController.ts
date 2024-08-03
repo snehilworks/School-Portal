@@ -87,6 +87,11 @@ export const getAllStudents = async (req: Request, res: Response) => {
   }
 };
 
+interface Class {
+    _id: string; // Or use a more specific type if you're using MongoDB ObjectId
+    className: string;
+}
+
 export const getAllAdmissionForms = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
@@ -94,12 +99,12 @@ export const getAllAdmissionForms = async (req: Request, res: Response) => {
 
     const startIdx = (page - 1) * limit;
 
-    const totalAdmissionForms = await Admission.countDocuments(); 
+    const totalAdmissionForms = await Admission.countDocuments();
 
     const admissionForms = await Admission.find().skip(startIdx).limit(limit);
 
     // Fetch all classes to map IDs to names
-    const classes = await classModel.find({ _id: { $in: admissionForms.map(form => form.class) } });
+    const classes: Class[] = await classModel.find({ _id: { $in: admissionForms.map(form => form.class) } }).lean();
 
     // Create a map for class IDs to class names
     const classMap = new Map(classes.map(cls => [cls._id.toString(), cls.className]));
@@ -123,7 +128,7 @@ export const getAllAdmissionForms = async (req: Request, res: Response) => {
 
 export const admissionFormReviewed = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params; 
+    const { id } = req.params;
 
     const updatedAdmission = await Admission.findByIdAndUpdate(
       id,
@@ -235,7 +240,7 @@ export const ContactMessages = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1; // Default to page 1 if not provided
     const limit = parseInt(req.query.limit as string) || 20; // Default to 20 items per page if not provided
-  
+
     const skip = (page - 1) * limit;
 
     const messages = await contactModel.find().skip(skip).limit(limit);
@@ -245,7 +250,7 @@ export const ContactMessages = async (req: Request, res: Response) => {
         messages,
           totalMessages,
           totalPages: Math.ceil(totalMessages / limit),
-          currentPage: page,   
+          currentPage: page,
       });
     } catch (error) {
       console.error("Error getting Student:", error);
@@ -285,7 +290,7 @@ export const adminLogin = async (req: Request, res: Response) => {
       JWT_SECRET,
       { expiresIn: '1h' }
     );
-    
+
     res.cookie("sps", token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
 
     return res.status(200).json({ token });
@@ -407,7 +412,7 @@ export const updateAdmissionSeats = async (req: Request, res: Response) => {
     console.error("Error updating seats available:", error);
     res.status(512).json({ message: "Internal server error" });
   }
-};  
+};
 
 //update in class Model
 export const setClassTeacher = async (req: Request, res: Response) => {
