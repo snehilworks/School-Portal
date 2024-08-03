@@ -80,12 +80,33 @@ const PaymentsPage = () => {
     setEndDate(end);
   };
 
+  const calculateFinalAmount = () => {
+    let finalAmount = amount;
+
+    switch (feeType) {
+      case "Annual":
+        finalAmount = amount * 0.9; // 10% discount
+        break;
+      case "6 Month":
+        finalAmount = (amount / 2) * 0.95; // 5% discount
+        break;
+      case "Monthly":
+        finalAmount = amount / 12;
+        break;
+      default:
+        finalAmount = amount;
+    }
+
+    return Math.round(finalAmount);
+  };
+
   const handlePayment = async (e) => {
     e.preventDefault();
-    const finalAmount = calculateFinalAmount();
+    const finalAmount = calculateFinalAmount() * 100; // Amount in paise
+
     try {
       const response = await axiosInstance.post(`/api/pay/order`, {
-        amount: finalAmount * 100,
+        amount: finalAmount,
         currency: "INR",
         receipt: `OrderReceipt1_${startDate
           .toISOString()
@@ -127,11 +148,6 @@ const PaymentsPage = () => {
     } catch (error) {
       console.error("Error initiating payment:", error);
     }
-  };
-
-  const calculateFinalAmount = () => {
-    // Implement your logic for calculating the final amount
-    return amount;
   };
 
   return (
@@ -236,9 +252,7 @@ const PaymentsPage = () => {
           </div>
 
           <div className="text-center">
-            <PrimaryButton type="submit" className="mt-6 w-full">
-              Pay Now
-            </PrimaryButton>
+            <PrimaryButton type="submit">Pay Now</PrimaryButton>
           </div>
         </form>
       </div>

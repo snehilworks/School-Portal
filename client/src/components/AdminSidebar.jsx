@@ -10,6 +10,7 @@ import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import { FaRegMessage } from "react-icons/fa6";
 import { FaWpforms } from "react-icons/fa";
+import { FaHotel } from "react-icons/fa";
 
 const AdminSidebar = ({ setSelectedContent }) => {
   const sidebarStyle = {
@@ -47,12 +48,16 @@ const AdminSidebar = ({ setSelectedContent }) => {
     setSelectedContent("Admission Form");
   };
 
+  const handleHostelForms = () => {
+    setSelectedContent("Hostel Form");
+  };
+
   const handlePayments = () => {
     setSelectedContent("Payments");
   };
 
   const handleFees = () => {
-    setSelectedContent("Fees");
+    setSelectedContent("Set-Fees");
   };
 
   return (
@@ -95,7 +100,7 @@ const AdminSidebar = ({ setSelectedContent }) => {
           <ListItemIcon>
             <CurrencyRupeeIcon style={{ color: "#fff" }} />
           </ListItemIcon>
-          <ListItemText primary="Fees" />
+          <ListItemText primary="Set-Fees" />
         </ListItem>
         <ListItem onClick={handlePayments} style={{ cursor: "pointer" }}>
           <ListItemIcon>
@@ -114,6 +119,12 @@ const AdminSidebar = ({ setSelectedContent }) => {
             <FaWpforms style={{ color: "#fff" }} />
           </ListItemIcon>
           <ListItemText primary="Admission Forms" />
+        </ListItem>
+        <ListItem onClick={handleHostelForms} style={{ cursor: "pointer" }}>
+          <ListItemIcon>
+            <FaHotel style={{ color: "#fff" }} />
+          </ListItemIcon>
+          <ListItemText primary="Hostel Forms" />
         </ListItem>
       </List>
     </div>
