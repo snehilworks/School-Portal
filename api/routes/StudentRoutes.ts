@@ -24,6 +24,8 @@ router.get('/class', StudentController.getClass);
 
 router.get('/fee-structure', StudentController.getFeeStructure);
 
+router.post('/hostel-form', StudentController.HostelFormStore)
+
 router.post('/complete-student-profile', StudentController.completeStudentProfile);
 
 router.get('/class-fee/:id', StudentController.getFeeForClass);
