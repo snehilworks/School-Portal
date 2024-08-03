@@ -12,6 +12,8 @@ const PaymentsPage = () => {
   const [email, setEmail] = useState("");
   const [studentClass, setStudentClass] = useState("");
   const [feeType, setFeeType] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,18 +50,51 @@ const PaymentsPage = () => {
     fetchStudentData();
   }, []);
 
+  useEffect(() => {
+    if (startDate && feeType) {
+      updateEndDate();
+    }
+  }, [feeType, startDate]);
+
   const handleFeeTypeChange = (event) => {
     setFeeType(event.target.value);
   };
 
+  const updateEndDate = () => {
+    let end = new Date(startDate);
+
+    switch (feeType) {
+      case "Monthly":
+        end.setMonth(end.getMonth() + 1);
+        break;
+      case "6 Month":
+        end.setMonth(end.getMonth() + 6);
+        break;
+      case "Annual":
+        end.setFullYear(end.getFullYear() + 1);
+        break;
+      default:
+        end = new Date();
+    }
+
+    setEndDate(end);
+  };
+
   const calculateFinalAmount = () => {
     let finalAmount = amount;
-    if (feeType === "Annual") {
-      finalAmount = finalAmount * (1 - 0.1); // 10% dis
-    } else if (feeType === "6 Month") {
-      finalAmount = (finalAmount / 2) * (1 - 0.05); // 5% dis
-    } else if (feeType === "Monthly") {
-      finalAmount = finalAmount / 12;
+
+    switch (feeType) {
+      case "Annual":
+        finalAmount = amount * 0.9; // 10% discount
+        break;
+      case "6 Month":
+        finalAmount = (amount / 2) * 0.95; // 5% discount
+        break;
+      case "Monthly":
+        finalAmount = amount / 12;
+        break;
+      default:
+        finalAmount = amount;
     }
 
     return Math.round(finalAmount);
@@ -67,12 +102,15 @@ const PaymentsPage = () => {
 
   const handlePayment = async (e) => {
     e.preventDefault();
-    const finalAmount = calculateFinalAmount();
+    const finalAmount = calculateFinalAmount() * 100; // Amount in paise
+
     try {
       const response = await axiosInstance.post(`/api/pay/order`, {
-        amount: finalAmount * 100,
+        amount: finalAmount,
         currency: "INR",
-        receipt: "OrderReceipt1",
+        receipt: `OrderReceipt1_${startDate
+          .toISOString()
+          .slice(0, 10)}_${endDate.toISOString().slice(0, 10)}`,
       });
       const order = response.data;
 
@@ -193,23 +231,30 @@ const PaymentsPage = () => {
           {feeType && (
             <div className="p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-md">
               <p>Final Amount: INR {calculateFinalAmount()}</p>
+              <p>Fee Valid From: {startDate.toISOString().slice(0, 10)}</p>
+              <p>Fee Valid Until: {endDate.toISOString().slice(0, 10)}</p>
             </div>
           )}
 
-          <button
-            type="submit"
-            id="rzp-button1"
-            className="w-full py-3 px-6 mt-4 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors duration-300"
-          >
-            Pay Now
-          </button>
-        </form>
-      </div>
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700">
+              Pay From
+            </label>
+            <input
+              id="paymentStartDate"
+              name="paymentStartDate"
+              type="date"
+              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+              value={startDate.toISOString().slice(0, 10)}
+              onChange={(e) => setStartDate(new Date(e.target.value))}
+              required
+            />
+          </div>
 
-      <div className="mt-6 flex justify-center w-full">
-        <PrimaryButton onClick={() => navigate("/student/fee-structure")}>
-          Fee Structure Here
-        </PrimaryButton>
+          <div className="text-center">
+            <PrimaryButton type="submit">Pay Now</PrimaryButton>
+          </div>
+        </form>
       </div>
     </div>
   );

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import PrimaryButton from "../ui/PrimaryButton";
 import Modal from "../ui/Modal";
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { FaBed } from "react-icons/fa";
 
-const AdmissionFormContent = () => {
-  const [admissionForms, setAdmissionForms] = useState([]);
+const HostelFormContent = () => {
+  const [hostelForms, setHostelForms] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -15,30 +15,27 @@ const AdmissionFormContent = () => {
   const [formToReview, setFormToReview] = useState(null);
 
   useEffect(() => {
-    const fetchAdmissionForms = async (page) => {
+    const fetchHostelForms = async (page) => {
       try {
-        const response = await axiosInstance.get(
-          `/api/admin/admission-forms-preview`,
-          {
-            params: { page, limit: 20 },
-          }
-        );
+        const response = await axiosInstance.get(`/api/admin/hostel-forms`, {
+          params: { page, limit: 20 },
+        });
         const { data, totalPages, currentPage } = response.data;
-        setAdmissionForms(data);
+        setHostelForms(data);
         setCurrentPage(currentPage);
         setTotalPages(totalPages);
       } catch (error) {
-        console.error("Error fetching admission forms:", error);
-        setError("Failed to load admission forms.");
+        console.error("Error fetching hostel forms:", error);
+        setError("Failed to load hostel forms.");
       } finally {
         setLoading(false);
       }
     };
-    fetchAdmissionForms(currentPage);
+    fetchHostelForms(currentPage);
   }, [currentPage]);
 
   const handlePageChange = (page) => {
-    if (page < 1 || page > totalPages) return; // Prevent invalid page numbers
+    if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
 
@@ -59,10 +56,9 @@ const AdmissionFormContent = () => {
   const handleConfirmReview = async () => {
     try {
       await axiosInstance.put(
-        `/api/admin/admission-form-reviewed/${formToReview._id}`
+        `/api/admin/hostel-form-reviewed/${formToReview._id}`
       );
-      // Update the local state to reflect the change
-      setAdmissionForms((prevForms) =>
+      setHostelForms((prevForms) =>
         prevForms.map((form) =>
           form._id === formToReview._id ? { ...form, review: true } : form
         )
@@ -92,22 +88,22 @@ const AdmissionFormContent = () => {
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
       <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">
-        Admission Forms
+        Hostel Forms
       </h2>
       <div className="overflow-x-auto">
         <table className="w-full bg-white border border-gray-300 rounded-lg shadow-lg">
-          <thead className="bg-blue-500 text-white">
+          <thead className="bg-green-500 text-white">
             <tr>
               <th className="p-4 text-left">Student Name</th>
               <th className="p-4 text-left">Class</th>
               <th className="p-4 text-left">Email</th>
-              <th className="p-4 text-left">Father's Phone</th>
+              <th className="p-4 text-left">Guardian's Phone</th>
               <th className="p-4 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {admissionForms.length > 0 ? (
-              admissionForms.map((form) => (
+            {hostelForms.length > 0 ? (
+              hostelForms.map((form) => (
                 <tr
                   key={form._id}
                   className="border-b border-gray-300 hover:bg-gray-100 transition-colors"
@@ -115,11 +111,11 @@ const AdmissionFormContent = () => {
                   <td className="p-4 text-gray-700">{form.studentName}</td>
                   <td className="p-4 text-gray-700">{form.class}</td>
                   <td className="p-4 text-gray-700">{form.email}</td>
-                  <td className="p-4 text-gray-700">{form.fatherPhone}</td>
+                  <td className="p-4 text-gray-700">{form.guardianPhone}</td>
                   <td className="p-4 text-center flex justify-center items-center space-x-2">
                     {form.review ? (
                       <span className="flex items-center space-x-2 text-green-600">
-                        <CheckCircleIcon className="w-8 h-8" />
+                        <FaBed className="w-8 h-8" />
                         <span className="text-lg font-medium">Reviewed</span>
                       </span>
                     ) : (
@@ -142,7 +138,7 @@ const AdmissionFormContent = () => {
             ) : (
               <tr>
                 <td colSpan="5" className="p-4 text-center text-gray-600">
-                  No admission forms found
+                  No hostel forms found
                 </td>
               </tr>
             )}
@@ -196,8 +192,8 @@ const AdmissionFormContent = () => {
               {selectedForm.class}
             </p>
             <p>
-              <strong className="text-gray-700">Father's Phone:</strong>{" "}
-              {selectedForm.fatherPhone}
+              <strong className="text-gray-700">Guardian's Phone:</strong>{" "}
+              {selectedForm.guardianPhone}
             </p>
             <p>
               <strong className="text-gray-700">Gender:</strong>{" "}
@@ -247,4 +243,4 @@ const AdmissionFormContent = () => {
   );
 };
 
-export default AdmissionFormContent;
+export default HostelFormContent;
