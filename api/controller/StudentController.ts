@@ -8,6 +8,7 @@ import { loginSchema } from "../validations/loginValidation";
 import { CompleteStudentProfileRequestBody } from "../types/completeProfile";
 
 import * as dotenv from "dotenv";
+import HostelForm from "../models/HostelFormModel";
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
@@ -188,7 +189,7 @@ export const completeStudentProfile = async (req: Request<{}, {}, CompleteStuden
     if (!studentDetail) {
       return res.status(422).json({ message: 'Student not found' });
     }
-    
+
     //update current student
     Object.assign(studentDetail, studentData);
 
@@ -220,7 +221,7 @@ export const getMeApi = async (req: Request, res: Response) => {
     if (!studentDetail) {
       return res.status(422).json({ message: "Student not found" });
     }
-    
+
     return res.status(200).json(studentDetail);
   } catch (error) {
     console.error('Error getting me api student:', error);
@@ -248,4 +249,24 @@ export const getFeeForClass = async (req: Request, res: Response)  => {
     console.error('Error getting fee for the particular class:', error);
     return res.status(512).json({ message: 'Internal server error' });
   }
+};
+
+export const HostelFormStore = async (req: Request, res: Response) => {
+    try {
+        const { studentName, grade, joiningDate } = req.body;
+
+        const existingHostelForm = await HostelForm.findOne({ studentName, grade, joiningDate });
+
+        if (existingHostelForm) {
+            return res.status(422).json({ message: "Hostel form with these details already exists" });
+        }
+
+        const newHostelForm = new HostelForm(req.body);
+        await newHostelForm.save();
+
+        res.status(201).json({ message: "Hostel form submitted successfully" });
+    } catch (error) {
+        console.error('Error Storing Hostel Form:', error);
+        return res.status(512).json({ message: 'Internal server error' });
+    }
 };
