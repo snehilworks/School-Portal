@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import Razorpay from "razorpay";
 import Payment from "../models/PaymentModel";
+import Class from "../models/classModel";
+import crypto from 'crypto';
+// import axios from 'axios';
 
 const razor = new Razorpay({
   key_id: process.env.RAZORPAY_ID_KEY as string,
@@ -14,23 +17,23 @@ export const CreateOrder = async (req: Request, res: Response) => {
         }
 
         const { amount, studentName, studentClass } = req.body;
-      
+
       const options = {
-        amount: amount,  
+        amount: amount,
         currency: "INR",
         receipt: "receipt#1",
         payment_capture: '1',
-        notes: {  
+        notes: {
           studentName,
           studentClass
         }
       };
       const order = await razor.orders.create(options);
-    
+
       if(!order) {
         return res.status(408).send("No Order was made.");
       }
-    
+
       res.json(order);
     } catch (err) {
       console.log(err);
@@ -154,3 +157,49 @@ export const FetchPaymentDetails = async (req:Request, res: Response) => {
     res.status(512).send("Error");
   }
 };
+
+export const HandleVerifyPayment = async (req: Request, res: Response) => {
+    try {
+      const { orderId, paymentId, signature, studentId, studentName, studentClass, amount } = req.body;
+
+      // Create the expected signature
+      const body = `${orderId}|${paymentId}`;
+      const expectedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_SECRET_KEY as string)
+        .update(body.toString())
+        .digest('hex');
+
+      const isAuthentic = expectedSignature === signature;
+
+      if (isAuthentic) {
+        try {
+          // Verify class existence
+          const classRecord = await Class.findById(studentClass);
+          if (!classRecord) {
+            return res.status(400).json({ status: 'failure', message: 'Invalid class reference' });
+          }
+
+          // Save payment details to database
+          const payment = new Payment({
+            orderId,
+            paymentId,
+            studentId,
+            studentName,
+            studentClass,
+            amount,
+            paymentStatus: 'success',
+          });
+
+          await payment.save();
+          res.json({ status: 'success' });
+        } catch (error) {
+          console.error('Error saving payment:', error);
+          res.status(512).json({ status: 'error', message: "Internal Server Error" });
+        }
+      } else {
+        res.status(422).json({ status: 'failure', message: 'Invalid signature' });
+      }
+    } catch (err) {
+      console.error('Error verifying payment:', err);
+      res.status(512).send("Internal Server Error");
+    }
+  };

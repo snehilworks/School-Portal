@@ -1,26 +1,29 @@
-import mongoose, { Schema, Document, Types } from "mongoose";
+import mongoose, { Schema, Document } from 'mongoose';
 
-export interface IPayment extends Document {
+interface IPayment extends Document {
+  orderId: string;
   paymentId: string;
-  studentId: Types.ObjectId; // Reference to the student
-  feeType: string; // e.g., monthly, yearly, admission, hostel
+  studentId: mongoose.Schema.Types.ObjectId;
+  studentName: string;
+  feeType: string;
+  studentClass: mongoose.Schema.Types.ObjectId;
   amount: number;
-  currency: string;
-  status: string;
-  captured: boolean;
-  createdAt: number;
+  paymentStatus: string;
+  paymentDate: Date;
 }
 
-const PaymentSchema: Schema = new Schema({
+const paymentSchema: Schema = new Schema({
+  orderId: { type: String, required: true },
   paymentId: { type: String, required: true },
-  studentId: { type: Types.ObjectId, ref: 'Student', required: true },
-  feeType: { type: String, required: true },
+  studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Student', required: true },
+  studentName: { type: String, required: true },
+  feeType: { type: String, required: true }, // { annual , 6-month, monthly }
+  studentClass: { type: mongoose.Schema.Types.ObjectId, ref: 'Class', required: true },
   amount: { type: Number, required: true },
-  currency: { type: String, required: true },
-  status: { type: String, required: true },
-  captured: { type: Boolean, required: true },
-  createdAt: { type: Number, required: true },
+  paymentStatus: { type: String, required: true },
+  paymentDate: { type: Date, default: Date.now },
 });
 
-const Payment = mongoose.model<IPayment>('Payment', PaymentSchema);
+const Payment = mongoose.model<IPayment>('Payment', paymentSchema);
+
 export default Payment;
