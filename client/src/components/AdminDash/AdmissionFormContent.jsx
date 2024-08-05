@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import PrimaryButton from "../ui/PrimaryButton";
 import Modal from "../ui/Modal";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { FaSearch, FaTimes } from "react-icons/fa";
+import useDebounce from "../../hooks/useDebounce"; // Adjust the import path as necessary
 
 const AdmissionFormContent = () => {
   const [admissionForms, setAdmissionForms] = useState([]);
@@ -12,30 +14,50 @@ const AdmissionFormContent = () => {
   const [error, setError] = useState(null);
   const [selectedForm, setSelectedForm] = useState(null);
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
-  const [formToReview, setFormToReview] = useState(null);
+  const [formToReview, setFormToReview] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // Adjust debounce delay as necessary
+  const [filteredForms, setFilteredForms] = useState([]);
+
+  const fetchAdmissionForms = useCallback(async (page, query = "") => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(
+        `/api/admin/admission-forms-preview`,
+        {
+          params: { page, limit: 20, search: query },
+        }
+      );
+      const { data, totalPages, currentPage } = response.data;
+      setAdmissionForms(data);
+      setCurrentPage(currentPage);
+      setTotalPages(totalPages);
+      setError(null); // Clear error if data is fetched successfully
+    } catch (error) {
+      console.error("Error fetching admission forms:", error);
+      setError("Failed to load admission forms.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchAdmissionForms = async (page) => {
-      try {
-        const response = await axiosInstance.get(
-          `/api/admin/admission-forms-preview`,
-          {
-            params: { page, limit: 20 },
-          }
-        );
-        const { data, totalPages, currentPage } = response.data;
-        setAdmissionForms(data);
-        setCurrentPage(currentPage);
-        setTotalPages(totalPages);
-      } catch (error) {
-        console.error("Error fetching admission forms:", error);
-        setError("Failed to load admission forms.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAdmissionForms(currentPage);
-  }, [currentPage]);
+    fetchAdmissionForms(currentPage, debouncedSearchQuery);
+  }, [currentPage, debouncedSearchQuery, fetchAdmissionForms]);
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    setCurrentPage(1);
+    fetchAdmissionForms(1, debouncedSearchQuery);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+  };
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return; // Prevent invalid page numbers
@@ -61,7 +83,6 @@ const AdmissionFormContent = () => {
       await axiosInstance.put(
         `/api/admin/admission-form-reviewed/${formToReview._id}`
       );
-      // Update the local state to reflect the change
       setAdmissionForms((prevForms) =>
         prevForms.map((form) =>
           form._id === formToReview._id ? { ...form, review: true } : form
@@ -75,25 +96,62 @@ const AdmissionFormContent = () => {
     }
   };
 
-  if (loading)
+  useEffect(() => {
+    const filtered = admissionForms.filter((form) =>
+      form.studentName
+        .toLowerCase()
+        .includes(debouncedSearchQuery.toLowerCase())
+    );
+    setFilteredForms(filtered);
+  }, [debouncedSearchQuery, admissionForms]);
+
+  if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="w-12 h-12 border-4 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
       </div>
     );
+  }
 
-  if (error)
+  if (error) {
     return (
       <div className="text-center text-red-600 mt-8">
         <p>{error}</p>
       </div>
     );
+  }
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
-      <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">
-        Admission Forms
-      </h2>
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-3xl font-bold text-gray-800">Admission Forms</h2>
+
+        {/* Enhanced Search Box */}
+        <div className="mb-8 flex justify-center">
+          <div className="relative w-full max-w-md">
+            <form onSubmit={handleSearchSubmit}>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search by student name..."
+                className="w-full p-4 pl-12 pr-16 border border-gray-300 rounded-lg shadow-lg bg-gradient-to-r from-blue-100 to-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out"
+              />
+              <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 transition-transform duration-300 ease-in-out" />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={clearSearch}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 transition-transform duration-300 ease-in-out"
+                >
+                  <FaTimes />
+                </button>
+              )}
+            </form>
+          </div>
+        </div>
+      </div>
+
       <div className="overflow-x-auto">
         <table className="w-full bg-white border border-gray-300 rounded-lg shadow-lg">
           <thead className="bg-blue-500 text-white">
@@ -106,8 +164,8 @@ const AdmissionFormContent = () => {
             </tr>
           </thead>
           <tbody>
-            {admissionForms.length > 0 ? (
-              admissionForms.map((form) => (
+            {filteredForms.length > 0 ? (
+              filteredForms.map((form) => (
                 <tr
                   key={form._id}
                   className="border-b border-gray-300 hover:bg-gray-100 transition-colors"
@@ -157,7 +215,7 @@ const AdmissionFormContent = () => {
         >
           Previous
         </PrimaryButton>
-        <span className="text-gray-700">
+        <span className="text-lg font-medium">
           Page {currentPage} of {totalPages}
         </span>
         <PrimaryButton
@@ -169,77 +227,65 @@ const AdmissionFormContent = () => {
         </PrimaryButton>
       </div>
 
-      {/* Modal for detailed view */}
+      {/* View Details Modal */}
       {selectedForm && (
-        <Modal
-          onClose={handleCloseModal}
-          className="bg-white p-6 rounded-lg shadow-lg"
-        >
-          <h3 className="text-2xl font-bold mb-4 text-gray-800">
-            Details for {selectedForm.studentName}
-          </h3>
-          <div className="space-y-2">
-            <p>
-              <strong className="text-gray-700">Student Name:</strong>{" "}
-              {selectedForm.studentName}
-            </p>
-            <p>
-              <strong className="text-gray-700">Father's Name:</strong>{" "}
-              {selectedForm.fatherName}
-            </p>
-            <p>
-              <strong className="text-gray-700">Mother's Name:</strong>{" "}
-              {selectedForm.motherName}
-            </p>
-            <p>
-              <strong className="text-gray-700">Class:</strong>{" "}
-              {selectedForm.class}
-            </p>
-            <p>
-              <strong className="text-gray-700">Father's Phone:</strong>{" "}
-              {selectedForm.fatherPhone}
-            </p>
-            <p>
-              <strong className="text-gray-700">Gender:</strong>{" "}
-              {selectedForm.gender}
-            </p>
-            <p>
-              <strong className="text-gray-700">Email:</strong>{" "}
-              {selectedForm.email}
-            </p>
-            <p>
-              <strong className="text-gray-700">Address:</strong>{" "}
-              {selectedForm.address}
-            </p>
+        <Modal onClose={() => setSelectedForm(null)}>
+          <div className="p-8">
+            <h2 className="text-2xl font-bold mb-4">Form Details</h2>
+            <div>
+              <p>
+                <strong>Student Name:</strong> {selectedForm.studentName}
+              </p>
+              <p>
+                <strong>Email:</strong> {selectedForm.email}
+              </p>
+              <p>
+                <strong>Class:</strong> {selectedForm.class}
+              </p>
+              <p>
+                <strong>Father's Phone:</strong> {selectedForm.fatherPhone}
+              </p>
+              <p>
+                <strong>Mother's Phone:</strong> {selectedForm.motherPhone}
+              </p>
+              <p>
+                <strong>Address:</strong> {selectedForm.address}
+              </p>
+              <p>
+                <strong>Guardian Name:</strong> {selectedForm.guardianName}
+              </p>
+              <p>
+                <strong>Guardian Phone:</strong> {selectedForm.guardianPhone}
+              </p>
+              <p>
+                <strong>Admission Status:</strong>{" "}
+                {selectedForm.admissionStatus ? "Admitted" : "Not Admitted"}
+              </p>
+            </div>
           </div>
         </Modal>
       )}
 
-      {/* Modal for review confirmation */}
+      {/* Review Modal */}
       {reviewModalOpen && (
-        <Modal
-          onClose={() => setReviewModalOpen(false)}
-          className="bg-white p-8 rounded-lg shadow-xl max-w-lg mx-auto"
-        >
-          <h3 className="text-2xl font-bold mb-4 text-gray-800">
-            Confirm Review
-          </h3>
-          <p className="mb-6 text-gray-700">
-            Are you sure you want to mark this form as reviewed?
-          </p>
-          <div className="flex justify-end space-x-4">
-            <PrimaryButton
-              className="bg-green-600 text-white hover:bg-green-700"
-              onClick={handleConfirmReview}
-            >
-              Confirm
-            </PrimaryButton>
-            <PrimaryButton
-              className="bg-gray-600 text-white hover:bg-gray-700"
-              onClick={() => setReviewModalOpen(false)}
-            >
-              Cancel
-            </PrimaryButton>
+        <Modal onClose={handleCloseModal}>
+          <div className="p-8">
+            <h2 className="text-2xl font-bold mb-4">Confirm Review</h2>
+            <p>Are you sure you want to mark this form as reviewed?</p>
+            <div className="flex justify-end space-x-4 mt-6">
+              <PrimaryButton
+                className="bg-green-600 text-white hover:bg-green-700 transition-colors py-2 px-4 rounded-md shadow-md"
+                onClick={handleConfirmReview}
+              >
+                Confirm
+              </PrimaryButton>
+              <PrimaryButton
+                className="bg-red-600 text-white hover:bg-red-700 transition-colors py-2 px-4 rounded-md shadow-md"
+                onClick={handleCloseModal}
+              >
+                Cancel
+              </PrimaryButton>
+            </div>
           </div>
         </Modal>
       )}
