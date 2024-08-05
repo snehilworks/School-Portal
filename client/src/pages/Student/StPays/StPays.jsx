@@ -3,6 +3,8 @@ import { Payment } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import PrimaryButton from "../../../components/ui/PrimaryButton";
 import axiosInstance from "../../../utils/axiosInstance";
+import ErrorModal from "../../../components/ErrorModal";
+import InternalServerModal from "../../../components/InternalServerModal";
 
 const PaymentsPage = () => {
   const [amount, setAmount] = useState("");
@@ -14,6 +16,8 @@ const PaymentsPage = () => {
   const [feeType, setFeeType] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [error, setError] = useState("");
+  const [internalServerError, setInternalServerError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -102,6 +106,9 @@ const PaymentsPage = () => {
 
   const handlePayment = async (e) => {
     e.preventDefault();
+    setError("");
+    setInternalServerError("");
+
     const finalAmount = calculateFinalAmount() * 100; // Amount in paise
 
     try {
@@ -113,6 +120,13 @@ const PaymentsPage = () => {
           .slice(0, 10)}_${endDate.toISOString().slice(0, 10)}`,
       });
       const order = response.data;
+
+      if (response.status === 512) {
+        setInternalServerError(
+          "Internal Server Error. Please try again later."
+        );
+        return; // Exit early
+      }
 
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY || "",
@@ -256,6 +270,12 @@ const PaymentsPage = () => {
           </div>
         </form>
       </div>
+      {internalServerError && (
+        <InternalServerModal
+          error={internalServerError}
+          onClose={() => setInternalServerError("")}
+        />
+      )}
     </div>
   );
 };
