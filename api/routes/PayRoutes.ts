@@ -11,8 +11,11 @@ const router = express.Router();
 // Verify Payment: Optionally, you can fetch payment details to verify and store transaction information.
 
 router.post("/order", RazorPayController.CreateOrder);
-router.get("/orders", RazorPayController.FetchOrderList); 
+router.get("/orders", RazorPayController.FetchOrderList);
 router.get('/order/:id', RazorPayController.FetchSpecificOrder);
+
+//saving to database the payment details
+router.post('/verify-payment', RazorPayController.HandleVerifyPayment);
 
 router.get('/payments', RazorPayController.FetchAllPayments);
 router.post('/capture-payment',RazorPayController.CapturePayment);

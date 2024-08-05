@@ -9,6 +9,7 @@ export interface HostelForm extends Document {
   roomPreference: string;
   messFacilities: string;
   additionalNotes: string;
+  review: boolean;
 }
 
 const hostelFormSchema: Schema = new Schema({
@@ -20,6 +21,7 @@ const hostelFormSchema: Schema = new Schema({
   roomPreference: { type: String, enum: ['single', 'shared'], required: true },
   messFacilities: { type: String, required: true },
   additionalNotes: { type: String, default: '' },
+  review: { type: Boolean, default: false },
 });
 
 export default mongoose.model<HostelForm>("HostelForm", hostelFormSchema);

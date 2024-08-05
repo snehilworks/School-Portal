@@ -10,6 +10,7 @@ import classModel from "../models/classModel";
 import { loginSchema } from "../validations/loginValidation";
 import Admin from "../models/adminModel";
 import jwt from "jsonwebtoken";
+import HostelForm from "../models/HostelFormModel";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 
@@ -146,6 +147,61 @@ export const admissionFormReviewed = async (req: Request, res: Response) => {
     res.status(512).json({ message: "Internal server error" });
   }
 };
+
+export const getAllHostelForms = async (req: Request, res: Response) => {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = 15;
+
+      const startIdx = (page - 1) * limit;
+
+      const totalHostelForms = await HostelForm.countDocuments();
+
+      const hostelForms = await HostelForm.find().skip(startIdx).limit(limit);
+
+      // Fetch all classes to map IDs to names
+      const classes: Class[] = await classModel.find({ _id: { $in: hostelForms.map(form => form.class) } }).lean();
+
+      // Create a map for class IDs to class names
+      const classMap = new Map(classes.map(cls => [cls._id.toString(), cls.className]));
+
+      // Map the admission forms to include class names
+      const response = {
+        data: hostelForms.map(form => ({
+          ...form.toObject(),
+          class: classMap.get(form.class.toString()) || 'Unknown Class'
+        })),
+        totalPages: Math.ceil(totalHostelForms / limit),
+        currentPage: page
+      };
+
+      res.status(201).json(response);
+    } catch (error) {
+      console.error("Error getting hostel forms:", error);
+      res.status(512).json({ message: "Internal server error" });
+    }
+  };
+
+  export const HostelFormReviewed = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      const updatedHostelForm = await HostelForm.findByIdAndUpdate(
+        id,
+        { review: true },
+        { new: true } // Return the updated document
+      );
+
+      if (!updatedHostelForm) {
+        return res.status(404).json({ message: 'Hostel form not found' });
+      }
+
+      return res.status(200).json(updatedHostelForm);
+    } catch (error) {
+      console.error("Error setting review true for hostel form:", error);
+      res.status(512).json({ message: "Internal server error" });
+    }
+  };
 
 export const getSpecificTeacher = async (req: Request, res: Response) => {
   const { id } = req.params;

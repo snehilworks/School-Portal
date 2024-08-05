@@ -38,6 +38,10 @@ router.put("/set-class-teacher/:id", AdminController.setClassTeacher);
 router.get("/admission-forms-preview", AdminController.getAllAdmissionForms);
 router.put('/admission-form-reviewed/:id', AdminController.admissionFormReviewed)
 
+//Hostel form list
+router.get("/hostel-forms-preview", AdminController.getAllHostelForms);
+router.put('/hostel-form-reviewed/:id', AdminController.HostelFormReviewed)
+
 //Fee Routes
 router.post('/create-payment', FeeController.createPayment);
 router.post('/payment-success', FeeController.handlePaymentSuccess);
