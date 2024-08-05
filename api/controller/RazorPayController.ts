@@ -158,9 +158,33 @@ export const FetchPaymentDetails = async (req:Request, res: Response) => {
   }
 };
 
+interface PaymentData {
+    orderId: string;
+    paymentId: string;
+    studentId: string;
+    studentName: string;
+    studentClass: string;
+    amount: number;
+    fieldType: string;
+    paymentStatus: string;
+    paymentDate: Date;
+    feeType?: string;
+  }
+
 export const HandleVerifyPayment = async (req: Request, res: Response) => {
     try {
-      const { orderId, paymentId, signature, studentId, studentName, studentClass, amount } = req.body;
+        const {
+            orderId,
+            paymentId,
+            signature,
+            studentId,
+            studentName,
+            fieldType,
+            studentClass,
+            amount,
+            paymentDate,
+            feeType
+          } = req.body;
 
       // Create the expected signature
       const body = `${orderId}|${paymentId}`;
@@ -171,26 +195,34 @@ export const HandleVerifyPayment = async (req: Request, res: Response) => {
       const isAuthentic = expectedSignature === signature;
 
       if (isAuthentic) {
-        try {
           // Verify class existence
           const classRecord = await Class.findById(studentClass);
           if (!classRecord) {
             return res.status(400).json({ status: 'failure', message: 'Invalid class reference' });
           }
 
-          // Save payment details to database
-          const payment = new Payment({
-            orderId,
-            paymentId,
-            studentId,
-            studentName,
-            studentClass,
-            amount,
-            paymentStatus: 'success',
-          });
+          try {
+            let paymentData: PaymentData = {
+              orderId,
+              paymentId,
+              studentId,
+              studentName,
+              studentClass,
+              amount,
+              fieldType,
+              paymentStatus: 'success',
+              paymentDate
+            };
 
-          await payment.save();
-          res.json({ status: 'success' });
+            // Add feeType only if fieldType is 'FEES'
+            if (fieldType === 'FEES') {
+              paymentData.feeType = feeType;
+            }
+
+            const payment = new Payment(paymentData);
+            await payment.save();
+
+          return res.status(201).json({ status: 'success' });
         } catch (error) {
           console.error('Error saving payment:', error);
           res.status(512).json({ status: 'error', message: "Internal Server Error" });
@@ -200,6 +232,88 @@ export const HandleVerifyPayment = async (req: Request, res: Response) => {
       }
     } catch (err) {
       console.error('Error verifying payment:', err);
-      res.status(512).send("Internal Server Error");
+      res.status(512).json({status: 'error', message: 'Internal Server Error'});
     }
   };
+
+  export const GetAllPaidPayments = async (req: Request, res: Response) => {
+    try {
+        const { page = 1, limit = 20, search = '' } = req.query;
+
+        // Calculate the number of payments to skip
+        const skip = (Number(page) - 1) * Number(limit);
+
+        // Construct the search query
+        const searchQuery: any = {};
+        if (search) {
+            searchQuery.$or = [
+                { paymentId: { $regex: search, $options: 'i' } },
+                { studentName: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        // Retrieve payments with pagination
+        const payments = await Payment.find(searchQuery)
+            .sort({ paymentDate: -1 }) // Sort by paymentDate in descending order
+            .skip(skip)
+            .limit(Number(limit))
+            .populate({
+                path: 'studentClass', // assuming studentClass is a reference to the Class model
+                select: 'className' // only select the className field
+            });
+
+        // Count total number of payments
+        const totalPayments = await Payment.countDocuments();
+
+        // Calculate total pages
+        const totalPages = Math.ceil(totalPayments / Number(limit));
+
+        // Create next page link if there are more pages
+        const nextPage = Number(page) < totalPages ? Number(page) + 1 : null;
+
+        // Create previous page link if it's not the first page
+        const prevPage = Number(page) > 1 ? Number(page) - 1 : null;
+
+        res.status(200).json({
+            status: 'success',
+            currentPage: Number(page),
+            totalPages,
+            nextPage,
+            prevPage,
+            payments
+        });
+    } catch (err) {
+        console.error('Error retrieving payments:', err);
+        res.status(512).json({ status: 'error', message: 'Internal Server Error' });
+    }
+};
+
+export const PaidPaymentDetails = async (req: Request, res: Response) => {
+    try {
+
+    } catch (err) {
+        console.error('Error retrieving payments:', err);
+        res.status(512).json({ status: 'error', message: 'Internal Server Error' });
+    }
+};
+
+export const PaidPaymentReviewed = async (req: Request, res: Response) => {
+    try {
+        const { paymentId } = req.params;
+
+        const updatedPayment = await Payment.findOneAndUpdate(
+            { paymentId: paymentId }, // Find the document with this paymentId
+            { review: true }, // Update the review field
+            { new: true } // Return the updated document
+          );
+
+        if (!updatedPayment) {
+          return res.status(422).json({ message: 'Payment Status not updated' });
+        }
+
+        return res.status(200).json(updatedPayment);
+    } catch (err) {
+        console.error('Error Updating payment status:', err);
+        res.status(512).json({ status: 'error', message: 'Internal Server Error' });
+    }
+};
