@@ -238,7 +238,7 @@ export const HandleVerifyPayment = async (req: Request, res: Response) => {
 
   export const GetAllPaidPayments = async (req: Request, res: Response) => {
     try {
-        const { page = 1, limit = 20, search = '' } = req.query;
+        const { page = 1, limit = 20, search = '', fieldType = '' } = req.query;
 
         // Calculate the number of payments to skip
         const skip = (Number(page) - 1) * Number(limit);
@@ -250,6 +250,10 @@ export const HandleVerifyPayment = async (req: Request, res: Response) => {
                 { paymentId: { $regex: search, $options: 'i' } },
                 { studentName: { $regex: search, $options: 'i' } }
             ];
+        }
+
+        if (fieldType) {
+            searchQuery.fieldType = fieldType;
         }
 
         // Retrieve payments with pagination
