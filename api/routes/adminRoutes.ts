@@ -1,6 +1,7 @@
 import express from "express";
 import * as AdminController from "./../controller/adminController";
 import FeeController  from './../controller/feeController';
+import * as RazorPayController  from './../controller/RazorPayController';
 
 const router = express.Router();
 
@@ -44,6 +45,11 @@ router.put('/hostel-form-reviewed/:id', AdminController.HostelFormReviewed)
 
 //Fee Routes
 router.post('/create-payment', FeeController.createPayment);
+
+router.get('/paid-payments', RazorPayController.GetAllPaidPayments);
+router.put('/paid-payments/reviewed/:paymentId', RazorPayController.PaidPaymentReviewed);
+
+router.get('/paid-payment/detail/:paymentId', RazorPayController.PaidPaymentDetails)
 router.post('/payment-success', FeeController.handlePaymentSuccess);
 router.get('/payment/:paymentId', FeeController.getPaymentDetails);
 

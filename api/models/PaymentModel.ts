@@ -6,11 +6,12 @@ interface IPayment extends Document {
   studentId: mongoose.Schema.Types.ObjectId;
   studentName: string;
   fieldType: 'ADMISSION' | 'FEES' | 'HOSTEL';
-  feeType?: 'ANNUAL' | 'HALF-YEARLY' | 'MONTHLY';
+  feeType?: 'ANNUAL' | '6-MONTH' | 'MONTHLY';
   studentClass: mongoose.Schema.Types.ObjectId;
   amount: number;
   paymentStatus: string;
   paymentDate: Date;
+  review: boolean;
 }
 
 const paymentSchema: Schema = new Schema({
@@ -25,12 +26,13 @@ const paymentSchema: Schema = new Schema({
   },
   feeType: {
     type: String,
-    enum: ['ANNUAL', 'HALF-YEARLY', 'MONTHLY']
+    enum: ['ANNUAL', '6-MONTH', 'MONTHLY']
   },
   studentClass: { type: mongoose.Schema.Types.ObjectId, ref: 'Class', required: true },
   amount: { type: Number, required: true },
   paymentStatus: { type: String, required: true },
   paymentDate: { type: Date, default: Date.now },
+  review: { type: Boolean, default: false },
 });
 
 // Pre-save hook for conditional validation
