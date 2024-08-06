@@ -3,6 +3,8 @@ import { Payment } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import PrimaryButton from "../../../components/ui/PrimaryButton";
 import axiosInstance from "../../../utils/axiosInstance";
+import ErrorModal from "../../../components/ErrorModal";
+import InternalServerModal from "../../../components/InternalServerModal";
 
 const PaymentsPage = () => {
   const [amount, setAmount] = useState("");
@@ -14,6 +16,8 @@ const PaymentsPage = () => {
   const [feeType, setFeeType] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [internalServerError, setInternalServerError] = useState("");
+  const [studentId, setStudentId] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +25,7 @@ const PaymentsPage = () => {
       try {
         const response = await axiosInstance.get("/api/student/me");
         const studentData = response.data;
+        setStudentId(studentData._id);
         setStudentClass(studentData.class);
         setName(studentData.name);
         setFatherName(studentData.fatherName);
@@ -102,6 +107,8 @@ const PaymentsPage = () => {
 
   const handlePayment = async (e) => {
     e.preventDefault();
+    setInternalServerError("");
+
     const finalAmount = calculateFinalAmount() * 100; // Amount in paise
 
     try {
@@ -114,6 +121,13 @@ const PaymentsPage = () => {
       });
       const order = response.data;
 
+      if (response.status === 512) {
+        setInternalServerError(
+          "Internal Server Error. Please try again later."
+        );
+        return; // Exit early
+      }
+
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY || "",
         amount: order.amount,
@@ -122,10 +136,34 @@ const PaymentsPage = () => {
         description: "School Fee Payment",
         image: "https://example.com/your_logo",
         order_id: order.id,
-        handler: function (response) {
-          alert(`Payment ID: ${response.razorpay_payment_id}`);
-          alert(`Order ID: ${response.razorpay_order_id}`);
-          alert(`Signature: ${response.razorpay_signature}`);
+        handler: async function (response) {
+          // Verify the payment
+          try {
+            const verifyResponse = await axiosInstance.post(
+              `/api/pay/verify-payment`,
+              {
+                orderId: order.id,
+                paymentId: response.razorpay_payment_id,
+                signature: response.razorpay_signature,
+                studentId: studentId,
+                studentName: name,
+                fieldType: "FEES",
+                feeType: feeType.toUpperCase().replace(" ", "-"), // Convert to the required format
+                studentClass: studentClass,
+                amount: finalAmount / 100, // Convert back to INR
+                paymentDate: new Date(),
+              }
+            );
+
+            if (verifyResponse.status === 201) {
+              alert("Payment verified and saved successfully!");
+              // Navigate to another page or show a success message
+              console.log("verification done successfully ye boi");
+            }
+          } catch (error) {
+            console.error("Error verifying payment:", error);
+            setError("Payment verification failed. Please contact support.");
+          }
         },
         prefill: {
           name: name,
@@ -256,6 +294,12 @@ const PaymentsPage = () => {
           </div>
         </form>
       </div>
+      {internalServerError && (
+        <InternalServerModal
+          error={internalServerError}
+          onClose={() => setInternalServerError("")}
+        />
+      )}
     </div>
   );
 };
