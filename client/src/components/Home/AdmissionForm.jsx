@@ -1,15 +1,7 @@
-import { useState, useEffect } from "react";
-import {
-  Modal,
-  Fade,
-  Typography,
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Modal, Fade, Typography } from "@mui/material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./AdmissionForm.css";
 
 const AdmissionForm = ({ open, onClose }) => {
@@ -24,9 +16,12 @@ const AdmissionForm = ({ open, onClose }) => {
     address: "",
     email: "",
   });
+
   const [classesList, setClassesList] = useState([]);
   const [admissionFee, setAdmissionFee] = useState(0);
   const [isClassesFetched, setIsClassesFetched] = useState(false);
+  const [internalServerError, setInternalServerError] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -71,14 +66,24 @@ const AdmissionForm = ({ open, onClose }) => {
 
   const handleSubmitAndPay = async (e) => {
     e.preventDefault();
+    setInternalServerError("");
 
     try {
-      await axios.post(
+      const response = await axios.post(
         `${process.env.API_URL}/api/home/admission-form`,
         formData
       );
+
+      if (response.status === 512) {
+        setInternalServerError(
+          "Internal Server Error. Please try again later."
+        );
+        return; // Exit early
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
+      setInternalServerError("Internal Server Error. Please try again later.");
+      return; // Exit early
     }
 
     // Pay
@@ -100,15 +105,39 @@ const AdmissionForm = ({ open, onClose }) => {
       var options = {
         key: import.meta.env.VITE_RAZORPAY_KEY || "",
         amount: order.amount,
-        currency: order.currency,
+        currency: "INR",
         name: "Shivam Public",
         description: "Admission Fee",
         image: "https://example.com/your_logo",
         order_id: order.id,
-        handler: function (response) {
-          alert(response.razorpay_payment_id);
-          alert(response.razorpay_order_id);
-          alert(response.razorpay_signature);
+        handler: async function (response) {
+          // Verify the payment
+          try {
+            const verifyResponse = await axios.post(
+              `${process.env.API_URL}/api/pay/verify-payment`,
+              {
+                orderId: order.id,
+                paymentId: response.razorpay_payment_id,
+                signature: response.razorpay_signature,
+                studentName: formData.studentName,
+                studentClass: formData.class,
+                amount: order.amount / 100, // Convert back to INR
+                paymentDate: new Date(),
+                fieldType: "ADMISSION",
+              }
+            );
+
+            if (verifyResponse.status === 201) {
+              alert("Payment verified and saved successfully!");
+              // Navigate to another page or show a success message
+              navigate("/success");
+            }
+          } catch (error) {
+            console.error("Error verifying payment:", error);
+            setInternalServerError(
+              "Payment verification failed. Please contact support."
+            );
+          }
         },
         prefill: {
           name: formData.studentName,
@@ -125,17 +154,14 @@ const AdmissionForm = ({ open, onClose }) => {
 
       var rzp1 = new window.Razorpay(options);
       rzp1.on("payment.failed", function (response) {
-        alert(response.error.code);
-        alert(response.error.description);
-        alert(response.error.source);
-        alert(response.error.step);
-        alert(response.error.reason);
-        alert(response.error.metadata.order_id);
-        alert(response.error.metadata.payment_id);
+        alert(`Payment failed: ${response.error.description}`);
       });
       rzp1.open();
     } catch (error) {
       console.error("Error creating payment order:", error);
+      setInternalServerError(
+        "Error creating payment order. Please try again later."
+      );
     }
   };
 
@@ -302,8 +328,8 @@ const AdmissionForm = ({ open, onClose }) => {
                 <textarea
                   id="address"
                   name="address"
-                  rows="3" // You can set the initial number of rows
-                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary resize-y" // `resize-y` allows vertical resizing
+                  rows="3"
+                  className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary resize-y"
                   value={formData.address}
                   onChange={handleChange}
                   required
@@ -332,6 +358,11 @@ const AdmissionForm = ({ open, onClose }) => {
               Save and Pay Now
             </button>
           </form>
+          {internalServerError && (
+            <div className="mt-4 p-2 bg-red-100 text-red-700 border border-red-300 rounded-md">
+              {internalServerError}
+            </div>
+          )}
         </div>
       </Fade>
     </Modal>
