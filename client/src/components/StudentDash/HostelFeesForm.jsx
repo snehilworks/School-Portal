@@ -12,7 +12,7 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     studentName: "",
     studentId: "",
-    class: "", // Make sure this matches the ID of your select element
+    class: "",
     parentContact: "",
     joiningDate: "",
     roomPreference: "",
@@ -45,7 +45,7 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
           setFormData({
             studentName: studentData.name || "",
             studentId: studentData.id || "",
-            class: studentData.class || "", // Make sure this matches the ID of your select element
+            class: studentData.class || "",
             parentContact: studentData.fatherPhone || "",
             joiningDate: "",
             roomPreference: "",
@@ -121,10 +121,32 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
           description: "Admission Fee",
           image: "https://example.com/your_logo",
           order_id: order.id,
-          handler: function (response) {
-            alert(response.razorpay_payment_id);
-            alert(response.razorpay_order_id);
-            alert(response.razorpay_signature);
+          handler: async function (response) {
+            try {
+              // Verify payment
+              const verificationResponse = await axiosInstance.post(
+                `${process.env.API_URL}/api/pay/verify-payment`,
+                {
+                  orderId: order.id,
+                  paymentId: response.razorpay_payment_id,
+                  signature: response.razorpay_signature,
+                  studentName: formData.studentName,
+                  studentClass: formData.class,
+                  amount: order.amount / 100, // Convert back to INR
+                  paymentDate: new Date(),
+                  fieldType: "HOSTEL",
+                }
+              );
+
+              if (verificationResponse.status === 200) {
+                alert("Payment verified successfully.");
+              } else {
+                alert("Payment verification failed.");
+              }
+            } catch (error) {
+              console.error("Error verifying payment:", error);
+              alert("Payment verification error.");
+            }
           },
           prefill: {
             name: formData.studentName,
@@ -171,7 +193,7 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
     const selectedClassId = e.target.value;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      class: selectedClassId, // Ensure this matches the key in your formData state
+      class: selectedClassId,
     }));
   };
 
