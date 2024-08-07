@@ -6,9 +6,9 @@
 
 - TypeScript
 - React JS
-- Express + TypeScript
+- Node JS + TypeScript
 
 ### Additional
 
 - Validation
-- Advanced Payment Functionality
+- Advanced Razorpay Payment Functionality
