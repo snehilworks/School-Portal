@@ -24,6 +24,7 @@ import TProfile from "./pages/Teacher/teacherProfile/teacherProfile";
 import TeacherDash from "./pages/Teacher/teacherDashboard/teacherDash";
 import AdminDash from "./pages/Admin/AdminDashboard/adminDash";
 import AdminLogin from "./pages/Admin/AdminLogin/adminLogin";
+import PaymentCompletion from "./pages/Payment/PaymentCompletion";
 
 // import TAttendanceList from "./pages/Teacher/TAttendanceList/TAttendanceList";
 // import TeacherDash from "./pages/Teacher/";
@@ -65,6 +66,10 @@ const routes = [
   {
     path: "/student/complete/profile",
     element: <CompleteProfile />,
+  },
+  {
+    path: "/student/payment-completion",
+    element: <PaymentCompletion />,
   },
   {
     path: "/student/fee-structure",

@@ -130,7 +130,7 @@ const AdmissionForm = ({ open, onClose }) => {
             if (verifyResponse.status === 201) {
               alert("Payment verified and saved successfully!");
               // Navigate to another page or show a success message
-              navigate("/success");
+              navigate("/student/payment-completion");
             }
           } catch (error) {
             console.error("Error verifying payment:", error);
