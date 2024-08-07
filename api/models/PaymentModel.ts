@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 interface IPayment extends Document {
   orderId: string;
   paymentId: string;
-  studentId: mongoose.Schema.Types.ObjectId;
+  studentId?: mongoose.Schema.Types.ObjectId;
   studentName: string;
   fieldType: 'ADMISSION' | 'FEES' | 'HOSTEL';
   feeType?: 'ANNUAL' | '6-MONTH' | 'MONTHLY';
@@ -17,7 +17,7 @@ interface IPayment extends Document {
 const paymentSchema: Schema = new Schema({
   orderId: { type: String, required: true },
   paymentId: { type: String, required: true },
-  studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Student', required: true },
+  studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Student'},
   studentName: { type: String, required: true },
   fieldType: {
     type: String,
