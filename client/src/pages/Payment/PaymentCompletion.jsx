@@ -1,11 +1,13 @@
 import React from "react";
-import { Typography, Container, Box, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Typography, Container, Box } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 
 const PaymentCompletion = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { paymentId } = location.state || {}; // Read paymentId from state
 
   const handleGoBackHome = () => {
     navigate("/");
@@ -32,6 +34,14 @@ const PaymentCompletion = () => {
         <Typography variant="body1" paragraph>
           Thank you for your payment. Your transaction was completed
           successfully.
+        </Typography>
+        {paymentId && (
+          <Typography variant="body2" color="textSecondary" paragraph>
+            Your Payment ID: <b>{paymentId}</b>
+          </Typography>
+        )}
+        <Typography variant="body1" color="textPrimary">
+          Share this with your School Teacher.
         </Typography>
         <Typography variant="body2" color="textSecondary" paragraph>
           If you have any questions or need further assistance, please contact

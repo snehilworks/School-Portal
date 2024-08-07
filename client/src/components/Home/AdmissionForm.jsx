@@ -130,7 +130,9 @@ const AdmissionForm = ({ open, onClose }) => {
             if (verifyResponse.status === 201) {
               alert("Payment verified and saved successfully!");
               // Navigate to another page or show a success message
-              navigate("/student/payment-completion");
+              navigate("/student/payment-completion", {
+                state: { paymentId: response.razorpay_payment_id },
+              });
             }
           } catch (error) {
             console.error("Error verifying payment:", error);

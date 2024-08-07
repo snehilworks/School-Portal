@@ -3,6 +3,7 @@ import axios from "axios";
 import axiosInstance from "../../utils/axiosInstance";
 import ErrorModal from "../ErrorModal";
 import InternalServerModal from "../InternalServerModal";
+import { useNavigate } from "react-router-dom";
 
 const HostelFeesForm = ({ isOpen, onClose }) => {
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -21,6 +22,7 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
   });
   const [error, setError] = useState("");
   const [internalServerError, setInternalServerError] = useState("");
+  const navigate = useNavigate();
 
   const handleOpenClassesDropdown = async () => {
     if (!isClassesFetched) {
@@ -138,8 +140,10 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
                 }
               );
 
-              if (verificationResponse.status === 200) {
-                alert("Payment verified successfully.");
+              if (verificationResponse.status === 201) {
+                navigate("/student/payment-completion", {
+                  state: { paymentId: response.razorpay_payment_id },
+                });
               } else {
                 alert("Payment verification failed.");
               }
