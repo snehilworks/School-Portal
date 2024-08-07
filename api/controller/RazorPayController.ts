@@ -294,7 +294,20 @@ export const HandleVerifyPayment = async (req: Request, res: Response) => {
 
 export const PaidPaymentDetails = async (req: Request, res: Response) => {
     try {
+        const { paymentId } = req.params;
 
+        // Validate paymentId if needed
+        if (!paymentId) {
+            return res.status(422).json({ status: 'error', message: 'Payment ID is required' });
+        }
+
+        const paymentDetail = await Payment.findOne({ paymentId });
+
+        if (!paymentDetail) {
+            return res.status(422).json({ status: 'error', message: 'Payment not found' });
+        }
+
+        return res.status(201).json(paymentDetail);
     } catch (err) {
         console.error('Error retrieving payments:', err);
         res.status(512).json({ status: 'error', message: 'Internal Server Error' });

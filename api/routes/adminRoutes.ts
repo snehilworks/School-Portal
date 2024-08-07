@@ -48,8 +48,8 @@ router.post('/create-payment', FeeController.createPayment);
 
 router.get('/paid-payments', RazorPayController.GetAllPaidPayments);
 router.put('/paid-payments/reviewed/:paymentId', RazorPayController.PaidPaymentReviewed);
-
 router.get('/paid-payment/detail/:paymentId', RazorPayController.PaidPaymentDetails)
+
 router.post('/payment-success', FeeController.handlePaymentSuccess);
 router.get('/payment/:paymentId', FeeController.getPaymentDetails);
 
