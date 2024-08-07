@@ -156,9 +156,10 @@ const PaymentsPage = () => {
             );
 
             if (verifyResponse.status === 201) {
-              alert("Payment verified and saved successfully!");
               // Navigate to another page or show a success message
-              console.log("verification done successfully ye boi");
+              navigate("/student/payment-completion", {
+                state: { paymentId: response.razorpay_payment_id },
+              });
             }
           } catch (error) {
             console.error("Error verifying payment:", error);

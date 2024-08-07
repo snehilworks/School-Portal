@@ -13,6 +13,7 @@ const PaymentsPage = () => {
   const [error, setError] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [fieldTypes, setFieldTypes] = useState(["ADMISSION", "FEES", "HOSTEL"]);
   const [paymentToCheck, setPaymentToCheck] = useState(null);
   const debouncedSearchQuery = useDebounce(searchQuery, 500); // Adjust debounce delay as necessary
 
@@ -111,6 +112,36 @@ const PaymentsPage = () => {
     <div className="p-8 bg-gradient-to-r from-gray-50 via-gray-100 to-gray-200 min-h-screen">
       <div className="flex flex-col md:flex-row justify-between items-center mb-8">
         <h2 className="text-4xl font-bold text-gray-800">Paid Payments</h2>
+        <div className="relative inline-block w-full max-w-xs">
+          <select
+            // value={fieldTypeFilter}
+            // onChange={handleFieldTypeChange}
+            className="block w-full py-3 px-4 font-bold border border-gray-600 rounded-lg bg-blue-100 text-gray-700 placeholder-gray-400 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out"
+          >
+            <option value="">All Fields</option>
+            {fieldTypes.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+            <svg
+              className="w-5 h-5 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
+        </div>
 
         {/* Enhanced Search Box */}
         <div className="relative w-full max-w-md mt-4 md:mt-0">

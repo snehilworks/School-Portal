@@ -74,9 +74,8 @@ const UpdateTeacherContent = () => {
         phone: data.data.phone || "",
         classTeacher: data.data.classTeacher || false,
         classes: data.data.classes ? data.data.classes.join(", ") : "",
-        classId: data.data.class ? data.data.class._id : "",
+        classId: data.data.class ? data.data.class : "",
       };
-
       setTeacherDetails(updatedTeacherDetails);
     } catch (error) {
       console.error("Error fetching teacher details:", error);
@@ -99,7 +98,7 @@ const UpdateTeacherContent = () => {
     };
 
     try {
-      const response = await axiosInstance.put(
+      await axiosInstance.put(
         `/api/admin/teacher/${selectedTeacherId}`,
         payload
       );
