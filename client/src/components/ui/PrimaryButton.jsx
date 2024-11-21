@@ -17,8 +17,8 @@ const PrimaryButton = ({
     buttonColorClasses = "bg-gray-800 text-white";
     hoverColorClasses = "hover:bg-gray-700";
   } else if (color === "student") {
-    buttonColorClasses = "bg-green-600 text-white";
-    hoverColorClasses = "hover:bg-green-700";
+    buttonColorClasses = "bg-emerald-700 text-white";
+    hoverColorClasses = "hover:bg-emerald-800";
   } else if (color === "teacher") {
     buttonColorClasses = "bg-cyan-500 text-white";
     hoverColorClasses = "hover:bg-cyan-600";
@@ -29,15 +29,15 @@ const PrimaryButton = ({
     buttonColorClasses = "bg-blue-900 text-white";
     hoverColorClasses = "hover:bg-black";
   } else {
-    buttonColorClasses = "bg-blue-900 text-white";
-    hoverColorClasses = "hover:bg-blue-800";
+    buttonColorClasses = "bg-sky-800 text-white";
+    hoverColorClasses = "hover:bg-sky-900";
   }
 
   return (
     <button
       disabled={disabled}
       onClick={onClick}
-      className={`text-lg lg:text-xl px-6 py-3 flex items-center justify-center gap-2 rounded-lg shadow-md transition-transform transform hover:scale-105 ${buttonColorClasses} ${hoverColorClasses} ${className}`}
+      className={`text-lg lg:text-xl z-10 px-4 py-1 flex items-center justify-center gap-2 rounded-lg shadow-md transition-transform transform hover:scale-105 ${buttonColorClasses} ${hoverColorClasses} ${className}`}
       style={{ ...extra_styles }}
     >
       {children}
