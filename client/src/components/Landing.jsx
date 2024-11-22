@@ -32,7 +32,7 @@ export const Landing = () => {
         <div className="w-full flex flex-col laptop:flex-row items-center justify-between gap-4">
           <div className="order-2 laptop:order-1 h-fit laptop:h-full flex flex-col items-center justify-between">
             <p className="text-center text-[30px] laptop:text-[48px] font-extrabold text-gray-900 leading-tight font-serif">
-              Shivam Public School, Aarni
+              Shivam Public School
             </p>
 
             <div className=" bg-white laptop:mt-8 w-fit flex flex-col mx-auto items-center laptop:items-start gap-4">
