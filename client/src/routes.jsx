@@ -53,8 +53,8 @@ const routes = [
   { path: "/admin/login", element: <AdminLogin /> },
 
   // Student Routes
-  { path: "/student/login", element: <Login /> },
-  { path: "/student/register", element: <Register /> },
+  // { path: "/student/login", element: <Login /> },
+  // { path: "/student/register", element: <Register /> },
   {
     path: "/student/dashboard",
     element: (
@@ -119,7 +119,7 @@ const routes = [
   { path: "/student/hostel", element: <SHostel /> },
 
   // Teacher Routes
-  { path: "/teacher/login", element: <TLogin /> },
+  // { path: "/teacher/login", element: <TLogin /> },
   { path: "/teacher/register", element: <TRegister /> },
   {
     path: "/teacher/dashboard",

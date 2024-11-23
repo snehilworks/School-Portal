@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PrimaryButton from "./ui/PrimaryButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,9 +8,15 @@ import {
   faSchool,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import LoginModal from "./Modal/LoginModal";
+import RegisterModal from "./Modal/RegisterModal";
+import TeacherLoginModal from "./Modal/TeacherLoginModal";
 
 export const Landing = () => {
   const navigate = useNavigate();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isTeacherLoginModalOpen, setIsTeacherLoginModalOpen] = useState(false);
 
   useEffect(() => {
     const studentToken = localStorage.getItem("studentToken");
@@ -26,6 +32,19 @@ export const Landing = () => {
     }
   }, [navigate]);
 
+  //Closing Modals **Logic**
+  const handleLoginCloseModal = () => {
+    setIsLoginModalOpen(false);
+  };
+
+  const handleRegisterCloseModal = () => {
+    setIsRegisterModalOpen(false);
+  };
+
+  const handleTeacherLoginCloseModal = () => {
+    setIsTeacherLoginModalOpen(false);
+  };
+
   return (
     <div className="w-full h-full bg-white">
       <div className="component-container flex items-start laptop:items-center justify-center">
@@ -39,9 +58,7 @@ export const Landing = () => {
               <div className="flex gap-4">
                 <PrimaryButton
                   extra_styles={{ width: "100%" }}
-                  onClick={() => {
-                    navigate("/student/register");
-                  }}
+                  onClick={() => setIsRegisterModalOpen(true)}
                 >
                   <div className="flex items-center gap-2 px-4 py-2">
                     <FontAwesomeIcon
@@ -54,9 +71,7 @@ export const Landing = () => {
                 <PrimaryButton
                   color={"student"}
                   extra_styles={{ width: "100%" }}
-                  onClick={() => {
-                    navigate("/student/login");
-                  }}
+                  onClick={() => setIsLoginModalOpen(true)}
                 >
                   <div className="flex items-center gap-2 px-4 py-2">
                     <FontAwesomeIcon
@@ -74,9 +89,7 @@ export const Landing = () => {
                     width: "100%",
                     border: "2px solid cyan",
                   }}
-                  onClick={() => {
-                    navigate("/teacher/login");
-                  }}
+                  onClick={() => setIsTeacherLoginModalOpen(true)}
                 >
                   <div className="flex items-center gap-2 px-4 py-2">
                     <FontAwesomeIcon
@@ -115,6 +128,13 @@ export const Landing = () => {
           </div>
         </div>
       </div>
+      {isLoginModalOpen && <LoginModal onClose={handleLoginCloseModal} />}
+      {isRegisterModalOpen && (
+        <RegisterModal onClose={handleRegisterCloseModal} />
+      )}
+      {isTeacherLoginModalOpen && (
+        <TeacherLoginModal onClose={handleTeacherLoginCloseModal} />
+      )}
     </div>
   );
 };
