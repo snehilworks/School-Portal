@@ -7,18 +7,18 @@ import About from "./pages/About/About.jsx";
 import Contact from "./pages/contact/Contact";
 import { Landing } from "./components/Landing.jsx";
 //student imports
-import Register from "./pages/Student/studentRegister/Register";
+// import Register from "./pages/Student/studentRegister/Register";
 import StPays from "./pages/Student/StPays/StPays";
 import CompleteProfile from "./pages/Student/CompleteProfile/CompleteProfile";
 import SEvents from "./pages/Student/SEvents/SEvents";
 import SGrade from "./pages/Student/SGrade/SGrade";
 import SHostel from "./pages/Student/SHostel/SHostel";
 import SAttendance from "./pages/Student/SAttendance/SAttendance";
-import Login from "./pages/Student/studentLogin/Login";
+// import Login from "./pages/Student/studentLogin/Login";
 import StudentDash from "./pages/Student/studentDashboard/studentDashboard";
 import StudentProfile from "./pages/Student/studentProfile/studentProfile";
 //teacher Imports
-import TLogin from "./pages/Teacher/teacherLogin/teacherLogin";
+// import TLogin from "./pages/Teacher/teacherLogin/teacherLogin";
 import TRegister from "./pages/Teacher/teacherRegister/teacherRegister";
 import TProfile from "./pages/Teacher/teacherProfile/teacherProfile";
 import TeacherDash from "./pages/Teacher/teacherDashboard/teacherDash";

@@ -125,7 +125,7 @@ function LoginModal({ onClose }) {
               alignItems="center"
               mb={2}
             >
-              <Avatar sx={{ bgcolor: "primary.main", mb: 2 }}>
+              <Avatar sx={{ bgcolor: "#10B981", mb: 2 }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography variant="h5" component="h1" mt={2}>
@@ -155,7 +155,7 @@ function LoginModal({ onClose }) {
               fullWidth
               variant="contained"
               size="large"
-              color="primary"
+              style={{ backgroundColor: "#047857", color: "#fff", borderRadius: "6rem", }}
               sx={{ mt: 2 }}
               onClick={handleLogin}
               disabled={loading} // Disable button when loading

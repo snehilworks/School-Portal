@@ -18,7 +18,7 @@ import { userState } from "../../store/atoms/user";
 import { authState } from "../../store/atoms/auth";
 import ErrorModal from "../../components/ErrorModal";
 
-function RegisterModal({onClose}) {
+function RegisterModal({ onClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -114,7 +114,7 @@ function RegisterModal({onClose}) {
               alignItems="center"
               mb={2}
             >
-              <Avatar sx={{ bgcolor: "primary.main", mb: 2 }}>
+              <Avatar sx={{ bgcolor: "#0284C7", mb: 2 }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography variant="h5" component="h1" mt={2}>
@@ -144,7 +144,11 @@ function RegisterModal({onClose}) {
               fullWidth
               variant="contained"
               size="large"
-              color="primary"
+              style={{
+                backgroundColor: "#075985",
+                color: "#fff",
+                borderRadius: "6rem",
+              }}
               sx={{ mt: 2 }}
               onClick={handleRegister}
               disabled={loading} // Disable button when loading
