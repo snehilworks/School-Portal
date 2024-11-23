@@ -18,7 +18,7 @@ const GradientMenu = styled(Menu)(({ theme }) => ({
   "& .MuiPaper-root": {
     borderRadius: "0.75rem",
     padding: theme.spacing(1),
-    background: "linear-gradient(to right, #4b6cb7, #182848)", // Custom gradient colors
+    background: "linear-gradient(to right, #0F766E, #1F2937)", // Custom gradient colors
     minWidth: "12rem",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
     [theme.breakpoints.down("sm")]: {
@@ -83,7 +83,7 @@ function Appbar() {
   return (
     <AppBar
       position="sticky"
-      sx={{ backgroundColor: indigo["800"] }}
+      sx={{ backgroundColor: "#115E59" }}
       elevation={0}
     >
       <Toolbar className="w-full max-w-[1440px] mx-auto">
@@ -92,10 +92,10 @@ function Appbar() {
             onClick={() => navigate("/")}
             className="flex cursor-pointer items-center"
           >
-            <p>Shivam Public</p>
+            <p className="font-bold font-sans text-2xl">Shivam Public</p>
           </div>
           <div
-            className="appbar-buttons hidden md:flex"
+            className="appbar-buttons hidden md:flex font-sans text-xl"
             style={{ gap: "2rem" }}
           >
             <p
