@@ -93,7 +93,7 @@ function TeacherLoginModal({ onClose }) {
               alignItems="center"
               mb={4}
             >
-              <Avatar sx={{ bgcolor: "#67E8F9", mb: 2 }}>
+              <Avatar sx={{ bgcolor: "#06B6D4", mb: 2 }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography variant="h5" component="h1" mt={2}>
@@ -132,7 +132,7 @@ function TeacherLoginModal({ onClose }) {
                 size="large"
                 sx={{ mt: 2 }}
                 style={{
-                  backgroundColor: "#00bcd4",
+                  backgroundColor: "#0E7490",
                   color: "#fff",
                   borderRadius: "6rem",
                 }}

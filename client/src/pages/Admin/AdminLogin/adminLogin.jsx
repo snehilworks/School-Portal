@@ -59,7 +59,7 @@ function AdminLogin() {
   };
 
   return (
-    <Grid container justifyContent="center" alignItems="center" height="100vh">
+    <Grid container justifyContent="center" alignItems="center" height="100vh" className="bg-gray-800">
       <Grid item xs={12} sm={8} md={6} lg={4}>
         <Paper elevation={3} sx={{ padding: 4, borderRadius: 4, mx: 2 }}>
           <Box display="flex" flexDirection="column" alignItems="center" mb={4}>

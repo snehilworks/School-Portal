@@ -30,7 +30,7 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-yellow-100 py-12">
+    <div className="w-full min-h-screen bg-yellow-200 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-extrabold text-gray-800 text-center mb-8">
           Contact Us
@@ -80,7 +80,7 @@ const ContactPage = () => {
                 color="primary"
                 fullWidth
                 onClick={handleSend}
-                className="bg-blue-600 hover:bg-blue-700 transition-colors duration-300"
+                className="!bg-sky-700 hover:bg-blue-700 transition-colors duration-300"
               >
                 Send
               </Button>
