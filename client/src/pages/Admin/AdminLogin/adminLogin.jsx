@@ -7,7 +7,10 @@ import {
   TextField,
   Button,
   CircularProgress,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import axios from "axios";
@@ -25,6 +28,7 @@ function AdminLogin() {
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
   const setAuthState = useSetRecoilState(authState);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -58,6 +62,8 @@ function AdminLogin() {
     }
   };
 
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+
   return (
     <Grid container justifyContent="center" alignItems="center" height="100vh" className="bg-gray-800">
       <Grid item xs={12} sm={8} md={6} lg={4}>
@@ -89,11 +95,30 @@ function AdminLogin() {
               fullWidth
               label="Admin's Password"
               variant="outlined"
-              type="password"
+              type={showPassword ? "text" : "password"}
               margin="normal"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               disabled={loading}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                      style={{
+                        padding: "0.7rem",
+                      }}
+                    >
+                      {showPassword ? (
+                        <FaEyeSlash className="text-2xl text-gray-600" />
+                      ) : (
+                        <FaEye className="text-2xl text-gray-600" />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               fullWidth

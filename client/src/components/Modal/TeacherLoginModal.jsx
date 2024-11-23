@@ -8,7 +8,10 @@ import {
   Button,
   CircularProgress,
   Modal,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import axios from "axios";
@@ -26,6 +29,7 @@ function TeacherLoginModal({ onClose }) {
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
   const setAuthState = useSetRecoilState(authState);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -64,6 +68,8 @@ function TeacherLoginModal({ onClose }) {
       onClose();
     }
   };
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   return (
     <Modal
@@ -119,11 +125,30 @@ function TeacherLoginModal({ onClose }) {
                 fullWidth
                 label="Teacher's Password"
                 variant="outlined"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 margin="normal"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 disabled={loading}
+                InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                      style={{
+                        padding: "0.7rem",
+                      }}
+                    >
+                      {showPassword ? (
+                        <FaEyeSlash className="text-2xl text-cyan-400" />
+                      ) : (
+                        <FaEye className="text-2xl text-cyan-400" />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
               />
               <Button
                 fullWidth

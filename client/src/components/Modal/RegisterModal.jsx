@@ -6,7 +6,10 @@ import {
   Avatar,
   CircularProgress,
   Modal,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -18,7 +21,7 @@ import { userState } from "../../store/atoms/user";
 import { authState } from "../../store/atoms/auth";
 import ErrorModal from "../../components/ErrorModal";
 
-function RegisterModal({ onClose }) {
+function RegisterModal({ onClose, onOpenLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,6 +29,7 @@ function RegisterModal({ onClose }) {
   const navigate = useNavigate();
   const setUser = useSetRecoilState(userState);
   const setAuthState = useSetRecoilState(authState);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleRegister = async () => {
     setLoading(true);
@@ -86,6 +90,8 @@ function RegisterModal({ onClose }) {
     }
   };
 
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+
   return (
     <Modal
       open={true}
@@ -134,11 +140,30 @@ function RegisterModal({ onClose }) {
               fullWidth
               label="Password"
               variant="outlined"
-              type="password"
+              type={showPassword ? "text" : "password"}
               margin="normal"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               disabled={loading} // Disable input when loading
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                      style={{
+                        padding: "0.7rem",
+                      }}
+                    >
+                      {showPassword ? (
+                        <FaEyeSlash className="text-2xl text-sky-600" />
+                      ) : (
+                        <FaEye className="text-2xl text-sky-600" />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               fullWidth
@@ -166,7 +191,7 @@ function RegisterModal({ onClose }) {
                   variant="text"
                   size="small"
                   style={{ color: "#00008B" }}
-                  onClick={() => navigate("/student/login")}
+                  onClick={() => onOpenLogin()}
                   disabled={loading} // Disable button when loading
                 >
                   Login

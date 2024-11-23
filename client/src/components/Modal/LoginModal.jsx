@@ -6,7 +6,10 @@ import {
   Avatar,
   CircularProgress,
   Modal,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -27,6 +30,9 @@ function LoginModal({ onClose }) {
   const [error, setError] = useState(null);
   const setUser = useSetRecoilState(userState);
   const setAuthState = useSetRecoilState(authState);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -139,23 +145,47 @@ function LoginModal({ onClose }) {
               margin="normal"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              disabled={loading} // Disable input when loading
+              disabled={loading}
             />
+
             <TextField
-              fullWidth
               label="Password"
               variant="outlined"
-              type="password"
+              type={showPassword ? "text" : "password"}
               margin="normal"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              disabled={loading} // Disable input when loading
+              disabled={loading}
+              fullWidth
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                      style={{
+                        padding: "0.7rem",
+                      }}
+                    >
+                      {showPassword ? (
+                        <FaEyeSlash className="text-2xl text-teal-500" />
+                      ) : (
+                        <FaEye className="text-2xl text-teal-500" />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               fullWidth
               variant="contained"
               size="large"
-              style={{ backgroundColor: "#047857", color: "#fff", borderRadius: "6rem", }}
+              style={{
+                backgroundColor: "#047857",
+                color: "#fff",
+                borderRadius: "6rem",
+              }}
               sx={{ mt: 2 }}
               onClick={handleLogin}
               disabled={loading} // Disable button when loading
