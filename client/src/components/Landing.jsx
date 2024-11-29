@@ -97,7 +97,7 @@ export const Landing = () => {
                   color={"teacher"}
                   extra_styles={{
                     width: "100%",
-                    border: "2px solid cyan",
+                    border: "1.2px solid cyan",
                   }}
                   onClick={() => setIsTeacherLoginModalOpen(true)}
                 >
@@ -115,7 +115,7 @@ export const Landing = () => {
                   color={"admin"}
                   extra_styles={{
                     width: "100%",
-                    border: "2px solid gray",
+                    border: "1.5px solid gray",
                   }}
                   className="hidden md:flex"
                   onClick={() => {

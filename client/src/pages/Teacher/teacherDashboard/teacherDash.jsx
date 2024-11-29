@@ -87,13 +87,20 @@ const TeacherDashboard = () => {
 
       {/* Main Content */}
       <div
-        className="bg-gradient-to-r min-h-[91.5vh] from-blue-100 to-blue-300"
+        className="bg-gradient-to-t min-h-[91.5vh] from-cyan-100 to-cyan-300"
         style={{ flex: 1 }}
       >
         <Container maxWidth="lg">
           <Typography
             variant="h4"
-            style={{ marginBottom: "32px", marginTop: "32px" }}
+            style={{
+              marginBottom: "32px",
+              marginTop: "32px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            className="!font-serif !font-bold"
           >
             Teacher Dashboard
           </Typography>

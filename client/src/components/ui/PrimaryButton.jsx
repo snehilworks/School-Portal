@@ -17,11 +17,11 @@ const PrimaryButton = ({
     buttonColorClasses = "bg-gray-800 text-white";
     hoverColorClasses = "hover:bg-gray-700";
   } else if (color === "student") {
-    buttonColorClasses = "bg-emerald-700 text-white";
-    hoverColorClasses = "hover:bg-emerald-800";
+    buttonColorClasses = "bg-teal-800 text-white";
+    hoverColorClasses = "hover:bg-teal-900";
   } else if (color === "teacher") {
-    buttonColorClasses = "bg-cyan-500 text-white";
-    hoverColorClasses = "hover:bg-cyan-600";
+    buttonColorClasses = "bg-cyan-300 text-white";
+    hoverColorClasses = "hover:bg-cyan-400";
   } else if (color === "logout") {
     buttonColorClasses = "bg-red-500 text-white";
     hoverColorClasses = "hover:bg-red-600";
