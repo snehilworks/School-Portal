@@ -71,7 +71,7 @@ const AdminDashboard = () => {
 
       {/* Main Content */}
       <Container
-        className="bg-gradient-to-l  from-blue-100 to-blue-300"
+        className="bg-gradient-to-b  from-gray-300 to-gray-500"
         style={{ flex: 1 }}
       >
         <Typography

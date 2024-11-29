@@ -17,6 +17,7 @@ import {
   Alert,
 } from "@mui/material";
 import axiosInstance from "../../utils/axiosInstance";
+import PrimaryButton from "../ui/PrimaryButton";
 
 const UpdateTeacherContent = () => {
   const [teachers, setTeachers] = useState([]);
@@ -115,9 +116,21 @@ const UpdateTeacherContent = () => {
 
   return (
     <div>
-      <Card>
+      <Card
+        sx={{
+          maxWidth: 900,
+          margin: "auto",
+          borderRadius: 8,
+          boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.1)",
+          padding: "24px",
+        }}
+      >
         <CardContent>
-          <Typography variant="h5" gutterBottom>
+          <Typography
+            variant="h5"
+            className="!font-serif !flex justify-center"
+            gutterBottom
+          >
             Update Teacher
           </Typography>
           <FormControl fullWidth style={{ marginBottom: "16px" }}>
@@ -130,7 +143,11 @@ const UpdateTeacherContent = () => {
               fullWidth
             >
               {teachers.map((teacher) => (
-                <MenuItem key={teacher._id} value={teacher._id}>
+                <MenuItem
+                  key={teacher._id}
+                  value={teacher._id}
+                  className="!font-serif"
+                >
                   {teacher.name}
                 </MenuItem>
               ))}
@@ -243,9 +260,13 @@ const UpdateTeacherContent = () => {
               )}
               <Grid item xs={12}>
                 <Box display="flex" justifyContent="center" marginTop={2}>
-                  <Button variant="contained" color="primary" type="submit">
+                  <PrimaryButton
+                    variant="contained"
+                    color="admin"
+                    type="submit"
+                  >
                     Update
-                  </Button>
+                  </PrimaryButton>
                 </Box>
               </Grid>
             </Grid>

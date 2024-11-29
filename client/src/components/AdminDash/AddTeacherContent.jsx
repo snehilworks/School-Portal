@@ -18,6 +18,7 @@ import {
 import { CheckCircleOutlineOutlined as SuccessIcon } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 import axiosInstance from "../../utils/axiosInstance";
+import PrimaryButton from "../ui/PrimaryButton";
 
 const AddTeacherContent = () => {
   const [teacherDetails, setTeacherDetails] = useState({
@@ -118,10 +119,19 @@ const AddTeacherContent = () => {
   };
 
   return (
-    <Card variant="outlined">
+    <Card
+      variant="outlined"
+      sx={{
+        maxWidth: 1000,
+        margin: "auto",
+        borderRadius: 8,
+        boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.1)",
+        padding: "24px",
+      }}
+    >
       <CardContent>
         <Typography variant="h5" component="h2" align="center" gutterBottom>
-          <strong>Add Teacher</strong>
+          <strong className="font-serif">Add Teacher</strong>
         </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
@@ -227,14 +237,14 @@ const AddTeacherContent = () => {
               </Grid>
             )}
             <Grid item xs={12} align="center">
-              <Button
+              <PrimaryButton
                 variant="contained"
-                color="primary"
+                color="admin"
                 type="submit"
                 size="small"
               >
                 Submit
-              </Button>
+              </PrimaryButton>
             </Grid>
           </Grid>
         </form>

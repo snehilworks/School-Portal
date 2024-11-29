@@ -31,11 +31,11 @@ const ContactMessageContent = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen mb-10 rounded-lg shadow-lg">
+    <div className="p-6 bg-gray-50 min-h-screen mb-10 rounded-xl shadow-lg">
       <h2 className="text-2xl text-center font-extrabold text-gray-800 mb-6">
         Contact Messages
       </h2>
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         <ul className="divide-y divide-gray-200">
           {messages.map((message) => (
             <li

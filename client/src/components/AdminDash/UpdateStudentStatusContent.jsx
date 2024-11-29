@@ -83,8 +83,8 @@ const UpdateStudentStatusContent = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-8 p-6 bg-white shadow-md rounded-lg">
-      <h1 className="text-3xl font-semibold mb-6">Update Student Status</h1>
+    <div className="max-w-3xl mx-auto mt-8 p-6 bg-white shadow-lg rounded-2xl">
+      <h1 className="text-3xl font-semibold mb-8 font-serif flex justify-center">Update Student Status</h1>
       <div className="mb-6">
         <TextField
           id="search-student"
@@ -96,14 +96,14 @@ const UpdateStudentStatusContent = () => {
           className="mb-4"
         />
         <label
-          className="block text-gray-700 text-sm font-bold mb-2"
+          className="flex justify-center text-gray-700 text-sm font-serif mt-6 font-bold mb-2"
           htmlFor="student-select"
         >
           Select Student
         </label>
         <select
           id="student-select"
-          className="w-full p-3 border border-gray-300 rounded-lg"
+          className="w-full p-3 border border-gray-300 rounded-lg font-serif"
           value={selectedStudentId}
           onChange={handleSelectChange}
         >
@@ -120,10 +120,9 @@ const UpdateStudentStatusContent = () => {
       <div className="flex justify-center">
         <PrimaryButton
           extra_styles={{
-            backgroundColor: "#1E40AF",
             padding: "0.75rem 1.5rem",
-            borderRadius: "0.375rem",
           }}
+          color={"admin"}
           onClick={handleOpenModal}
           disabled={!selectedStudentId}
         >

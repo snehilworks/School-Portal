@@ -32,6 +32,16 @@ export const Landing = () => {
     }
   }, [navigate]);
 
+  const handleOpenRegister = () => {
+    setIsLoginModalOpen(false);
+    isRegisterModalOpen(true);
+  };
+
+  const handleOpenLogin = () => {
+    isRegisterModalOpen(false);
+    setIsLoginModalOpen(true);
+  };
+
   //Closing Modals **Logic**
   const handleLoginCloseModal = () => {
     setIsLoginModalOpen(false);
@@ -128,9 +138,18 @@ export const Landing = () => {
           </div>
         </div>
       </div>
-      {isLoginModalOpen && <LoginModal onClose={handleLoginCloseModal} />}
+      {/* Modal Components */}
+      {isLoginModalOpen && (
+        <LoginModal
+          onClose={handleLoginCloseModal}
+          onOpenRegister={handleOpenRegister}
+        />
+      )}
       {isRegisterModalOpen && (
-        <RegisterModal onClose={handleRegisterCloseModal} />
+        <RegisterModal
+          onClose={handleRegisterCloseModal}
+          onOpenLogin={handleOpenLogin}
+        />
       )}
       {isTeacherLoginModalOpen && (
         <TeacherLoginModal onClose={handleTeacherLoginCloseModal} />

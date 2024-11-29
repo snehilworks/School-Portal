@@ -95,7 +95,7 @@ function Appbar() {
             <p className="font-bold font-sans text-2xl">Shivam Public</p>
           </div>
           <div
-            className="appbar-buttons hidden md:flex font-sans text-xl"
+            className="appbar-buttons hidden md:flex font-serif text-xl"
             style={{ gap: "2rem" }}
           >
             <p
