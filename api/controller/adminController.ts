@@ -17,7 +17,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 // adding a new teacher
 export const addTeacher = async (req: Request, res: Response) => {
   try {
-    const { password,  classId, ...teacherData } = req.body;
+    const { password, classId, ...teacherData } = req.body;
 
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -52,7 +52,7 @@ export const getAllStudents = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = 15;
-    const searchQuery = req.query.search as string || '';
+    const searchQuery = (req.query.search as string) || "";
 
     const startIdx = (page - 1) * limit;
 
@@ -62,13 +62,13 @@ export const getAllStudents = async (req: Request, res: Response) => {
       $or: [
         { name: { $ne: null } },
         { phone: { $ne: null } },
-        { dob: { $ne: null } }
-      ]
+        { dob: { $ne: null } },
+      ],
     };
 
     // Add name search condition if searchQuery is provided
     if (searchQuery) {
-      filter.name = { $regex: searchQuery, $options: 'i' }; // Case-insensitive search
+      filter.name = { $regex: searchQuery, $options: "i" }; // Case-insensitive search
     }
 
     const totalStudents = await Student.countDocuments(filter); //total number of students
@@ -78,7 +78,7 @@ export const getAllStudents = async (req: Request, res: Response) => {
     const response = {
       students: students,
       totalPages: Math.ceil(totalStudents / limit), // Calculate total pages
-      currentPage: page
+      currentPage: page,
     };
 
     res.status(201).json(response);
@@ -89,8 +89,8 @@ export const getAllStudents = async (req: Request, res: Response) => {
 };
 
 interface Class {
-    _id: string; // Or use a more specific type if you're using MongoDB ObjectId
-    className: string;
+  _id: string; // Or use a more specific type if you're using MongoDB ObjectId
+  className: string;
 }
 
 export const getAllAdmissionForms = async (req: Request, res: Response) => {
@@ -105,19 +105,23 @@ export const getAllAdmissionForms = async (req: Request, res: Response) => {
     const admissionForms = await Admission.find().skip(startIdx).limit(limit);
 
     // Fetch all classes to map IDs to names
-    const classes: Class[] = await classModel.find({ _id: { $in: admissionForms.map(form => form.class) } }).lean();
+    const classes: Class[] = await classModel
+      .find({ _id: { $in: admissionForms.map((form) => form.class) } })
+      .lean();
 
     // Create a map for class IDs to class names
-    const classMap = new Map(classes.map(cls => [cls._id.toString(), cls.className]));
+    const classMap = new Map(
+      classes.map((cls) => [cls._id.toString(), cls.className])
+    );
 
     // Map the admission forms to include class names
     const response = {
-      data: admissionForms.map(form => ({
+      data: admissionForms.map((form) => ({
         ...form.toObject(),
-        class: classMap.get(form.class.toString()) || 'Unknown Class'
+        class: classMap.get(form.class.toString()) || "Unknown Class",
       })),
       totalPages: Math.ceil(totalAdmissionForms / limit),
-      currentPage: page
+      currentPage: page,
     };
 
     res.status(201).json(response);
@@ -138,7 +142,7 @@ export const admissionFormReviewed = async (req: Request, res: Response) => {
     );
 
     if (!updatedAdmission) {
-      return res.status(404).json({ message: 'Admission form not found' });
+      return res.status(404).json({ message: "Admission form not found" });
     }
 
     return res.status(200).json(updatedAdmission);
@@ -149,59 +153,63 @@ export const admissionFormReviewed = async (req: Request, res: Response) => {
 };
 
 export const getAllHostelForms = async (req: Request, res: Response) => {
-    try {
-      const page = parseInt(req.query.page as string) || 1;
-      const limit = 15;
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = 15;
 
-      const startIdx = (page - 1) * limit;
+    const startIdx = (page - 1) * limit;
 
-      const totalHostelForms = await HostelForm.countDocuments();
+    const totalHostelForms = await HostelForm.countDocuments();
 
-      const hostelForms = await HostelForm.find().skip(startIdx).limit(limit);
+    const hostelForms = await HostelForm.find().skip(startIdx).limit(limit);
 
-      // Fetch all classes to map IDs to names
-      const classes: Class[] = await classModel.find({ _id: { $in: hostelForms.map(form => form.class) } }).lean();
+    // Fetch all classes to map IDs to names
+    const classes: Class[] = await classModel
+      .find({ _id: { $in: hostelForms.map((form) => form.class) } })
+      .lean();
 
-      // Create a map for class IDs to class names
-      const classMap = new Map(classes.map(cls => [cls._id.toString(), cls.className]));
+    // Create a map for class IDs to class names
+    const classMap = new Map(
+      classes.map((cls) => [cls._id.toString(), cls.className])
+    );
 
-      // Map the admission forms to include class names
-      const response = {
-        data: hostelForms.map(form => ({
-          ...form.toObject(),
-          class: classMap.get(form.class.toString()) || 'Unknown Class'
-        })),
-        totalPages: Math.ceil(totalHostelForms / limit),
-        currentPage: page
-      };
+    // Map the admission forms to include class names
+    const response = {
+      data: hostelForms.map((form) => ({
+        ...form.toObject(),
+        class: classMap.get(form.class.toString()) || "Unknown Class",
+      })),
+      totalPages: Math.ceil(totalHostelForms / limit),
+      currentPage: page,
+    };
 
-      res.status(201).json(response);
-    } catch (error) {
-      console.error("Error getting hostel forms:", error);
-      res.status(512).json({ message: "Internal server error" });
+    res.status(201).json(response);
+  } catch (error) {
+    console.error("Error getting hostel forms:", error);
+    res.status(512).json({ message: "Internal server error" });
+  }
+};
+
+export const HostelFormReviewed = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const updatedHostelForm = await HostelForm.findByIdAndUpdate(
+      id,
+      { review: true },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedHostelForm) {
+      return res.status(404).json({ message: "Hostel form not found" });
     }
-  };
 
-  export const HostelFormReviewed = async (req: Request, res: Response) => {
-    try {
-      const { id } = req.params;
-
-      const updatedHostelForm = await HostelForm.findByIdAndUpdate(
-        id,
-        { review: true },
-        { new: true } // Return the updated document
-      );
-
-      if (!updatedHostelForm) {
-        return res.status(404).json({ message: 'Hostel form not found' });
-      }
-
-      return res.status(200).json(updatedHostelForm);
-    } catch (error) {
-      console.error("Error setting review true for hostel form:", error);
-      res.status(512).json({ message: "Internal server error" });
-    }
-  };
+    return res.status(200).json(updatedHostelForm);
+  } catch (error) {
+    console.error("Error setting review true for hostel form:", error);
+    res.status(512).json({ message: "Internal server error" });
+  }
+};
 
 export const getSpecificTeacher = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -242,7 +250,6 @@ export const getSpecificStudent = async (req: Request, res: Response) => {
     res.status(512).json({ message: "Internal server error" });
   }
 };
-
 
 // Updating teacher details
 export const updateTeacher = async (req: Request, res: Response) => {
@@ -292,7 +299,6 @@ export const deleteTeacher = async (req: Request, res: Response) => {
 };
 
 export const ContactMessages = async (req: Request, res: Response) => {
-
   try {
     const page = parseInt(req.query.page as string) || 1; // Default to page 1 if not provided
     const limit = parseInt(req.query.limit as string) || 20; // Default to 20 items per page if not provided
@@ -302,16 +308,16 @@ export const ContactMessages = async (req: Request, res: Response) => {
     const messages = await contactModel.find().skip(skip).limit(limit);
     const totalMessages = await contactModel.countDocuments();
 
-      res.json({
-        messages,
-          totalMessages,
-          totalPages: Math.ceil(totalMessages / limit),
-          currentPage: page,
-      });
-    } catch (error) {
-      console.error("Error getting Student:", error);
-      res.status(512).json({ message: "Internal server error" });
-    }
+    res.json({
+      messages,
+      totalMessages,
+      totalPages: Math.ceil(totalMessages / limit),
+      currentPage: page,
+    });
+  } catch (error) {
+    console.error("Error getting Student:", error);
+    res.status(512).json({ message: "Internal server error" });
+  }
 };
 
 export const adminLogin = async (req: Request, res: Response) => {
@@ -326,13 +332,10 @@ export const adminLogin = async (req: Request, res: Response) => {
 
     const admin = await Admin.findOne({ email });
     if (!admin) {
-      return res.status(401).json({ message: "Teacher Data not Found!" });
+      return res.status(403).json({ message: "Admin Data not Found!" });
     }
 
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      admin.password
-    );
+    const isPasswordValid = await bcrypt.compare(password, admin.password);
 
     if (!isPasswordValid) {
       return res.status(422).json({ message: "Invalid email or password" });
@@ -344,10 +347,13 @@ export const adminLogin = async (req: Request, res: Response) => {
         id: adminId,
       },
       JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: "1h" }
     );
 
-    res.cookie("sps", token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+    res.cookie("sps", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
 
     return res.status(200).json({ token });
   } catch (error) {
@@ -414,24 +420,25 @@ export const setFees = async (req: Request, res: Response) => {
 
     const existingFee = await Fee.findOne({ class: existingClass._id });
     if (existingFee) {
-      return res.status(422).json({ message: "Fee already set for this class" });
+      return res
+        .status(422)
+        .json({ message: "Fee already set for this class" });
     }
 
     const newFee = new Fee({
       class: existingClass._id, // Use the class ID as the foreign key
       description: desc,
-      amount: amount
+      amount: amount,
     });
 
     await newFee.save();
 
     res.status(201).json({ message: "Fee set successfully", fee: newFee });
-
   } catch (error) {
     console.error("Error setting fees:", error);
     res.status(512).json({ message: "Internal server error" });
   }
-};;
+};
 
 export const getFees = async (req: Request, res: Response) => {};
 
