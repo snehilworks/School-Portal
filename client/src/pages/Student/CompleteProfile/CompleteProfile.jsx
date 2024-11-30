@@ -22,6 +22,7 @@ const CompleteProfile = () => {
 
   const [classList, setClassList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,6 +38,16 @@ const CompleteProfile = () => {
 
     fetchClasses();
   }, []);
+
+  useEffect(() => {
+    // Calculate progress based on formData fields
+    const filledFields = Object.values(formData).filter(
+      (field) => field !== ""
+    ).length;
+    const totalFields = Object.keys(formData).length;
+    const newProgress = (filledFields / totalFields) * 100;
+    setProgress(newProgress);
+  }, [formData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,11 +77,27 @@ const CompleteProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-800 to-blue-300 flex items-center justify-center px-4">
-      <div className="bg-gradient-to-br from-blue-500 to-green-200  border-stone-800 mt-10 mb-10 shadow-lg rounded-lg p-8 max-w-4xl w-full">
-        <h2 className="text-3xl font-bold text-center mb-6 text-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-teal-800 to-teal-200 flex items-center justify-center px-4">
+      <div className="bg-gradient-to-l from-teal-500 to-teal-200  border-stone-800 mt-10 mb-10 shadow-lg rounded-lg p-8 max-w-4xl w-full">
+        <h2 className="text-3xl font-bold font-serif text-center mb-6 text-gray-900">
           Complete Your Profile
         </h2>
+
+        {/* Progress bar */}
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-semibold mb-2">
+            Profile Completion
+          </label>
+          <progress
+            value={progress}
+            max="100"
+            className="w-full h-3"
+          />
+          <p className="text-center font-serif text-sm">
+            {Math.round(progress)}% Completed
+          </p>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -116,7 +143,7 @@ const CompleteProfile = () => {
                 Date of Birth
               </label>
               <input
-                className="form-input block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                className="form-input font-sans block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
                 id="dob"
                 type="date"
                 name="dob"
@@ -132,7 +159,7 @@ const CompleteProfile = () => {
                 Gender
               </label>
               <select
-                className="form-select block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                className="form-select font-sans block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
                 id="gender"
                 name="gender"
                 value={formData.gender}
@@ -220,7 +247,7 @@ const CompleteProfile = () => {
                 <p className="text-gray-500">Loading classes...</p>
               ) : (
                 <select
-                  className="form-select block w-full px-4 py-3 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                  className="form-select font-sans text-md w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
                   id="class"
                   name="class"
                   value={formData.class}
