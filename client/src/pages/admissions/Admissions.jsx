@@ -21,7 +21,7 @@ const AdmissionsPage = () => {
     { class: "9", seatsAvailable: 14 },
     { class: "10", seatsAvailable: 10 },
     { class: "11-Science", seatsAvailable: 12 },
-    { class: "11-Arts", seatsAvailable: 10 },
+    { class: "11-Arts", seatsAvailable: 0 },
     { class: "12-Science", seatsAvailable: 12 },
     { class: "12-Arts", seatsAvailable: 10 },
   ];
@@ -36,11 +36,13 @@ const AdmissionsPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-red-300 py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="mb-8 font-extrabold text-2xl text-center sm:text-3xl md:text-4xl text-gray-900">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="mb-8 font-extrabold text-3xl font-serif text-center sm:text-3xl md:text-4xl text-black">
           Admissions
         </h2>
-        <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
+
+        {/* Table Layout for larger screens (laptop/desktop) */}
+        <div className="hidden sm:block bg-white shadow-lg">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
@@ -50,7 +52,7 @@ const AdmissionsPage = () => {
                 <th className="px-2 py-3 sm:px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Seats Available
                 </th>
-                <th className="px-2 py-3 sm:px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-2 py-3 sm:px-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Action
                 </th>
               </tr>
@@ -64,14 +66,13 @@ const AdmissionsPage = () => {
                   <td className="px-2 py-4 sm:px-4 whitespace-nowrap text-sm text-gray-500">
                     {row.seatsAvailable}
                   </td>
-                  <td className="px-2 py-4 sm:px-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-2 py-4 sm:px-4 whitespace-nowrap flex justify-center text-sm text-gray-500">
                     <PrimaryButton
                       onClick={handleOpenModal}
-                      color={"student"}
                       disabled={row.seatsAvailable === 0}
-                      className={`px-2 py-1 text-sm sm:px-3 sm:py-1.5 sm:text-base md:px-4 md:py-2 md:text-lg rounded-md ${
+                      className={`md:px-4 md:py-2 md:text-lg rounded-md ${
                         row.seatsAvailable === 0
-                          ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                          ? "!bg-gray-200 !text-gray-700 !font-poppins cursor-not-allowed"
                           : "bg-blue-600 text-white hover:bg-blue-700"
                       }`}
                     >
@@ -83,7 +84,52 @@ const AdmissionsPage = () => {
             </tbody>
           </table>
         </div>
-        <AdmissionForm open={openModal} onClose={handleCloseModal} />
+
+        {/* Card Layout for Mobile */}
+        <div className="sm:hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {seatAvailability.map((row) => (
+            <div
+              key={row.class}
+              className="bg-white shadow-lg p-4 flex justify-between"
+            >
+              <div>
+                <h3 className="text-lg font-medium text-gray-900">{`Class ${row.class}`}</h3>
+                <p className="text-sm text-gray-500">{`Seats Available: ${row.seatsAvailable}`}</p>
+              </div>
+              <div className="mt-4">
+                <PrimaryButton
+                  onClick={handleOpenModal}
+                  disabled={row.seatsAvailable === 0}
+                  className={`px-4 py-2 text-sm sm:px-5 sm:py-2 sm:text-base md:px-6 md:py-3 md:text-lg rounded-md transition-colors duration-300 ${
+                    row.seatsAvailable === 0
+                      ? "!bg-gray-200 !text-gray-700 !font-poppins cursor-not-allowed"
+                      : "bg-sky-800 text-white hover:bg-sky-700"
+                  }`}
+                >
+                  {row.seatsAvailable > 0 ? "Take Admission" : "Full"}
+                </PrimaryButton>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Modal */}
+        {openModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white rounded-lg shadow-lg w-full sm:w-96 p-6 transition-all transform opacity-100 scale-100">
+              <h3 className="text-2xl font-semibold text-gray-800">
+                Admission Form
+              </h3>
+              <AdmissionForm open={openModal} onClose={handleCloseModal} />
+              <button
+                onClick={handleCloseModal}
+                className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ export default {
     extend: {
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
+        sans: ["Roboto", "sans-serif"],
       },
       screens: {
         tablet: "768px",
@@ -12,6 +13,5 @@ export default {
       },
     },
   },
-
   plugins: [],
 };

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { TextField, Button, Snackbar } from "@mui/material";
+import { TextField, Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import axios from "axios";
+import PrimaryButton from "../../components/ui/PrimaryButton";
 
 const ContactPage = () => {
   const [name, setName] = useState("");
@@ -30,19 +31,19 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-yellow-200 py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-extrabold text-gray-800 text-center mb-8">
+    <div className="w-full min-h-screen mt-0 bg-teal-50 py-3">
+      <div className="max-w-3xl mx-auto px-6 sm:px-8">
+        <h2 className="text-4xl font-bold text-teal-800 text-center mb-10">
           Contact Us
         </h2>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
           {/* Contact Form */}
-          <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300">
-            <h3 className="text-xl text-center font-semibold text-gray-700 mb-6">
+          <div className="bg-white p-8 rounded-2xl shadow-lg border border-teal-200 hover:shadow-xl transition-shadow duration-300">
+            <h3 className="text-2xl font-semibold text-teal-800 mb-6 text-center">
               Get in Touch
             </h3>
-            <form className="space-y-4">
+            <form className="space-y-6">
               <div>
                 <TextField
                   label="Name"
@@ -50,7 +51,8 @@ const ContactPage = () => {
                   fullWidth
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="bg-gray-50"
+                  className="bg-teal-50 rounded-lg"
+                  required
                 />
               </div>
               <div>
@@ -60,7 +62,8 @@ const ContactPage = () => {
                   fullWidth
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-gray-50"
+                  className="bg-teal-50 rounded-lg"
+                  required
                 />
               </div>
               <div>
@@ -68,44 +71,47 @@ const ContactPage = () => {
                   label="Message"
                   variant="outlined"
                   multiline
-                  rows={5}
+                  rows={6}
                   fullWidth
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="bg-gray-50"
+                  className="bg-teal-50 rounded-lg"
+                  required
                 />
               </div>
-              <Button
+              <PrimaryButton
                 variant="contained"
                 color="primary"
                 fullWidth
                 onClick={handleSend}
-                className="!bg-sky-700 hover:bg-blue-700 transition-colors duration-300"
+                className="bg-teal-600 ml-14 hover:bg-teal-700 rounded-lg transition-colors duration-300"
               >
-                Send
-              </Button>
+                Send Message
+              </PrimaryButton>
             </form>
           </div>
 
           {/* Contact Information */}
-          <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300">
-            <h3 className="text-xl font-semibold text-gray-700 mb-6">
+          <div className="bg-white p-8 rounded-2xl shadow-lg border border-teal-200 hover:shadow-xl transition-shadow duration-300">
+            <h3 className="text-2xl font-semibold text-teal-800 mb-6">
               Contact Information
             </h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-teal-600 mb-4">
               <span className="font-semibold">Email:</span>{" "}
-              shivampublicschool@gmail.com
+              <a href="mailto:shivampublicschool@gmail.com" className="text-teal-600 hover:underline">
+                shivampublicschool@gmail.com
+              </a>
             </p>
-            <p className="text-gray-600 mb-4">
+            <p className="text-teal-600 mb-4">
               <span className="font-semibold">Phone:</span> (123) 456-7890
             </p>
-            <p className="text-gray-600">
-              <span className="font-semibold">Address:</span> 123 School Street,
-              City
+            <p className="text-teal-600">
+              <span className="font-semibold">Address:</span> 123 School Street, City
             </p>
           </div>
         </div>
 
+        {/* Snackbar for success message */}
         <Snackbar
           open={openSnackbar}
           autoHideDuration={6000}
@@ -117,8 +123,9 @@ const ContactPage = () => {
             variant="filled"
             onClose={handleCloseSnackbar}
             severity="success"
+            className="!bg-teal-600"
           >
-            Message sent successfully!
+            Your message has been sent successfully!
           </MuiAlert>
         </Snackbar>
       </div>

@@ -1,41 +1,32 @@
-// activitiesData.js
 const activitiesData = [
   {
+    title: "Annual Cultural Festival",
+    date: "March 15, 2024",
+    category: "Cultural",
+    description:
+      "A vibrant event celebrating cultural diversity with performances and food stalls.",
+  },
+  {
+    title: "Inter-School Sports Meet",
+    date: "April 5, 2024",
+    category: "Sports",
+    description:
+      "A competitive event featuring track and field, basketball, and swimming.",
+  },
+  {
     title: "Science Fair",
-    description: "Showcasing innovative science projects by students.",
-    date: "August 15, 2023",
+    date: "May 10, 2024",
+    category: "Academic",
+    description:
+      "Students showcase innovative science projects and experiments.",
   },
   {
-    title: "Art Exhibition",
-    description: "Displaying creative artworks by talented students.",
-    date: "September 10, 2023",
+    title: "Community Service Day",
+    date: "June 22, 2024",
+    category: "Community",
+    description:
+      "A day of volunteering at local shelters and environmental projects.",
   },
-  {
-    title: "Art Exhibition",
-    description: "Displaying creative artworks by talented students.",
-    date: "September 10, 2023",
-  },
-  {
-    title: "Art Exhibition",
-    description: "Displaying creative artworks by talented students.",
-    date: "September 10, 2023",
-  },
-  {
-    title: "Art Exhibition",
-    description: "Displaying creative artworks by talented students.",
-    date: "September 10, 2023",
-  },
-  {
-    title: "Art Exhibition",
-    description: "Displaying creative artworks by talented students.",
-    date: "September 10, 2023",
-  },
-  {
-    title: "Art Exhibition",
-    description: "Displaying creative artworks by talented students.",
-    date: "September 10, 2023",
-  },
-  // Add more activities here
 ];
 
 export default activitiesData;
