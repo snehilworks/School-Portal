@@ -45,19 +45,32 @@ const sendErrorEmail = (err: any, req: Request): void => {
     to: process.env.RECEIVER_MAIL,
     subject: `Error Log | ${err.status || 500}`,
     html: `
-      <h2 style="color: #d9534f;">An error occurred in the API:</h2>
-      <p><strong>Status Code:</strong> <span style="color: #f0ad4e;">${
+    <h2 style="color: #d9534f; font-family: Arial, sans-serif;">API Error Notification</h2>
+    <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5;">
+      <strong>Status Code:</strong> <span style="color: #f0ad4e;">${
         err.status || 500
-      }</span></p>
-      <p><strong>Error Message:</strong> <span style="color: #f0ad4e;">${
+      }</span>
+    </p>
+    <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5;">
+      <strong>Error Message : </strong> <span style="color: #f0ad4e;">${
         err.message
-      }</span></p>
-      <p><strong>Request Method:</strong> ${req.method}</p>
-      <p><strong>Request URL:</strong> <a href="${
+      }</span>
+    </p>
+    <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5;">
+      <strong>Request Method :</strong> ${req.method}
+    </p>
+    <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5;">
+      <strong>Request URL : </strong> <a href="${
         req.originalUrl
-      }" style="color: #0275d8;">${req.originalUrl}</a></p>
-      <hr />
-      <p style="font-size: 0.9em; color: #5bc0de;">This email was generated automatically to notify you about an API issue.</p>
+      }" style="color: #0275d8;">${req.originalUrl}</a>
+    </p>
+    <hr style="border: 1px solid #f0ad4e;">
+    <p style="font-family: Arial, sans-serif; font-size: 14px; color: #5bc0de;">
+      This email was automatically generated to notify you about an API issue. Please review the details above and take necessary action.
+    </p>
+    <p style="font-family: Arial, sans-serif; font-size: 14px; color: #5bc0de;">
+      If you require further assistance, please contact support.
+    </p>
     `,
   };
 
