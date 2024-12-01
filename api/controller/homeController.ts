@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import ContactModel from "../models/contactModel";
 import Classes from "../models/classModel";
 import Admission from "../models/admission";
@@ -26,14 +26,19 @@ export const contactMessage = async (req: Request, res: Response) => {
   }
 };
 
-export const getClasses = async (req: Request, res: Response) => {
+export const getClasses = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const classes = await Classes.find();
-
     res.status(200).json(classes);
-  } catch (error) {
-    console.error("Error fetching all students:", error);
+  } catch (error: any) {
+    console.error("Error fetching all classes:", error);
     res.status(512).json({ message: "Internal server error" });
+    error.status = 512;
+    next(error);
   }
 };
 
@@ -41,10 +46,16 @@ export const admissionForm = async (req: Request, res: Response) => {
   try {
     const { studentName, fatherName, email } = req.body;
 
-    const existingAdmission = await Admission.findOne({ studentName, fatherName, email });
+    const existingAdmission = await Admission.findOne({
+      studentName,
+      fatherName,
+      email,
+    });
 
     if (existingAdmission) {
-      return res.status(422).json({ message: "Admission form with these details already exists" });
+      return res
+        .status(422)
+        .json({ message: "Admission form with these details already exists" });
     }
 
     const newAdmission = new Admission(req.body);
@@ -61,11 +72,13 @@ export const admissionFees = async (req: Request, res: Response) => {
   try {
     const { classId } = req.params;
 
-    const admissionFee = await AdmissionFee.findOne({ classId: classId }).select('class amount');
+    const admissionFee = await AdmissionFee.findOne({
+      classId: classId,
+    }).select("class amount");
     if (!admissionFee) {
-        return res.status(404).json({ message: 'Admission fee not found' });
+      return res.status(404).json({ message: "Admission fee not found" });
     }
-    
+
     return res.status(201).json(admissionFee);
   } catch (error) {
     console.error("Error getting all the admission fees:", error);
