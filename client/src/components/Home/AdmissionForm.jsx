@@ -101,31 +101,41 @@ const AdmissionForm = ({ open, onClose }) => {
         }
       );
       const order = response.data;
+      VerifyPayment(order);
+    } catch (error) {
+      console.error("Error creating payment order:", error);
+      setInternalServerError(
+        "Error creating payment order. Please try again later."
+      );
+    }
+  };
 
-      var options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY || "",
-        amount: order.amount,
-        currency: "INR",
-        name: "Shivam Public",
-        description: "Admission Fee",
-        image: "https://example.com/your_logo",
-        order_id: order.id,
-        handler: async function (response) {
-          // Verify the payment
-          try {
-            const verifyResponse = await axios.post(
-              `${process.env.API_URL}/api/pay/verify-payment`,
-              {
-                orderId: order.id,
-                paymentId: response.razorpay_payment_id,
-                signature: response.razorpay_signature,
-                studentName: formData.studentName,
-                studentClass: formData.class,
-                amount: order.amount / 100, // Convert back to INR
-                paymentDate: new Date(),
-                fieldType: "ADMISSION",
-              }
-            );
+  const VerifyPayment = async (data) => {
+    var options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY || "",
+      amount: data.amount,
+      currency: "INR",
+      name: "Shivam Public",
+      description: "Admission Fee",
+      image: "https://example.com/your_logo",
+      order_id: data.id,
+      handler: async function (response) {
+        // Verify the payment
+        console.log("handler triggered");
+        try {
+          const verifyResponse = await axios.post(
+            `${process.env.API_URL}/api/pay/verify-payment`,
+            {
+              orderId: data.id,
+              paymentId: response.razorpay_payment_id,
+              signature: response.razorpay_signature,
+              studentName: formData.studentName,
+              studentClass: formData.class,
+              amount: data.amount / 100, // Convert back to INR
+              paymentDate: new Date(),
+              fieldType: "ADMISSION",
+            }
+          );
 
             if (verifyResponse.status === 201) {
               alert("Payment verified and saved successfully!");
@@ -176,15 +186,15 @@ const AdmissionForm = ({ open, onClose }) => {
       className="flex items-center justify-center"
     >
       <Fade in={open}>
-        <div className="relative bg-white rounded-lg p-4 md:p-6 max-w-lg w-full mx-4 md:mx-auto shadow-lg overflow-y-auto max-h-screen">
+        <div className="relative bg-white mt-20 md:mt-0 rounded-lg max-w-lg w-full mx-5 px-4 pt-5 pb-10 md:p-6 md:mx-auto shadow-lg overflow-y-auto max-h-[95vh]">
           <button
             onClick={onClose}
-            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 focus:outline-none"
+            className="absolute md:top-4 md:right-4 text-red-500 hover:text-red-700"
             aria-label="Close"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              className="h-10 w-10"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
