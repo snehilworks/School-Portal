@@ -137,44 +137,38 @@ const AdmissionForm = ({ open, onClose }) => {
             }
           );
 
-            if (verifyResponse.status === 201) {
-              alert("Payment verified and saved successfully!");
-              // Navigate to another page or show a success message
-              navigate("/student/payment-completion", {
-                state: { paymentId: response.razorpay_payment_id },
-              });
-            }
-          } catch (error) {
-            console.error("Error verifying payment:", error);
-            setInternalServerError(
-              "Payment verification failed. Please contact support."
-            );
+          if (verifyResponse.status === 201) {
+            alert("Payment verified and saved successfully!");
+            // Navigate to another page or show a success message
+            navigate("/student/payment-completion", {
+              state: { paymentId: response.razorpay_payment_id },
+            });
           }
-        },
-        prefill: {
-          name: formData.studentName,
-          email: formData.email,
-          contact: formData.fatherPhone,
-        },
-        notes: {
-          address: formData.address,
-        },
-        theme: {
-          color: "#3399cc",
-        },
-      };
+        } catch (error) {
+          console.error("Error verifying payment:", error);
+          setInternalServerError(
+            "Payment verification failed. Please contact support."
+          );
+        }
+      },
+      prefill: {
+        name: formData.studentName,
+        email: formData.email,
+        contact: formData.fatherPhone,
+      },
+      notes: {
+        address: formData.address,
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
 
-      var rzp1 = new window.Razorpay(options);
-      rzp1.on("payment.failed", function (response) {
-        alert(`Payment failed: ${response.error.description}`);
-      });
-      rzp1.open();
-    } catch (error) {
-      console.error("Error creating payment order:", error);
-      setInternalServerError(
-        "Error creating payment order. Please try again later."
-      );
-    }
+    var rzp1 = new window.Razorpay(options);
+    rzp1.on("payment.failed", function (response) {
+      alert(`Payment failed: ${response.error.description}`);
+    });
+    rzp1.open();
   };
 
   return (
