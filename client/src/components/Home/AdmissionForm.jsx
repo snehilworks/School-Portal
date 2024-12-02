@@ -67,6 +67,8 @@ const AdmissionForm = ({ open, onClose }) => {
   const handleSubmitAndPay = async (e) => {
     e.preventDefault();
     setInternalServerError("");
+    //creating order
+    //and sending axios.post from where order id is being created on backend
 
     try {
       const response = await axios.post(
@@ -87,84 +89,82 @@ const AdmissionForm = ({ open, onClose }) => {
     }
 
     // Pay
-    const amount = admissionFee * 100; // Amount in smallest currency unit
-    const currency = "INR";
-    const receiptId = "OrderReceipt_1";
+    const amount = admissionFee * 100;
 
     try {
       const response = await axios.post(
         `${process.env.API_URL}/api/pay/order`,
-        {
-          amount,
-          currency,
-          receipt: receiptId,
-        }
+        { amount }
       );
       const order = response.data;
-
-      var options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY || "",
-        amount: order.amount,
-        currency: "INR",
-        name: "Shivam Public",
-        description: "Admission Fee",
-        image: "https://example.com/your_logo",
-        order_id: order.id,
-        handler: async function (response) {
-          // Verify the payment
-          try {
-            const verifyResponse = await axios.post(
-              `${process.env.API_URL}/api/pay/verify-payment`,
-              {
-                orderId: order.id,
-                paymentId: response.razorpay_payment_id,
-                signature: response.razorpay_signature,
-                studentName: formData.studentName,
-                studentClass: formData.class,
-                amount: order.amount / 100, // Convert back to INR
-                paymentDate: new Date(),
-                fieldType: "ADMISSION",
-              }
-            );
-
-            if (verifyResponse.status === 201) {
-              alert("Payment verified and saved successfully!");
-              // Navigate to another page or show a success message
-              navigate("/student/payment-completion", {
-                state: { paymentId: response.razorpay_payment_id },
-              });
-            }
-          } catch (error) {
-            console.error("Error verifying payment:", error);
-            setInternalServerError(
-              "Payment verification failed. Please contact support."
-            );
-          }
-        },
-        prefill: {
-          name: formData.studentName,
-          email: formData.email,
-          contact: formData.fatherPhone,
-        },
-        notes: {
-          address: formData.address,
-        },
-        theme: {
-          color: "#3399cc",
-        },
-      };
-
-      var rzp1 = new window.Razorpay(options);
-      rzp1.on("payment.failed", function (response) {
-        alert(`Payment failed: ${response.error.description}`);
-      });
-      rzp1.open();
+      VerifyPayment(order);
     } catch (error) {
       console.error("Error creating payment order:", error);
       setInternalServerError(
         "Error creating payment order. Please try again later."
       );
     }
+  };
+
+  const VerifyPayment = async (data) => {
+    var options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY || "",
+      amount: data.amount,
+      currency: "INR",
+      name: "Shivam Public",
+      description: "Admission Fee",
+      image: "https://example.com/your_logo",
+      order_id: data.id,
+      handler: async function (response) {
+        // Verify the payment
+        console.log('handler triggered')
+        try {
+          const verifyResponse = await axios.post(
+            `${process.env.API_URL}/api/pay/verify-payment`,
+            {
+              orderId: data.id,
+              paymentId: response.razorpay_payment_id,
+              signature: response.razorpay_signature,
+              studentName: formData.studentName,
+              studentClass: formData.class,
+              amount: data.amount / 100, // Convert back to INR
+              paymentDate: new Date(),
+              fieldType: "ADMISSION",
+            }
+          );
+
+          if (verifyResponse.status === 201) {
+            alert("Payment verified and saved successfully!");
+            // Navigate to another page or show a success message
+            navigate("/student/payment-completion", {
+              state: { paymentId: response.razorpay_payment_id },
+            });
+          }
+        } catch (error) {
+          console.error("Error verifying payment:", error);
+          setInternalServerError(
+            "Payment verification failed. Please contact support."
+          );
+        }
+      },
+      prefill: {
+        name: formData.studentName,
+        email: formData.email,
+        contact: formData.fatherPhone,
+      },
+      notes: {
+        address: formData.address,
+      },
+      theme: {
+        color: "#047857",
+      },
+    };
+
+    var rzp1 = new window.Razorpay(options);
+    rzp1.on("payment.failed", function (response) {
+      alert(`Payment failed: ${response.error.description}`);
+    });
+    rzp1.open();
   };
 
   return (
