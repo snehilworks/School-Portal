@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Grade, Event, Home, Payment, Today } from "@mui/icons-material";
-import PrimaryButton from "./../../../components/ui/PrimaryButton";
+import PrimaryButton from "../../../components/ui/PrimaryButton";
 
 function StudentDash() {
   return (
-    <div className="bg-gradient-to-r from-gray-100 to-emerald-300 min-h-screen flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-gradient-to-r from-gray-100 to-emerald-300 min-h-[91.3vh] flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl w-full space-y-8">
         <div className="text-center">
           <h2 className="text-5xl font-extrabold font-mono text-gray-900">

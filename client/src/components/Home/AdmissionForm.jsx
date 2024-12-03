@@ -67,6 +67,8 @@ const AdmissionForm = ({ open, onClose }) => {
   const handleSubmitAndPay = async (e) => {
     e.preventDefault();
     setInternalServerError("");
+    //creating order
+    //and sending axios.post from where order id is being created on backend
 
     try {
       const response = await axios.post(
@@ -87,18 +89,12 @@ const AdmissionForm = ({ open, onClose }) => {
     }
 
     // Pay
-    const amount = admissionFee * 100; // Amount in smallest currency unit
-    const currency = "INR";
-    const receiptId = "OrderReceipt_1";
+    const amount = admissionFee * 100;
 
     try {
       const response = await axios.post(
         `${process.env.API_URL}/api/pay/order`,
-        {
-          amount,
-          currency,
-          receipt: receiptId,
-        }
+        { amount }
       );
       const order = response.data;
       VerifyPayment(order);
@@ -180,7 +176,7 @@ const AdmissionForm = ({ open, onClose }) => {
       className="flex items-center justify-center"
     >
       <Fade in={open}>
-        <div className="relative bg-white my-20 md:mt-0 rounded-lg max-w-lg w-full mx-5 px-4 pt-5 pb-10 md:p-6 md:mx-auto shadow-lg overflow-y-auto max-h-[95vh]">
+        <div className="relative bg-white my-20 rounded-lg max-w-lg w-full mx-5 px-4 pt-5 pb-10 md:p-6 md:mx-auto shadow-lg overflow-y-auto max-h-[95vh]">
           <button
             onClick={onClose}
             className="absolute md:top-4 md:right-4 text-red-500 hover:text-red-700"

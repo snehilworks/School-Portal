@@ -79,12 +79,12 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
         formSubmissionSuccess = true;
       } else if (formResponse.status === 422) {
         setError("Validation Error. Please check your form data.");
-        return; // Exit early
+        return;
       } else {
         setInternalServerError(
           "Internal Server Error. Please try again later."
         );
-        return; // Exit early
+        return;
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -100,82 +100,17 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
 
     if (formSubmissionSuccess) {
       const amount = hostelFee * 100;
-      const currency = "INR";
-      const receiptId = "OrderReceipt_1";
 
       try {
         // Create Razorpay order
         const paymentResponse = await axiosInstance.post(
           `${process.env.API_URL}/api/pay/order`,
           {
-            amount,
-            currency,
-            receipt: receiptId,
+            amount
           }
         );
         const order = paymentResponse.data;
-
-        var options = {
-          key: import.meta.env.VITE_RAZORPAY_KEY || "",
-          amount: order.amount,
-          currency: order.currency,
-          name: "Shivam Public",
-          description: "Admission Fee",
-          image: "https://example.com/your_logo",
-          order_id: order.id,
-          handler: async function (response) {
-            try {
-              // Verify payment
-              const verificationResponse = await axiosInstance.post(
-                `${process.env.API_URL}/api/pay/verify-payment`,
-                {
-                  orderId: order.id,
-                  paymentId: response.razorpay_payment_id,
-                  signature: response.razorpay_signature,
-                  studentName: formData.studentName,
-                  studentClass: formData.class,
-                  amount: order.amount / 100, // Convert back to INR
-                  paymentDate: new Date(),
-                  fieldType: "HOSTEL",
-                }
-              );
-
-              if (verificationResponse.status === 201) {
-                navigate("/student/payment-completion", {
-                  state: { paymentId: response.razorpay_payment_id },
-                });
-              } else {
-                alert("Payment verification failed.");
-              }
-            } catch (error) {
-              console.error("Error verifying payment:", error);
-              alert("Payment verification error.");
-            }
-          },
-          prefill: {
-            name: formData.studentName,
-            email: formData.email,
-            contact: formData.parentContact,
-          },
-          notes: {
-            address: formData.address,
-          },
-          theme: {
-            color: "#3399cc",
-          },
-        };
-
-        var rzp1 = new window.Razorpay(options);
-        rzp1.on("payment.failed", function (response) {
-          alert(response.error.code);
-          alert(response.error.description);
-          alert(response.error.source);
-          alert(response.error.step);
-          alert(response.error.reason);
-          alert(response.error.metadata.order_id);
-          alert(response.error.metadata.payment_id);
-        });
-        rzp1.open();
+        VerifyPayment(order);
       } catch (error) {
         console.error("Error creating payment order:", error);
         setInternalServerError(
@@ -201,40 +136,77 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
     }));
   };
 
+  const VerifyPayment = async (data) => {
+    var options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY || "",
+      amount: data.amount,
+      currency: "INR",
+      name: "Shivam Public, Aarni(Hostel)",
+      description: "Hotel Fees",
+      image: "https://example.com/your_logo",
+      order_id: data.id,
+      handler: async function (response) {
+        try {
+          // Verify payment
+          const verificationResponse = await axiosInstance.post(
+            `${process.env.API_URL}/api/pay/verify-payment`,
+            {
+              orderId: data.id,
+              paymentId: response.razorpay_payment_id,
+              signature: response.razorpay_signature,
+              studentName: formData.studentName,
+              studentClass: formData.class,
+              amount: data.amount / 100, // Convert back to INR
+              paymentDate: new Date(),
+              fieldType: "HOSTEL",
+            }
+          );
+
+          if (verificationResponse.status === 201) {
+            navigate("/student/payment-completion", {
+              state: { paymentId: response.razorpay_payment_id },
+            });
+          } else {
+            alert("Payment verification failed.");
+          }
+        } catch (error) {
+          console.error("Error verifying payment:", error);
+          alert("Payment verification error.");
+        }
+      },
+      prefill: {
+        name: formData.studentName,
+        email: formData.email,
+        contact: formData.parentContact,
+      },
+      notes: {
+        address: formData.address,
+      },
+      theme: {
+        color: "#14B8A6",
+      },
+    };
+
+    var rzp1 = new window.Razorpay(options);
+    rzp1.on("payment.failed", function (response) {
+      alert(`Payment failed: ${response.error.description}`);
+    });
+    rzp1.open();
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-60">
-      <div className="relative bg-white rounded-lg shadow-lg w-full max-w-3xl overflow-y-auto max-h-screen">
+    <div className="fixed inset-0 mt-40 md:mt-16 mb-20 md:mb-5 bg-opacity-50 flex items-center justify-center p-4 z-60">
+      <div className="relative bg-white p-5 rounded-lg shadow-lg w-full max-w-3xl overflow-y-auto max-h-screen mt-0">
         <button
-          className="absolute top-2 right-2 p-2 text-gray-600 md:hidden"
+          className="absolute top-2 right-2 hidden md:block text-red-600 p-3"
           onClick={onClose}
           aria-label="Close"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-
-        <button
-          className="absolute top-2 right-2 hidden md:block text-gray-600 p-2"
-          onClick={onClose}
-          aria-label="Close"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
+            className="h-10 w-10"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -249,10 +221,32 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
         </button>
 
         <div className="p-6">
-          <h2 className="text-2xl font-bold mb-4 text-center">
-            Hostel Fees Form
-          </h2>
-          <form className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="flex">
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              Hostel Fees Form
+            </h2>
+            <button
+              className="mb-3 pl-10 text-red-700 md:hidden"
+              onClick={onClose}
+              aria-label="Close"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-[25px] w-[25px]"
+                fill="none"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <form className="md:grid gap-4 md:grid-cols-2">
             <div className="mb-4">
               <label className="block text-gray-700 mb-2" htmlFor="studentName">
                 Student Name
@@ -385,12 +379,13 @@ const HostelFeesForm = ({ isOpen, onClose }) => {
             <div className="mb-4 col-span-2">
               <button
                 type="submit"
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded"
+                className="w-full bg-gradient-to-l from-teal-600 to-teal-200 text-black font-semibold shadow-lg hover:bg-black py-2 px-4 rounded"
                 onClick={handleSubmitAndPay}
               >
                 Submit and Pay
               </button>
             </div>
+            {/* </div> */}
           </form>
         </div>
       </div>
