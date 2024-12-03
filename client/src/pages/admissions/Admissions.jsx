@@ -115,20 +115,7 @@ const AdmissionsPage = () => {
 
         {/* Modal */}
         {openModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg shadow-lg w-full sm:w-96 p-6 transition-all transform opacity-100 scale-100">
-              <h3 className="text-2xl font-semibold text-gray-800">
-                Admission Form
-              </h3>
-              <AdmissionForm open={openModal} onClose={handleCloseModal} />
-              <button
-                onClick={handleCloseModal}
-                className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-              >
-                Close
-              </button>
-            </div>
-          </div>
+          <AdmissionForm open={openModal} onClose={handleCloseModal} />
         )}
       </div>
     </div>
