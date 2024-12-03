@@ -177,10 +177,10 @@ const AdmissionForm = ({ open, onClose }) => {
       onClose={onClose}
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
-      className="flex items-center justify-center mb-10"
+      className="flex items-center justify-center"
     >
       <Fade in={open}>
-        <div className="relative bg-white mt-20 md:mt-0 rounded-lg max-w-lg w-full mx-5 px-4 pt-5 pb-10 md:p-6 md:mx-auto shadow-lg overflow-y-auto max-h-[95vh]">
+        <div className="relative bg-white my-20 md:mt-0 rounded-lg max-w-lg w-full mx-5 px-4 pt-5 pb-10 md:p-6 md:mx-auto shadow-lg overflow-y-auto max-h-[95vh]">
           <button
             onClick={onClose}
             className="absolute md:top-4 md:right-4 text-red-500 hover:text-red-700"
