@@ -105,7 +105,7 @@ export const getAllAdmissionForms = async (req: Request, res: Response) => {
     const admissionForms = await Admission.find().skip(startIdx).limit(limit);
 
     // Fetch all classes to map IDs to names
-    const classes: Class[] = await classModel
+    const classes = await classModel
       .find({ _id: { $in: admissionForms.map((form) => form.class) } })
       .lean();
 
@@ -164,7 +164,7 @@ export const getAllHostelForms = async (req: Request, res: Response) => {
     const hostelForms = await HostelForm.find().skip(startIdx).limit(limit);
 
     // Fetch all classes to map IDs to names
-    const classes: Class[] = await classModel
+    const classes = await classModel
       .find({ _id: { $in: hostelForms.map((form) => form.class) } })
       .lean();
 
