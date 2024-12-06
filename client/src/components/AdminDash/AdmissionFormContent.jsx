@@ -123,7 +123,7 @@ const AdmissionFormContent = () => {
   }
 
   return (
-    <div className="p-8 bg-gray-800 min-h-screen rounded-2xl mb-4">
+    <div className="p-8 bg-custom-gray min-h-screen rounded-2xl mb-4">
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-3xl font-bold text-white">Admission Forms</h2>
 

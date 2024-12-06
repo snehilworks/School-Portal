@@ -100,7 +100,7 @@ const HostelFormContent = () => {
     );
 
   return (
-    <div className="p-8 bg-gray-800 min-h-screen rounded-2xl">
+    <div className="p-8 bg-custom-gray min-h-screen rounded-2xl">
       <h2 className="text-3xl font-semibold text-white text-center mb-8">
         Hostel Forms
       </h2>

@@ -410,7 +410,6 @@ export const updateAdmissionStatus = async (req: Request, res: Response) => {
 export const setFees = async (req: Request, res: Response) => {
   try {
     const classId = req.body.class;
-    const desc = req.body.description;
     const amount = req.body.amount;
 
     const existingClass = await Class.findOne({ _id: classId });
@@ -427,7 +426,7 @@ export const setFees = async (req: Request, res: Response) => {
 
     const newFee = new Fee({
       class: existingClass._id, // Use the class ID as the foreign key
-      description: desc,
+      description: existingClass.className,
       amount: amount,
     });
 

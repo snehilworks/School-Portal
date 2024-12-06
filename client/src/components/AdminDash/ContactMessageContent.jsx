@@ -39,7 +39,7 @@ const ContactMessageContent = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-800 min-h-screen mb-10 rounded-xl shadow-lg">
+    <div className="p-8 bg-custom-gray min-h-screen mb-10 rounded-xl shadow-lg">
       <h2 className="text-3xl font-semibold text-center text-white font-poppins mb-8">
         Contact Messages
       </h2>
