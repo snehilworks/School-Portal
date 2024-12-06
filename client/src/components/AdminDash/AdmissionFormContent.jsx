@@ -4,6 +4,7 @@ import PrimaryButton from "../ui/PrimaryButton";
 import Modal from "../ui/Modal";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { FaSearch, FaTimes } from "react-icons/fa";
+// import AdmissionFormService from "./services/AdmissionFormService";
 import useDebounce from "../../hooks/useDebounce"; // Adjust the import path as necessary
 
 const AdmissionFormContent = () => {
@@ -122,9 +123,9 @@ const AdmissionFormContent = () => {
   }
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
+    <div className="p-8 bg-gray-800 min-h-screen rounded-2xl mb-4">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-800">Admission Forms</h2>
+        <h2 className="text-3xl font-bold text-white">Admission Forms</h2>
 
         {/* Enhanced Search Box */}
         <div className="mb-8 flex justify-center">
@@ -152,9 +153,9 @@ const AdmissionFormContent = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full bg-white border border-gray-300 rounded-lg shadow-lg">
-          <thead className="bg-blue-500 text-white">
+      <div className="overflow-x-auto rounded-xl">
+        <table className="w-full bg-white border border-gray-900 rounded-xl shadow-lg">
+          <thead className="bg-gray-900 shadow-lg text-white">
             <tr>
               <th className="p-4 text-left">Student Name</th>
               <th className="p-4 text-left">Class</th>
@@ -230,37 +231,59 @@ const AdmissionFormContent = () => {
       {/* View Details Modal */}
       {selectedForm && (
         <Modal onClose={() => setSelectedForm(null)}>
-          <div className="p-8">
-            <h2 className="text-2xl font-bold mb-4">Form Details</h2>
-            <div>
-              <p>
-                <strong>Student Name:</strong> {selectedForm.studentName}
-              </p>
-              <p>
-                <strong>Email:</strong> {selectedForm.email}
-              </p>
-              <p>
-                <strong>Class:</strong> {selectedForm.class}
-              </p>
-              <p>
-                <strong>Father's Phone:</strong> {selectedForm.fatherPhone}
-              </p>
-              <p>
-                <strong>Mother's Phone:</strong> {selectedForm.motherPhone}
-              </p>
-              <p>
-                <strong>Address:</strong> {selectedForm.address}
-              </p>
-              <p>
-                <strong>Guardian Name:</strong> {selectedForm.guardianName}
-              </p>
-              <p>
-                <strong>Guardian Phone:</strong> {selectedForm.guardianPhone}
-              </p>
-              <p>
-                <strong>Admission Status:</strong>{" "}
-                {selectedForm.admissionStatus ? "Admitted" : "Not Admitted"}
-              </p>
+          <div className="p-8 max-w-2xl mx-auto bg-white rounded-xl shadow-lg">
+            <h2 className="text-3xl font-semibold text-center mb-6 text-gray-900">
+              Form Details
+            </h2>
+            <div className="space-y-6">
+              <div className="flex justify-between">
+                <p className="font-semibold text-gray-700">Student Name:</p>
+                <p className="text-gray-900">{selectedForm.studentName}</p>
+              </div>
+              <div className="flex justify-between">
+                <p className="font-semibold text-gray-700">Email:</p>
+                <p className="text-blue-600">{selectedForm.email}</p>
+              </div>
+              <div className="flex justify-between">
+                <p className="font-semibold text-gray-700">Class:</p>
+                <p className="text-gray-900">{selectedForm.class}</p>
+              </div>
+              <div className="flex justify-between">
+                <p className="font-semibold text-gray-700">Father's Phone:</p>
+                <p className="text-gray-900">{selectedForm.fatherPhone}</p>
+              </div>
+              <div className="flex justify-between">
+                <p className="font-semibold text-gray-700">Address:</p>
+                <p className="text-gray-900">{selectedForm.address}</p>
+              </div>
+              <div className="flex justify-between items-center">
+                <p className="font-semibold text-gray-700">Admission Status:</p>
+                <p
+                  className={`font-medium ${
+                    selectedForm.admissionStatus
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  <span
+                    className={`${
+                      selectedForm.admissionStatus
+                        ? "bg-green-100 text-green-600 px-2 py-1 rounded-full"
+                        : "bg-red-100 text-red-600 px-2 py-1 rounded-full"
+                    }`}
+                  >
+                    {selectedForm.admissionStatus ? "Admitted" : "Not Admitted"}
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end mt-6 space-x-4">
+              <button
+                onClick={() => setSelectedForm(null)}
+                className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105"
+              >
+                Close
+              </button>
             </div>
           </div>
         </Modal>

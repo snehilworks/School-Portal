@@ -100,8 +100,8 @@ const HostelFormContent = () => {
     );
 
   return (
-    <div className="p-8 bg-blue-400 min-h-screen">
-      <h2 className="text-3xl font-semibold text-gray-800 text-center mb-8">
+    <div className="p-8 bg-gray-800 min-h-screen rounded-2xl">
+      <h2 className="text-3xl font-semibold text-white text-center mb-8">
         Hostel Forms
       </h2>
 
@@ -113,14 +113,14 @@ const HostelFormContent = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by student name..."
-            className="w-full p-4 pl-12 pr-16 border border-gray-300 rounded-lg shadow-lg bg-gradient-to-r from-blue-100 to-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out"
+            className="w-full p-4 pl-12 pr-16 border border-gray-300 rounded-lg shadow-lg bg-gradient-to-r from-white to-gray-200 placeholder-gray-500 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 ease-in-out"
           />
-          <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 transition-transform duration-300 ease-in-out" />
+          <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500" />
           {searchQuery && (
             <button
               type="button"
               onClick={clearSearch}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 transition-transform duration-300 ease-in-out"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-800 transition-transform duration-300 ease-in-out"
             >
               <FaTimes />
             </button>
@@ -133,26 +133,25 @@ const HostelFormContent = () => {
           filteredForms.map((form) => (
             <div
               key={form._id}
-              className="bg-white rounded-lg shadow-lg p-6 transition-transform transform hover:scale-105"
+              className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transform hover:scale-105 transition-transform duration-300"
             >
               <div className="flex justify-between items-center">
                 <div className="flex flex-col">
                   <h3 className="text-xl font-semibold text-gray-800 mb-2">
                     {form.studentName} (Class: {form.class})
                   </h3>
-                  <div className="flex items-center space-x-4">
-                    <span
-                      className={`text-sm font-medium ${
-                        form.review ? "text-green-600" : "text-red-600"
-                      }`}
-                    >
-                      {form.review ? "Reviewed" : "Pending Review"}
-                    </span>
-                  </div>
+                  <span
+                    className={`text-sm font-medium ${
+                      form.review ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {form.review ? "Reviewed" : "Pending Review"}
+                  </span>
                 </div>
                 {!form.review && (
                   <PrimaryButton
-                    className="bg-blue-500 text-white hover:bg-blue-600 transition-colors py-2 px-4 rounded-md"
+                    color={"admin"}
+                    className="py-2 px-4 rounded-md bg-blue-500 hover:bg-blue-600 text-white transition-colors"
                     onClick={() => handleReviewClick(form)}
                   >
                     Review Form
@@ -172,7 +171,7 @@ const HostelFormContent = () => {
                   : "View Details"}
               </button>
               {expandedFormId === form._id && (
-                <div className="mt-4 bg-gray-100 p-4 rounded-lg shadow-inner">
+                <div className="mt-4 bg-gradient-to-br from-gray-100 to-gray-200 p-4 rounded-lg shadow-inner">
                   <p>
                     <strong>Joining Date:</strong>{" "}
                     {new Date(form.joiningDate).toLocaleDateString()}
@@ -195,14 +194,23 @@ const HostelFormContent = () => {
             </div>
           ))
         ) : (
-          <div className="text-center text-gray-600">No hostel forms found</div>
+          <div className="text-center text-gray-600 flex flex-col items-center mt-8">
+            <FaSearch className="text-6xl mb-4 text-gray-300" />
+            <p>No hostel forms found</p>
+          </div>
         )}
       </div>
+
+      {/* Pagination */}
       <div className="flex justify-between items-center mt-8">
         <PrimaryButton
           disabled={currentPage === 1}
           onClick={() => handlePageChange(currentPage - 1)}
-          className="bg-gray-500 text-white hover:bg-gray-600 transition-colors py-2 px-4 rounded-md flex items-center"
+          className={`py-2 px-4 rounded-md flex items-center ${
+            currentPage === 1
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-500 hover:bg-blue-600 text-white"
+          } transition-opacity`}
         >
           <FaArrowLeft className="mr-2" /> Previous
         </PrimaryButton>
@@ -212,7 +220,11 @@ const HostelFormContent = () => {
         <PrimaryButton
           disabled={currentPage === totalPages}
           onClick={() => handlePageChange(currentPage + 1)}
-          className="bg-gray-500 text-white hover:bg-gray-600 transition-colors py-2 px-4 rounded-md flex items-center"
+          className={`py-2 px-4 rounded-md flex items-center ${
+            currentPage === totalPages
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-500 hover:bg-blue-600 text-white"
+          } transition-opacity`}
         >
           Next <FaArrowRight className="ml-2" />
         </PrimaryButton>
