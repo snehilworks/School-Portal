@@ -49,22 +49,21 @@ function HostelDetailsPage() {
       <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-2xl overflow-hidden">
         {/* Header Section */}
         <div className="flex items-center justify-between px-8 py-4 bg-teal-800 text-white">
-          {/* Back button */}
-
           {/* Hostel name */}
           <h1 className="text-4xl font-extrabold">{hostelDetails.name}</h1>
 
+          {/* Back button */}
           <button
             onClick={() => navigate(-1)}
             className="text-lg font-semibold hover:text-teal-300 transition duration-300"
           >
             {/* Mobile view: Only arrow */}
-            <span className="sm:hidden p-2 shadow-lg rounded-lg text-black font-bold bg-gray-300">
+            <span className="sm:hidden p-2 shadow-lg rounded-lg text-white font-bold bg-teal-500">
               ←
             </span>
 
             {/* Desktop view: Arrow with 'Back' */}
-            <span className="hidden sm:block bg-gray-300 px-2 py-1 rounded-lg text-black hover:bg-gray-400">
+            <span className="hidden sm:block bg-teal-500 px-3 py-1.5 rounded-lg text-white hover:bg-teal-600">
               ← Back
             </span>
           </button>

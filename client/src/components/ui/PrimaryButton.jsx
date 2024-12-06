@@ -17,10 +17,10 @@ const PrimaryButton = ({
     buttonColorClasses = "bg-gray-800 text-white";
     hoverColorClasses = "hover:bg-gray-700";
   } else if (color === "student") {
-    buttonColorClasses = "bg-teal-800 text-white";
-    hoverColorClasses = "hover:bg-teal-900";
+    buttonColorClasses = "bg-teal-700 text-white";
+    hoverColorClasses = "hover:bg-teal-800";
   } else if (color === "teacher") {
-    buttonColorClasses = "bg-cyan-300 text-white";
+    buttonColorClasses = "bg-cyan-300 text-black";
     hoverColorClasses = "hover:bg-cyan-400";
   } else if (color === "logout") {
     buttonColorClasses = "bg-red-500 text-white";

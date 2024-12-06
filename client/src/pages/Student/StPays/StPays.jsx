@@ -192,7 +192,7 @@ const PaymentsPage = () => {
       <div className="max-w-3xl w-full bg-white rounded-lg shadow-lg p-8 mx-auto">
         <button
           onClick={() => navigate(-1)}
-          className="absolute bg-gray-400 text-black shadow-md font-bold px-2 py-1.5 text-sm md:py-2 md:px-5 rounded-md hover:bg-gray-500 transition duration-200"
+          className="absolute bg-teal-600 text-white shadow-md font-bold px-2 py-1.5 text-sm md:py-2 md:px-5 rounded-md hover:bg-gray-500 transition duration-200"
         >
           <span className="block md:hidden px-3 py-1">
             <IoArrowBackOutline className="text-md" />

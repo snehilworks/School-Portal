@@ -106,7 +106,7 @@ export const Landing = () => {
                       icon={faChalkboardTeacher}
                       className="text-[20px] laptop:text-[36px]"
                     />
-                    <p className="text-lg laptop:text-xl">
+                    <p className="text-lg font-serif laptop:text-xl">
                       Login for Faculties
                     </p>
                   </div>

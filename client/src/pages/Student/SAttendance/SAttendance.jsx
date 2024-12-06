@@ -25,10 +25,7 @@ function StudentAttendance() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Simulated API call to fetch attendance data (replace with actual API call)
     const fetchData = async () => {
-      // Replace this with the API endpoint to fetch student attendance data
-      // For now, we're using the sample attendance data
       setAttendanceData(sampleAttendanceData);
     };
 
@@ -38,27 +35,29 @@ function StudentAttendance() {
   const handleMonthChange = (event) => {
     setSelectedMonth(event.target.value);
     // Fetch attendance data for the selected month
-    // Replace this with actual logic to fetch data for the selected month
   };
 
   return (
-    <div className="bg-gradient-to-br from-yellow-200 via-yellow-300 to-yellow-400 min-h-screen flex justify-center items-center">
-      <div className="bg-white rounded-lg shadow-lg p-8 max-w-xl w-full">
+    <div className="bg-gradient-to-br from-teal-300 via-teal-500 to-white min-h-screen flex justify-center items-center py-10">
+      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-4xl">
+        {/* Back Button */}
         <button
           onClick={() => navigate(-1)}
-          className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mb-8 hover:bg-blue-700 transition duration-200"
+          className="bg-teal-600 text-white font-medium py-3 px-6 rounded-lg mb-8 hover:bg-teal-700 transition-all duration-300 transform hover:scale-105"
         >
           ← Back
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+        <h1 className="text-4xl font-semibold text-gray-800 mb-6 text-center">
           My Attendance for the Last 30 Days
         </h1>
-        <div className="mb-4">
+
+        {/* Month Dropdown */}
+        <div className="mb-6">
           <Select
             value={selectedMonth}
             onChange={handleMonthChange}
-            className="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-white"
+            className="block w-full py-3 px-4 border-2 border-teal-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all"
             displayEmpty
           >
             <MenuItem value="" disabled>
@@ -84,19 +83,34 @@ function StudentAttendance() {
             ))}
           </Select>
         </div>
-        <div className="overflow-x-auto">
-          <Table className="w-full bg-white rounded-lg shadow-md">
+
+        {/* Attendance Table */}
+        <div className="overflow-x-auto bg-white rounded-xl shadow-lg border border-teal-200">
+          <Table className="w-full rounded-t-lg">
             <TableHead>
-              <TableRow className="bg-gray-200">
-                <TableCell className="px-4 py-2">Date</TableCell>
-                <TableCell className="px-4 py-2">Status</TableCell>
+              <TableRow className="bg-teal-100">
+                <TableCell className="px-6 py-4 text-lg font-semibold text-teal-600">
+                  Date
+                </TableCell>
+                <TableCell className="px-6 py-4 text-lg font-semibold text-teal-600">
+                  Status
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {attendanceData.map((entry, index) => (
-                <TableRow key={index}>
-                  <TableCell className="px-4 py-2">{entry.date}</TableCell>
-                  <TableCell className="px-4 py-2">{entry.status}</TableCell>
+                <TableRow
+                  key={index}
+                  className={`${
+                    index % 2 === 0 ? "bg-teal-50" : "bg-teal-100"
+                  } hover:bg-teal-200 transition duration-300`}
+                >
+                  <TableCell className="px-6 py-4 text-gray-800">
+                    {entry.date}
+                  </TableCell>
+                  <TableCell className="px-6 py-4 text-gray-800">
+                    {entry.status}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
