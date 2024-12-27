@@ -71,7 +71,7 @@ const AboutUs = () => {
   });
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-r from-blue-500 to-blue-200 py-12">
+    <div className="w-full min-h-screen bg-gradient-to-b from-gray-50 to-blue-500 py-12">
       <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-10">
         <div className="bg-white p-8 rounded-lg shadow-xl space-y-8 font-serif">
           {/* Welcome Message */}

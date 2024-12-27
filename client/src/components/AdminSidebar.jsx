@@ -1,132 +1,126 @@
-import React from "react";
-import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
-
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
-import { FaRegMessage } from "react-icons/fa6";
-import { FaWpforms } from "react-icons/fa";
-import { FaHotel } from "react-icons/fa";
+import React, { useState } from "react";
+import { Home, Users, Mail, School, Building2, DollarSign } from "lucide-react";
 
 const AdminSidebar = ({ setSelectedContent }) => {
-  const sidebarStyle = {
-    backgroundColor: "#2c3e50",
-    color: "#fff",
-    // height: "100vh",
-    width: "25%",
-  };
+  const [activeItem, setActiveItem] = useState("Dashboard");
 
-  const handleDashboard = () => {
-    setSelectedContent("Dashboard");
-  };
-
-  const handleAddTeacher = () => {
-    setSelectedContent("Add Teacher");
-  };
-
-  const handleUpdateTeacher = () => {
-    setSelectedContent("Update Teacher");
-  };
-
-  const handleDeleteTeacher = () => {
-    setSelectedContent("Delete Teacher");
-  };
-
-  const handleUpdateStudentStatus = () => {
-    setSelectedContent("Update Student Admission Status");
-  };
-
-  const handleContactMessages = () => {
-    setSelectedContent("Contact Messages");
-  };
-
-  const handleAdmissionForms = () => {
-    setSelectedContent("Admission Form");
-  };
-
-  const handleHostelForms = () => {
-    setSelectedContent("Hostel Form");
-  };
-
-  const handlePayments = () => {
-    setSelectedContent("Payments");
-  };
-
-  const handleFees = () => {
-    setSelectedContent("Set-Fees");
-  };
+  const navigationGroups = [
+    {
+      title: "Overview",
+      items: [
+        {
+          name: "Dashboard",
+          icon: Home,
+          onClick: () => setSelectedContent("Dashboard"),
+        },
+      ],
+    },
+    {
+      title: "Teacher Management",
+      items: [
+        {
+          name: "Add Teacher",
+          icon: Users,
+          onClick: () => setSelectedContent("Add Teacher"),
+        },
+        {
+          name: "Update Teacher",
+          icon: Users,
+          onClick: () => setSelectedContent("Update Teacher"),
+        },
+        {
+          name: "Delete Teacher",
+          icon: Users,
+          onClick: () => setSelectedContent("Delete Teacher"),
+        },
+      ],
+    },
+    {
+      title: "Student Services",
+      items: [
+        {
+          name: "Update Student Admission Status",
+          icon: School,
+          onClick: () => setSelectedContent("Update Student Admission Status"),
+        },
+        {
+          name: "Admission Forms",
+          icon: School,
+          onClick: () => setSelectedContent("Admission Form"),
+        },
+        {
+          name: "Hostel Forms",
+          icon: Building2,
+          onClick: () => setSelectedContent("Hostel Form"),
+        },
+      ],
+    },
+    {
+      title: "Finance",
+      items: [
+        {
+          name: "Set-Fees",
+          icon: DollarSign,
+          onClick: () => setSelectedContent("Set-Fees"),
+        },
+        {
+          name: "Payments",
+          icon: DollarSign,
+          onClick: () => setSelectedContent("Payments"),
+        },
+      ],
+    },
+    {
+      title: "Communication",
+      items: [
+        {
+          name: "Contact Messages",
+          icon: Mail,
+          onClick: () => setSelectedContent("Contact Messages"),
+        },
+      ],
+    },
+  ];
 
   return (
-    <div className="h-[92vh] sticky top-16" style={sidebarStyle}>
-      <List>
-        <ListItem onClick={handleDashboard} style={{ cursor: "pointer" }}>
-          <ListItemIcon>
-            <DashboardIcon style={{ color: "#fff" }} />
-          </ListItemIcon>
-          <ListItemText primary="Dashboard" />
-        </ListItem>
-        <ListItem onClick={handleAddTeacher} style={{ cursor: "pointer" }}>
-          <ListItemIcon>
-            <PersonAddIcon style={{ color: "green" }} />
-          </ListItemIcon>
-          <ListItemText primary="Add Teacher" />
-        </ListItem>
-        <ListItem onClick={handleUpdateTeacher} style={{ cursor: "pointer" }}>
-          <ListItemIcon>
-            <EditIcon style={{ color: "#fff" }} />
-          </ListItemIcon>
-          <ListItemText primary="Update Teacher" />
-        </ListItem>
-        <ListItem onClick={handleDeleteTeacher} style={{ cursor: "pointer" }}>
-          <ListItemIcon>
-            <DeleteIcon style={{ color: "red" }} />
-          </ListItemIcon>
-          <ListItemText primary="Delete Teacher" />
-        </ListItem>
-        <ListItem
-          onClick={handleUpdateStudentStatus}
-          style={{ cursor: "pointer" }}
-        >
-          <ListItemIcon>
-            <EventAvailableIcon style={{ color: "#fff" }} />
-          </ListItemIcon>
-          <ListItemText primary="Update Student Admission Status" />
-        </ListItem>
-        <ListItem onClick={handleFees} style={{ cursor: "pointer" }}>
-          <ListItemIcon>
-            <CurrencyRupeeIcon style={{ color: "#fff" }} />
-          </ListItemIcon>
-          <ListItemText primary="Set-Fees" />
-        </ListItem>
-        <ListItem onClick={handlePayments} style={{ cursor: "pointer" }}>
-          <ListItemIcon>
-            <AccountBalanceIcon style={{ color: "#fff" }} />
-          </ListItemIcon>
-          <ListItemText primary="Payments" />
-        </ListItem>
-        <ListItem onClick={handleContactMessages} style={{ cursor: "pointer" }}>
-          <ListItemIcon>
-            <FaRegMessage style={{ color: "#fff" }} />
-          </ListItemIcon>
-          <ListItemText primary="Contact Messages" />
-        </ListItem>
-        <ListItem onClick={handleAdmissionForms} style={{ cursor: "pointer" }}>
-          <ListItemIcon>
-            <FaWpforms style={{ color: "#fff" }} />
-          </ListItemIcon>
-          <ListItemText primary="Admission Forms" />
-        </ListItem>
-        <ListItem onClick={handleHostelForms} style={{ cursor: "pointer" }}>
-          <ListItemIcon>
-            <FaHotel style={{ color: "#fff" }} />
-          </ListItemIcon>
-          <ListItemText primary="Hostel Forms" />
-        </ListItem>
-      </List>
+    <div className="h-[92vh] w-80 bg-gray-900 text-gray-300 overflow-y-auto sticky top-16">
+      <div className="p-4">
+        {navigationGroups.map((group, groupIndex) => (
+          <div key={groupIndex} className="mb-6">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
+              {group.title}
+            </h3>
+            <div className="space-y-1">
+              {group.items.map((item, itemIndex) => {
+                const Icon = item.icon;
+                const isActive = activeItem === item.name;
+
+                return (
+                  <button
+                    key={itemIndex}
+                    onClick={() => {
+                      setActiveItem(item.name);
+                      item.onClick();
+                    }}
+                    className={`w-full flex items-center px-3 py-2 text-sm rounded-lg transition-colors duration-150 ease-in-out
+                      ${
+                        isActive
+                          ? "bg-gray-800 text-white"
+                          : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                      }`}
+                  >
+                    <Icon
+                      size={18}
+                      className={`mr-3 ${isActive ? "text-blue-400" : ""}`}
+                    />
+                    <span className="truncate">{item.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
