@@ -2,13 +2,13 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 import Fee from "../models/feeModel";
-import Student from "../models/studentModel";
+import Student, { IStudent } from "../models/studentModel";
+import HostelForm, { IHostelForm } from "../models/HostelFormModel";
 import { loginSchema } from "../validations/loginValidation";
 import { CompleteStudentProfileRequestBody } from "../types/completeProfile";
 
-import * as dotenv from "dotenv";
-import HostelForm from "../models/HostelFormModel";
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
@@ -17,256 +17,177 @@ interface JwtPayload {
   id: string;
 }
 
-export const register = async (req: Request, res: Response) => {
+interface AuthenticatedRequest extends Request {
+  student?: IStudent;
+}
+
+export const register = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const { email, password } = loginSchema.parse(req.body);
-    // Validate if required fields are provided
+
     if (!email || !password) {
       return res
-        .status(401)
+        .status(400)
         .json({ message: "Email and password are required." });
     }
 
-    // Check if the email is already registered
     const existingStudent = await Student.findOne({ email });
     if (existingStudent) {
-      return res.status(422).json({ message: "Email already registered." });
+      return res.status(409).json({ message: "Email already registered." });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create a new student record
-    const newStudent = new Student({
-      email,
-      password: hashedPassword,
-    });
-    // Save the new student record
+    const newStudent = new Student({ email, password: hashedPassword });
     await newStudent.save();
 
-    const studentId = newStudent._id;
-    const token = jwt.sign(
-      {
-        id: studentId,
-      },
-      JWT_SECRET,
-      { expiresIn: '1h' } // Optional: set token expiration
-    );
+    const token = jwt.sign({ id: newStudent._id }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    res.cookie("sps", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
 
-    res.cookie("sps", token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-
-    // Send response with token
     return res.status(201).json({ token });
   } catch (error) {
     console.error("Error registering student:", error);
-    res.status(512).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response): Promise<Response> => {
   try {
-    // Validate the request
     const { email, password } = loginSchema.parse(req.body);
 
-    if (!email || !password) {
-      return res
-        .status(422)
-        .json({ message: "Email and password are required." });
-    }
-
     const student = await Student.findOne({ email });
-    if (!student) {
-      return res.status(422).json({ message: "Invalid email or password." });
+    if (!student || !(await bcrypt.compare(password, student.password))) {
+      return res.status(401).json({ message: "Invalid email or password." });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, student.password);
-    if (!isPasswordValid) {
-      return res.status(422).json({ message: "Invalid email or password." });
-    }
+    const token = jwt.sign({ id: student._id }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    res.cookie("sps", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
 
-    const studentId = student._id;
-    const token = jwt.sign(
-      {
-        id: studentId,
-      },
-      JWT_SECRET,
-      { expiresIn: '1h' } // Optional: set token expiration
-    );
-
-    res.cookie("sps", token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-
-    // Send response with token
     return res.status(200).json({ token });
   } catch (error) {
     console.error("Error during login:", error);
-    return res.status(512).json({ message: "Something went wrong" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-export const getFeeStructure = async (req: Request, res: Response) => {
+export const getFeeStructure = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
-    const fee = await Fee.find().populate('class', 'className')
-    .exec();
-    return res.status(201).json(fee);
+    const fee = await Fee.find().populate("class", "className").exec();
+    return res.status(200).json(fee);
   } catch (error) {
-    console.error("Error during Fee Structure:", error);
-    return res.status(512).json({ message: "Something went wrong" });
+    console.error("Error fetching fee structure:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// export const getHostel = async (req: Request, res: Response) => {};
-
-export const getClass = async (req: Request, res: Response) => {
-  try {
-    const { email } = loginSchema.parse(req.body);
-    const student = await Student.findOne({ email });
-
-    if (!student) {
-      return res.status(404).json({ message: "Student not found" });
-    }
-    const studentClass = student.class;
-
-    res.status(200).json({class : studentClass});
-
-  } catch (error) {
-    console.error("Error fetching student class:", error);
-    res.status(512).json({ message: "Internal Server Error" });
-  }
-};
-
-export const getProfile = async (req: Request, res: Response) => {
+export const getProfile = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<Response> => {
   try {
     const token = req.cookies.sps;
+    if (!token) return res.status(403).json({ message: "Unauthorized!" });
 
-    if (!token) {
-      return res.status(403).json({ message: "UnAuthorized!" });
-    }
-
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
-
-    if (!mongoose.Types.ObjectId.isValid(decoded.id)) {
-      return res.status(400).json({ message: "Invalid user ID format" });
-    }
-
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
     const student = await Student.findById(decoded.id);
+    if (!student) return res.status(404).json({ message: "User not found" });
 
-    if (!student) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    return res.status(200).json({
-      email: student.email,
-      admissionStatus: student.admission,
-    });
+    return res
+      .status(200)
+      .json({ email: student.email, admissionStatus: student.admission });
   } catch (error) {
     console.error("Error fetching user profile:", error);
-    res.status(512).json({ message: "Internal Server Error" });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-// const saveStudentProfile = async (data: CompleteStudentProfileRequestBody) => {
-//   const newStudent = new Student(data);
-//   return await newStudent.save();
-// };
-
-export const completeStudentProfile = async (req: Request<{}, {}, CompleteStudentProfileRequestBody>, res: Response) => {
+export const completeStudentProfile = async (
+  req: Request<{}, {}, CompleteStudentProfileRequestBody>,
+  res: Response
+): Promise<Response> => {
   try {
-    const studentData: CompleteStudentProfileRequestBody = req.body;
+    const { authorization } = req.headers;
+    if (!authorization)
+      return res.status(403).json({ message: "Unauthorized!" });
 
-    const token = req.headers.authorization?.split(' ')[1];
-
-    if (!token) {
-      return res.status(403).json({ message: 'UnAuthorized!' });
-    }
-
+    const token = authorization.split(" ")[1];
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
-    const studentId = decoded.id;
+    const student = await Student.findById(decoded.id);
+    if (!student) return res.status(404).json({ message: "Student not found" });
 
-    if (!mongoose.Types.ObjectId.isValid(studentId)) {
-      return res.status(422).json({ message: 'Invalid student ID' });
-    }
-    const studentDetail = await Student.findById(studentId);
-    if (!studentDetail) {
-      return res.status(422).json({ message: 'Student not found' });
-    }
+    Object.assign(student, req.body);
+    const savedStudent = await student.save();
 
-    //update current student
-    Object.assign(studentDetail, studentData);
-
-    // Save updated student profile
-    const savedStudent = await studentDetail.save();
-
-    res.status(201).json({ message: "Student profile completed successfully", student: savedStudent });
+    return res
+      .status(200)
+      .json({ message: "Profile updated successfully", student: savedStudent });
   } catch (error) {
-    console.error("Error fetching user profile:", error);
-    res.status(512).json({ message: "Internal Server Error" });
+    console.error("Error updating profile:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-export const getMeApi = async (req: Request, res: Response) => {
-  try {
-    const token = req.headers.authorization?.split(' ')[1];
-
-    if (!token) {
-      return res.status(403).json({ message: 'UnAuthorized!' });
-    }
-
-    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
-    const studentId = decoded.id;
-
-    if (!mongoose.Types.ObjectId.isValid(studentId)) {
-      return res.status(422).json({ message: 'Invalid student ID' });
-    }
-    const studentDetail = await Student.findById(studentId);
-    if (!studentDetail) {
-      return res.status(422).json({ message: "Student not found" });
-    }
-
-    return res.status(200).json(studentDetail);
-  } catch (error) {
-    console.error('Error getting me api student:', error);
-    return res.status(512).json({ message: 'Internal server error' });
-  }
-};
-
-export const getFeeForClass = async (req: Request, res: Response)  => {
+export const getFeeForClass = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const { id } = req.params;
-
     const fee = await Fee.findOne({ class: id });
-    if (!fee) {
-      return res.status(422).json({ message: `Fee not found for class ${id}` });
-    }
+    if (!fee)
+      return res.status(404).json({ message: `Fee not found for class ${id}` });
 
-    const feeData = {
+    return res.status(200).json({
       description: fee.description,
       class: fee.class,
-      amount: fee.amount
-    };
-
-    return res.status(200).json(feeData);
+      amount: fee.amount,
+    });
   } catch (error) {
-    console.error('Error getting fee for the particular class:', error);
-    return res.status(512).json({ message: 'Internal server error' });
+    console.error("Error fetching fee for class:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-export const HostelFormStore = async (req: Request, res: Response) => {
-    try {
-        const { studentName, grade, joiningDate } = req.body;
+export const HostelFormStore = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { studentName, class: studentClass, joiningDate } = req.body as IHostelForm;
 
-        const existingHostelForm = await HostelForm.findOne({ studentName, grade, joiningDate });
+    const existingForm = await HostelForm.findOne({
+      studentName,
+      class: studentClass,
+      joiningDate,
+    });
 
-        if (existingHostelForm) {
-            return res.status(422).json({ message: "Hostel form with these details already exists" });
-        }
+    if (existingForm)
+      return res.status(409).json({ message: "Hostel form already exists" });
 
-        const newHostelForm = new HostelForm(req.body);
-        await newHostelForm.save();
+    const newHostelForm = new HostelForm(req.body);
+    await newHostelForm.save();
 
-        res.status(201).json({ message: "Hostel form submitted successfully" });
-    } catch (error) {
-        console.error('Error Storing Hostel Form:', error);
-        return res.status(512).json({ message: 'Internal server error' });
-    }
+    return res
+      .status(201)
+      .json({ message: "Hostel form submitted successfully" });
+  } catch (error) {
+    console.error("Error storing hostel form:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
 };
+

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
@@ -16,210 +16,238 @@ interface JwtPayload {
   id: string;
 }
 
-// export const getDashboard = async (req: Request, res: Response) => {
-//   try {
-//     // Get teacher's information
-//     // const teacher = await Teacher.findById(req.id);
+// Utility function to handle errors more uniformly
+class AppError extends Error {
+  statusCode: number;
+  constructor(message: string, statusCode: number) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
 
-//     // Get classes taught by the teacher
-//     // const classes = await Class.find({ teacher: req.user.id });
+const authenticateJWT = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const token = req.cookies.sps || req.headers.authorization?.split(" ")[1];
 
-//     // Get students enrolled in the teacher's classes
-//     // const students = await Student.find({
-//     //   class: { $in: classes.map((cls) => cls._id) },
-//     // });
+  if (!token) {
+    return res.status(401).json({ message: "No token provided" });
+  }
 
-//     // Other data retrieval and processing as needed...
-
-//     res.status(200).json({
-//       //   teacher,
-//       //   classes,
-//       //   students,
-//       // Other data to be included in the dashboard
-//     });
-//   } catch (error) {
-//     console.error("Error fetching teacher dashboard:", error);
-//     res.status(512).json({ message: "Internal server error" });
-//   }
-// };
-
-export const getMeApi = async (req: Request, res: Response) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
-    
-    if (!token) {
-      return res.status(401).json({ message: 'No token provided' });
-    }
-
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
-    const teacherId = decoded.id;
-
-    return res.status(200).json({teacherId});
-  } catch (error) {
-    console.error('Error getting me api teacher:', error);
-    return res.status(512).json({ message: 'Internal server error' });
+    req.user = decoded; // Storing user data in the request object
+    next();
+  } catch (error: any) {
+    return res.status(403).json({ message: "Invalid or expired token" });
   }
 };
 
-export const getTeacher = async (req: Request, res: Response) => {
+// Helper function to check if ObjectId is valid
+const isValidObjectId = (id: string): boolean =>
+  mongoose.Types.ObjectId.isValid(id);
+
+export const getMeApi = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    if (!req.user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const teacherId = req.user.id;
+    return res.status(200).json({ teacherId });
+  } catch (error: any) {
+    console.error("Error getting 'me' API:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getTeacher = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'Invalid teacher ID' });
+
+    if (!isValidObjectId(id)) {
+      throw new AppError("Invalid teacher ID", 400);
     }
 
     const teacherDetail = await Teacher.findById(id);
+
     if (!teacherDetail) {
-      return res.status(404).json({ message: "Teacher not found" });
+      throw new AppError("Teacher not found", 404);
     }
-    res.json({
-      data: teacherDetail,
-    });
-  } catch (error) {
+
+    return res.status(200).json({ data: teacherDetail });
+  } catch (error: any) {
     console.error("Error getting teacher:", error);
-    res.status(512).json({ message: "Internal server error" });
+    return res
+      .status(error.statusCode || 500)
+      .json({ message: error.message || "Internal server error" });
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response): Promise<Response> => {
   try {
-    //validate the user data for login
     const { email, password } = loginSchema.parse(req.body);
 
-    if (!email || !password) {
-      return res
-        .status(422)
-        .json({ message: "Email and password are required." });
-    }
-
-    const teacher_data = await Teacher.findOne({ email });
-    if (!teacher_data) {
-      return res.status(401).json({ message: "Teacher Data not Found!" });
+    const teacherData = await Teacher.findOne({ email });
+    if (!teacherData) {
+      throw new AppError("Teacher not found", 401);
     }
 
     const isPasswordValid = await bcrypt.compare(
       password,
-      teacher_data.password
+      teacherData.password
     );
-
     if (!isPasswordValid) {
-      return res.status(422).json({ message: "Invalid email or password" });
+      throw new AppError("Invalid email or password", 422);
     }
 
-    const teacherId = teacher_data._id;
-    const token = jwt.sign(
-      {
-        id: teacherId,
-      },
-      JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-    
-    res.cookie("sps", token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+    const teacherId = teacherData._id;
+    const token = jwt.sign({ id: teacherId }, JWT_SECRET, { expiresIn: "1h" });
+
+    res.cookie("sps", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
 
     return res.status(200).json({ token });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error during login:", error);
-    res.status(512).json({ message: "Something went wrong" });
+    return res
+      .status(error.statusCode || 500)
+      .json({ message: error.message || "Something went wrong" });
   }
 };
 
-export const getStudents = async (req: Request, res: Response) => {
+export const getStudents = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = 15;
-
     const startIdx = (page - 1) * limit;
 
-    const totalStudents = await Student.countDocuments(); //total number of students
-
+    const totalStudents = await Student.countDocuments();
     const students = await Student.find().skip(startIdx).limit(limit);
 
-    const response = {
-      students: students,
-      totalPages: Math.ceil(totalStudents / limit), // Calculate total pages
-      currentPage: page
-    };
-
-    res.status(201).json(response);
-  } catch (error) {
+    return res.status(200).json({
+      students,
+      totalPages: Math.ceil(totalStudents / limit),
+      currentPage: page,
+    });
+  } catch (error: any) {
     console.error("Error fetching students:", error);
-    res.status(512).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const getStudentDetails = async (req: Request, res: Response) => {
-  const { id } = req.params;
+export const getStudentDetails = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
+    const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      throw new AppError("Invalid student ID", 400);
+    }
+
     const student = await Student.findById(id);
 
     if (!student) {
-      return res.status(404).json({ message: "Student not found!" });
+      throw new AppError("Student not found", 404);
     }
 
-    res.status(200).json(student);
-  } catch (error) {
-    console.error("Error getting Student Detail: ", error);
-    res.status(512).json({ message: "Internal Server Error " });
+    return res.status(200).json(student);
+  } catch (error: any) {
+    console.error("Error fetching student details:", error);
+    return res
+      .status(error.statusCode || 500)
+      .json({ message: error.message || "Internal server error" });
   }
 };
 
-export const getClasses = async (req: Request, res: Response) => {
+export const getClasses = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const classes = await Classes.find();
-
-    res.status(200).json(classes);
-  } catch (error) {
-    console.error("Error fetching all students:", error);
-    res.status(512).json({ message: "Internal server error" });
+    return res.status(200).json(classes);
+  } catch (error: any) {
+    console.error("Error fetching classes:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const getClassDetails = async (req: Request, res: Response) => {
-  const { id } = req.params;
+export const getClassDetails = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
-    const class_data = await Classes.findById(id);
+    const { id } = req.params;
 
-    if (!class_data) {
-      return res.status(404).json({ message: "Class not found!" });
+    if (!isValidObjectId(id)) {
+      throw new AppError("Invalid class ID", 400);
     }
 
-    res.status(200).json(class_data);
-  } catch (error) {
-    console.error("Error getting Class Detail: ", error);
-    res.status(512).json({ message: "Internal Server Error " });
+    const classData = await Classes.findById(id);
+
+    if (!classData) {
+      throw new AppError("Class not found", 404);
+    }
+
+    return res.status(200).json(classData);
+  } catch (error: any) {
+    console.error("Error fetching class details:", error);
+    return res
+      .status(error.statusCode || 500)
+      .json({ message: error.message || "Internal server error" });
   }
 };
 
-export const getTeacherProfile = async (req: Request, res: Response) => {
+export const getTeacherProfile = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const token = req.cookies.sps;
 
     if (!token) {
-      return res.status(403).json({ message: "UnAuthorized!" });
+      throw new AppError("Unauthorized!", 403);
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
 
-    if (!mongoose.Types.ObjectId.isValid(decoded.id)) {
-      return res.status(400).json({ message: "Invalid user ID format" });
+    if (!isValidObjectId(decoded.id)) {
+      throw new AppError("Invalid user ID format", 400);
     }
 
     const teacher = await Teacher.findById(decoded.id);
 
     if (!teacher) {
-      return res.status(404).json({ message: "Teacher not found" });
+      throw new AppError("Teacher not found", 404);
     }
 
-    return res.status(201).json({
+    return res.status(200).json({
       name: teacher.name,
       email: teacher.email,
       subjects: teacher.subjects,
       classTeacher: teacher.classTeacher,
       classes: teacher.classes,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching teacher profile:", error);
-    res.status(512).json({ message: "Internal Server Error" });
+    return res
+      .status(error.statusCode || 500)
+      .json({ message: error.message || "Internal Server Error" });
   }
 };

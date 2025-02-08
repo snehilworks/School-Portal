@@ -1,22 +1,22 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
-export interface Student extends Document {
+export interface IStudent extends Document {
   name: string;
   email: string;
   password: string;
-  phone: number;
+  phone: string;
   dob?: Date;
   gender?: string;
   fatherName?: string;
-  fatherPhone?: number;
+  fatherPhone?: string;
   motherName?: string;
-  motherPhone?: number;
-  class?: Types.ObjectId; 
+  motherPhone?: string;
+  class?: Types.ObjectId;
   section?: string;
   admission: boolean;
   placeName?: string;
   address?: string;
-  aadharNumber?: string; 
+  aadharNumber?: string;
   previousSchoolTC?: string | null;
 }
 
@@ -24,20 +24,20 @@ const studentSchema: Schema = new Schema({
   name: { type: String },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  phone: { type: Number },
+  phone: { type: String },
   dob: { type: Date },
   gender: { type: String },
   fatherName: { type: String },
-  fatherPhone: { type: Number },
+  fatherPhone: { type: String }, 
   motherName: { type: String },
-  motherPhone: { type: Number },
-  class: { type: Types.ObjectId, ref: 'Class' }, 
+  motherPhone: { type: String }, 
+  class: { type: Types.ObjectId, ref: "Class" },
   section: { type: String },
-  admission: { type: Boolean, default: false },
+  admission: { type: Boolean, required: true, default: false },
   placeName: { type: String },
   address: { type: String },
-  aadharNumber: { type: String },
-  previousSchoolTC: { type: String, default: null }
+  aadharNumber: { type: String, unique: true },
+  previousSchoolTC: { type: String, default: null },
 });
 
-export default mongoose.model<Student>("Student", studentSchema);
+export default mongoose.model<IStudent>("Student", studentSchema);

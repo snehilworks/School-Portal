@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
-export interface Teacher extends Document {
+export interface ITeacher extends Document {
   name: string;
   email: string;
   password: string;
@@ -8,7 +8,7 @@ export interface Teacher extends Document {
   phone: number;
   classTeacher: boolean;
   classes: string[];
-  class?: Types.ObjectId; 
+  class?: Types.ObjectId;
 }
 
 const teacherSchema: Schema = new Schema({
@@ -19,16 +19,16 @@ const teacherSchema: Schema = new Schema({
   phone: { type: Number },
   classTeacher: { type: Boolean, default: false },
   classes: [{ type: String }],
-  class: { 
-    type: Types.ObjectId, 
-    ref: 'Class', 
+  class: {
+    type: Types.ObjectId,
+    ref: "Class",
     validate: {
-      validator: function (this: Teacher) {
+      validator: function (this: ITeacher) {
         return !this.classTeacher || (this.classTeacher && this.class);
       },
-      message: 'Class field is required when the teacher is a class teacher.'
-    }
-  }, 
+      message: "Class field is required when the teacher is a class teacher.",
+    },
+  },
 });
 
-export default mongoose.model<Teacher>("Teacher", teacherSchema);
+export default mongoose.model<ITeacher>("Teacher", teacherSchema);
