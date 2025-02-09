@@ -21,6 +21,52 @@ interface AuthenticatedRequest extends Request {
   student?: IStudent;
 }
 
+export const getMeApi = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      return res.status(403).json({ message: "UnAuthorized!" });
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    const studentId = decoded.id;
+
+    if (!mongoose.Types.ObjectId.isValid(studentId)) {
+      return res.status(422).json({ message: "Invalid student ID" });
+    }
+    const studentDetail = await Student.findById(studentId);
+    if (!studentDetail) {
+      return res.status(422).json({ message: "Student not found" });
+    }
+
+    return res.status(200).json(studentDetail);
+  } catch (error) {
+    console.error("Error getting me api student:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getClass = async (req: Request, res: Response) => {
+  try {
+    const { email } = loginSchema.parse(req.body);
+    const student = await Student.findOne({ email });
+
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+    const studentClass = student.class;
+
+    res.status(200).json({ class: studentClass });
+  } catch (error) {
+    console.error("Error fetching student class:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 export const register = async (
   req: Request,
   res: Response
@@ -168,7 +214,11 @@ export const HostelFormStore = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const { studentName, class: studentClass, joiningDate } = req.body as IHostelForm;
+    const {
+      studentName,
+      class: studentClass,
+      joiningDate,
+    } = req.body as IHostelForm;
 
     const existingForm = await HostelForm.findOne({
       studentName,
@@ -190,4 +240,3 @@ export const HostelFormStore = async (
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
