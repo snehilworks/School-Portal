@@ -7,8 +7,8 @@ import {
   FaTshirt,
   FaPlug,
   FaWater,
-} from "react-icons/fa"; // Import icons
-import HostelFeesForm from "../../../components/StudentDash/HostelFeesForm"; // Adjust the import path as needed
+} from "react-icons/fa";
+import HostelFeesForm from "../../../components/StudentDash/HostelFeesForm";
 
 function HostelDetailsPage() {
   const [hostelDetails, setHostelDetails] = useState({
@@ -45,7 +45,7 @@ function HostelDetailsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-gray-300 to-teal-600 py-8 px-4">
+    <div className="min-h-screen mt-12 bg-gradient-to-r from-gray-300 to-teal-600 py-8 px-4">
       <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-2xl overflow-hidden">
         {/* Header Section */}
         <div className="flex items-center justify-between px-8 py-4 bg-teal-800 text-white">

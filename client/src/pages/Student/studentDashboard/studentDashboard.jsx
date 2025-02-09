@@ -5,7 +5,7 @@ import PrimaryButton from "../../../components/ui/PrimaryButton";
 
 function StudentDash() {
   return (
-    <div className="bg-gradient-to-br from-emerald-100 via-white to-emerald-300 min-h-[91.3vh] flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-gradient-to-br from-emerald-100 via-white to-emerald-300 min-h-screen mt-12 md:mt-0 flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl w-full space-y-12">
         {/* Header Section */}
         <div className="text-center">

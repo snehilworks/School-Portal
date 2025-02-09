@@ -121,7 +121,7 @@ const PaymentsPage = () => {
         setInternalServerError(
           "Internal Server Error. Please try again later."
         );
-        return; // Exit early
+        return;
       }
       VerifyPayment(order, finalAmount);
     } catch (error) {
@@ -188,7 +188,7 @@ const PaymentsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-gray-100 to-teal-300 flex flex-col items-center py-6 px-4 sm:px-6 lg:px-8 xl:px-16">
+    <div className="min-h-screen mt-12 md:mt-12 bg-gradient-to-r from-gray-100 to-teal-300 flex flex-col items-center py-6 px-4 sm:px-6 lg:px-8 xl:px-16">
       <div className="max-w-3xl w-full bg-white rounded-lg shadow-lg p-8 mx-auto">
         <button
           onClick={() => navigate(-1)}
