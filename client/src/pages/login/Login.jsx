@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import LoginModal from "../../components/Modal/LoginModal";
+import RegisterModal from "../../components/Modal/RegisterModal";
+import TeacherLoginModal from "../../components/Modal/TeacherLoginModal";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -45,35 +48,40 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <div className="min-h-screen md:m-0 overflow-hidden bg-gradient-to-br from-gray-500 via-gray-900 to-gray-600">
       {/* Decorative School Elements */}
       <div className="absolute inset-0 overflow-hidden opacity-10">
         <div className="absolute top-10 left-10 w-24 h-24 border-4 border-blue-500 rounded-full"></div>
+        <div className="absolute top-60 left-10 w-24 h-24 border-4 border-blue-500 rounded-full"></div>
         <div className="absolute top-20 right-20 w-32 h-32 border-4 border-indigo-500 rounded-lg rotate-45"></div>
+        <div className="absolute top-80 right-20 w-32 h-32 border-4 border-indigo-500 rounded-lg rotate-45"></div>
         <div className="absolute bottom-10 left-1/4 w-40 h-40 border-4 border-purple-500 rounded-lg -rotate-12"></div>
+        <div className="absolute bottom-50 left-1/4 w-40 h-40 border-4 border-purple-500 rounded-lg -rotate-12"></div>
         <div className="absolute top-1/3 right-1/3 w-28 h-28 border-4 border-cyan-500 rounded-full"></div>
+        <div className="absolute top-1/2 right-1/3 w-28 h-28 border-4 border-cyan-500 rounded-full"></div>
+        <div className="absolute top-1/6 right-1/3 w-28 h-28 border-4 border-cyan-500 rounded-full"></div>
       </div>
 
       {/* Main Content */}
       <div className="relative w-full min-h-screen flex flex-col items-center justify-center p-4">
         {/* Header Section */}
         <div className="mb-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 font-serif">
-            Welcome to SchoolName
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 font-serif">
+            Login Dashboard
           </h1>
-          <p className="text-lg text-gray-600 max-w-md mx-auto">
+          <p className="text-lg text-gray-300 max-w-md mx-auto">
             Access your educational journey through our secure portal
           </p>
         </div>
 
         {/* Buttons Container */}
-        <div className="w-full max-w-2xl p-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl">
+        <div className="w-full max-w-2xl p-8 bg-gray-700/80 backdrop-blur-sm rounded-2xl shadow-xl">
           <div className="space-y-4">
             {/* First Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <button
                 onClick={() => setIsRegisterModalOpen(true)}
-                className="p-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 group"
+                className="p-4 bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-700 hover:to-sky-800 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 group"
               >
                 <div className="flex items-center justify-center gap-3">
                   <svg
@@ -95,7 +103,7 @@ export const Login = () => {
 
               <button
                 onClick={() => setIsLoginModalOpen(true)}
-                className="p-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 group"
+                className="p-4 bg-gradient-to-r from-emerald-600 to-emerald-800 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 group"
               >
                 <div className="flex items-center justify-center gap-3">
                   <svg
@@ -126,7 +134,7 @@ export const Login = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <button
                 onClick={() => setIsTeacherLoginModalOpen(true)}
-                className="p-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 group"
+                className="p-4 bg-gradient-to-r from-cyan-700 to-cyan-900 hover:from-cyan-600 hover:to-cyan-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 group"
               >
                 <div className="flex items-center justify-center gap-3">
                   <svg
@@ -177,27 +185,21 @@ export const Login = () => {
         </div>
       </div>
 
-      {/* Keep your existing modal components */}
+      {/* Modal Components */}
       {isLoginModalOpen && (
         <LoginModal
-          onClose={() => setIsLoginModalOpen(false)}
-          onOpenRegister={() => {
-            setIsLoginModalOpen(false);
-            setIsRegisterModalOpen(true);
-          }}
+          onClose={handleLoginCloseModal}
+          onOpenRegister={handleOpenRegister}
         />
       )}
       {isRegisterModalOpen && (
         <RegisterModal
-          onClose={() => setIsRegisterModalOpen(false)}
-          onOpenLogin={() => {
-            setIsRegisterModalOpen(false);
-            setIsLoginModalOpen(true);
-          }}
+          onClose={handleRegisterCloseModal}
+          onOpenLogin={handleOpenLogin}
         />
       )}
       {isTeacherLoginModalOpen && (
-        <TeacherLoginModal onClose={() => setIsTeacherLoginModalOpen(false)} />
+        <TeacherLoginModal onClose={handleTeacherLoginCloseModal} />
       )}
     </div>
   );

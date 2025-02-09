@@ -196,7 +196,7 @@ function LoginModal({ onClose }) {
                 "Login"
               )}
             </Button>
-            <Box display="flex" justifyContent="center" mt={2}>
+            {/* <Box display="flex" justifyContent="center" mt={2}>
               <Typography variant="body2">
                 Don't have an account?{" "}
                 <Button
@@ -209,7 +209,7 @@ function LoginModal({ onClose }) {
                   Register
                 </Button>
               </Typography>
-            </Box>
+            </Box> */}
           </Paper>
         </Grid>
         <ErrorModal error={error} onClose={() => setError(null)} />
