@@ -1,76 +1,66 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  AppBar,
-  Toolbar,
-  IconButton,
+  Home,
+  Info,
+  GraduationCap,
+  ScrollText,
+  Phone,
+  LogOut,
+  LogIn,
   Menu,
-  MenuItem,
-  styled,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import PrimaryButton from "../PrimaryButton";
-import { indigo } from "@mui/material/colors";
-import { useState, useEffect } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
-import { authState } from "../../../store/atoms/auth";
+  X,
+} from "lucide-react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import { authState } from "../../../store/atoms/auth";
 
-const GradientMenu = styled(Menu)(({ theme }) => ({
-  "& .MuiPaper-root": {
-    borderRadius: "0.75rem",
-    padding: theme.spacing(1),
-    background: "linear-gradient(to right, #0F766E, #1F2937)", // Custom gradient colors
-    minWidth: "12rem",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
-    [theme.breakpoints.down("sm")]: {
-      minWidth: "10rem", // Adjust for mobile responsiveness
-    },
-  },
-}));
-
-const GradientMenuItem = styled(MenuItem)(({ theme }) => ({
-  color: "#fff", // White text for contrast
-  fontWeight: "500", // Slightly bold text for emphasis
-  cursor: "pointer",
-  "&:hover": {
-    backgroundColor: "rgba(255, 255, 255, 0.1)", // Lighter background on hover
-  },
-}));
-
-const LogoutMenuItem = styled(MenuItem)(({ theme }) => ({
-  color: "#D22B2B",
-  fontWeight: "bold",
-  borderRadius: "4%",
-  "&:hover": {
-    backgroundColor: "red",
-  },
-}));
+const NavItem = ({ path, label, icon: Icon, isActive, onClick }) => (
+  <motion.div
+    className={`
+      flex items-center space-x-2 
+      px-3 py-2 rounded-lg 
+      transition-all duration-300 
+      ${
+        isActive
+          ? "bg-white/10 text-white"
+          : "text-white/70 hover:text-white hover:bg-white/5"
+      }
+    `}
+    onClick={onClick}
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+  >
+    <Icon size={20} strokeWidth={1.5} />
+    <span className="text-sm font-medium">{label}</span>
+  </motion.div>
+);
 
 function Appbar() {
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const auth = useRecoilValue(authState);
   const setAuthState = useSetRecoilState(authState);
+
+  const navItems = [
+    { path: "/", label: "Home", icon: Home },
+    { path: "/about", label: "About Us", icon: Info },
+    { path: "/academics", label: "Academics", icon: GraduationCap },
+    { path: "/admissions", label: "Admissions", icon: ScrollText },
+    { path: "/contact", label: "Contact", icon: Phone },
+    { path: "/login", label: "Login", icon: LogIn },
+  ];
 
   useEffect(() => {
     const studentToken = localStorage.getItem("studentToken");
     const teacherToken = localStorage.getItem("teacherToken");
     const adminToken = localStorage.getItem("token");
 
-    if (studentToken || teacherToken || adminToken) {
-      setAuthState({ isAuthenticated: true });
-    } else {
-      setAuthState({ isAuthenticated: false });
-    }
+    setAuthState({
+      isAuthenticated: !!(studentToken || teacherToken || adminToken),
+    });
   }, [setAuthState]);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const handleLogout = () => {
     localStorage.removeItem("studentToken");
@@ -80,157 +70,118 @@ function Appbar() {
     navigate("/");
   };
 
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
   return (
-    <AppBar
-      position="sticky"
-      sx={{ backgroundColor: "#115E59" }}
-      elevation={0}
+    <motion.nav
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-teal-800 to-gray-900 shadow-lg"
     >
-      <Toolbar className="w-full max-w-[1440px] mx-auto">
-        <div className="w-full flex items-center justify-between font-poppins">
-          <div
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <motion.div
+            className="flex items-center cursor-pointer"
             onClick={() => navigate("/")}
-            className="flex cursor-pointer items-center"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <p className="font-bold font-sans text-2xl">Shivam Public</p>
-          </div>
-          <div
-            className="appbar-buttons hidden md:flex font-serif text-xl"
-            style={{ gap: "2rem" }}
-          >
-            <p
-              className="appbar-link cursor-pointer"
-              onClick={() => navigate("/")}
-            >
-              Home
-            </p>
-            <p
-              className="appbar-link cursor-pointer"
-              onClick={() => navigate("/about")}
-            >
-              About Us
-            </p>
-            <p
-              className="appbar-link cursor-pointer"
-              onClick={() => navigate("/academics")}
-            >
-              Academics
-            </p>
-            <p
-              className="appbar-link cursor-pointer"
-              onClick={() => navigate("/admissions")}
-            >
-              Admissions
-            </p>
-            <p
-              className="appbar-link cursor-pointer"
-              onClick={() => navigate("/contact")}
-            >
-              Contact
-            </p>
-          </div>
-          <div className="appbar-buttons hidden md:flex">
-            {auth.isAuthenticated ? (
-              <PrimaryButton
-                color="logout"
-                extra_styles={{ fontFamily: "serif", padding: "9.5px" }}
+            <h1 className="text-2xl font-bold text-white tracking-wide">
+              Shivam Public
+            </h1>
+          </motion.div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex space-x-4 items-center cursor-pointer">
+            {navItems.map((item) => (
+              <NavItem
+                key={item.path}
+                {...item}
+                isActive={location.pathname === item.path}
+                onClick={() => navigate(item.path)}
+              />
+            ))}
+
+            {auth.isAuthenticated && (
+              <motion.button
+                className="ml-4 bg-red-600/20 text-red-300 hover:bg-red-600/40 px-4 py-2 rounded-lg flex items-center space-x-2"
                 onClick={handleLogout}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Logout
-              </PrimaryButton>
-            ) : (
-              <></>
+                <LogOut size={20} strokeWidth={1.5} />
+                <span>Logout</span>
+              </motion.button>
             )}
           </div>
+
+          {/* Mobile Menu Toggle */}
           <div className="md:hidden">
-            <IconButton
-              aria-label="open menu"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleClick}
-              color="inherit"
+            <motion.button
+              className="text-white"
+              onClick={toggleMobileMenu}
+              whileTap={{ scale: 0.9 }}
             >
-              <MenuIcon />
-            </IconButton>
-            <GradientMenu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={open}
-              onClose={handleClose}
-            >
-              {[
-                // Provide an array instead of Fragment
-                <GradientMenuItem
-                  key="home"
-                  onClick={() => {
-                    navigate("/");
-                    handleClose();
-                  }}
-                >
-                  Home
-                </GradientMenuItem>,
-                <GradientMenuItem
-                  key="about"
-                  onClick={() => {
-                    navigate("/about");
-                    handleClose();
-                  }}
-                >
-                  About Us
-                </GradientMenuItem>,
-                <GradientMenuItem
-                  key="academics"
-                  onClick={() => {
-                    navigate("/academics");
-                    handleClose();
-                  }}
-                >
-                  Academics
-                </GradientMenuItem>,
-                <GradientMenuItem
-                  key="admissions"
-                  onClick={() => {
-                    navigate("/admissions");
-                    handleClose();
-                  }}
-                >
-                  Admissions
-                </GradientMenuItem>,
-                <GradientMenuItem
-                  key="contact"
-                  onClick={() => {
-                    navigate("/contact");
-                    handleClose();
-                  }}
-                >
-                  Contact
-                </GradientMenuItem>,
-                auth.isAuthenticated && (
-                  <LogoutMenuItem
-                    key="logout"
-                    onClick={() => {
-                      handleLogout();
-                      handleClose();
-                    }}
-                  >
-                    Logout
-                  </LogoutMenuItem>
-                ),
-              ]}
-            </GradientMenu>
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </motion.button>
           </div>
         </div>
-      </Toolbar>
-    </AppBar>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-black/10 backdrop-blur-sm"
+          >
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              {navItems.map((item) => (
+                <motion.div
+                  key={item.path}
+                  className={`
+                    flex items-center space-x-3 
+                    px-3 py-3 rounded-lg 
+                    cursor-pointer 
+                    ${
+                      location.pathname === item.path
+                        ? "bg-white/10 text-white"
+                        : "text-white/70 hover:bg-white/5 hover:text-white"
+                    }
+                  `}
+                  onClick={() => {
+                    navigate(item.path);
+                    toggleMobileMenu();
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <item.icon size={20} strokeWidth={1.5} />
+                  <span className="text-sm font-medium">{item.label}</span>
+                </motion.div>
+              ))}
+
+              {auth.isAuthenticated && (
+                <motion.div
+                  className="flex items-center space-x-3 px-3 py-3 rounded-lg bg-red-600/10 text-red-300 hover:bg-red-600/20 cursor-pointer"
+                  onClick={() => {
+                    handleLogout();
+                    toggleMobileMenu();
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <LogOut size={20} strokeWidth={1.5} />
+                  <span className="text-sm font-medium">Logout</span>
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
   );
 }
 

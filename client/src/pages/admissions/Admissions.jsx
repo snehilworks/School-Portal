@@ -25,12 +25,12 @@ const AdmissionsPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-red-50 to-emerald-500 py-12">
+    <div className="min-h-screen bg-gradient-to-b from-red-50 to-emerald-500 py-20">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="mb-12 text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Admissions 2024-25
+            Admissions 2025-26
           </h1>
           <div className="flex items-center justify-center gap-2 text-green-600">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
