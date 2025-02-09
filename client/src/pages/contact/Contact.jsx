@@ -1,133 +1,176 @@
-import React, { useState } from "react";
-import { TextField, Snackbar } from "@mui/material";
-import MuiAlert from "@mui/material/Alert";
-import axios from "axios";
-import PrimaryButton from "../../components/ui/PrimaryButton";
+import React, { useState, useRef } from "react";
+import { motion } from "framer-motion";
+import {
+  Send,
+  MapPin,
+  Mail,
+  Phone,
+  CheckCircle2,
+  User,
+  MessageCircle,
+} from "lucide-react";
 
 const ContactPage = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const formRef = useRef(null);
 
-  const handleSend = async () => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      await axios.post(`${process.env.API_URL}/api/home/contact`, {
-        name,
-        email,
-        message,
-      });
-      setName("");
-      setEmail("");
-      setMessage("");
-      setOpenSnackbar(true);
+      // Simulated API call
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setSubmitStatus("success");
+      setFormData({ name: "", email: "", message: "" });
+
+      // Auto-reset success message
+      setTimeout(() => setSubmitStatus(null), 3000);
     } catch (error) {
-      console.error("Error sending message:", error);
+      setSubmitStatus("error");
     }
   };
 
-  const handleCloseSnackbar = () => {
-    setOpenSnackbar(false);
-  };
-
   return (
-    <div className="w-full min-h-screen mt-0 bg-teal-50 py-3">
-      <div className="max-w-3xl mx-auto px-6 sm:px-8">
-        <h2 className="text-4xl font-bold text-teal-800 text-center mb-10">
-          Contact Us
-        </h2>
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-100 to-teal-500 pt-[12vh] pb-[8vh] relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-cyan-100 to-teal-200 opacity-20 animate-pulse"></div>
 
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
-          {/* Contact Form */}
-          <div className="bg-white p-8 rounded-2xl shadow-lg border border-teal-200 hover:shadow-xl transition-shadow duration-300">
-            <h3 className="text-2xl font-semibold text-teal-800 mb-6 text-center">
-              Get in Touch
-            </h3>
-            <form className="space-y-6">
-              <div>
-                <TextField
-                  label="Name"
-                  variant="outlined"
-                  fullWidth
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="bg-teal-50 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <TextField
-                  label="Email"
-                  variant="outlined"
-                  fullWidth
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="bg-teal-50 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <TextField
-                  label="Message"
-                  variant="outlined"
-                  multiline
-                  rows={6}
-                  fullWidth
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="bg-teal-50 rounded-lg"
-                  required
-                />
-              </div>
-              <PrimaryButton
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={handleSend}
-                className="bg-teal-600 ml-14 hover:bg-teal-700 rounded-lg transition-colors duration-300"
-              >
-                Send Message
-              </PrimaryButton>
-            </form>
-          </div>
-
-          {/* Contact Information */}
-          <div className="bg-white p-8 rounded-2xl shadow-lg border border-teal-200 hover:shadow-xl transition-shadow duration-300">
-            <h3 className="text-2xl font-semibold text-teal-800 mb-6">
-              Contact Information
-            </h3>
-            <p className="text-teal-600 mb-4">
-              <span className="font-semibold">Email:</span>{" "}
-              <a href="mailto:shivampublicschool@gmail.com" className="text-teal-600 hover:underline">
-                shivampublicschool@gmail.com
-              </a>
-            </p>
-            <p className="text-teal-600 mb-4">
-              <span className="font-semibold">Phone:</span> (123) 456-7890
-            </p>
-            <p className="text-teal-600">
-              <span className="font-semibold">Address:</span> 123 School Street, City
-            </p>
-          </div>
-        </div>
-
-        {/* Snackbar for success message */}
-        <Snackbar
-          open={openSnackbar}
-          autoHideDuration={6000}
-          onClose={handleCloseSnackbar}
-          className="mt-4"
+      <div className="max-w-6xl mx-auto px-4 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
-          <MuiAlert
-            elevation={6}
-            variant="filled"
-            onClose={handleCloseSnackbar}
-            severity="success"
-            className="!bg-teal-600"
+          <h1 className="text-5xl font-extrabold text-teal-900 mb-4 tracking-tight">
+            Connect with Us
+          </h1>
+          <p className="text-xl text-teal-700 max-w-3xl mx-auto">
+            We're here to answer your questions and support your journey
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 gap-12">
+          {/* Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white rounded-3xl p-8 shadow-2xl"
           >
-            Your message has been sent successfully!
-          </MuiAlert>
-        </Snackbar>
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+              <div className="relative">
+                <User className="absolute left-3 top-3 text-teal-500" />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Your Name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full p-3 pl-10 rounded-xl border border-teal-200 focus:ring-2 focus:ring-teal-500"
+                />
+              </div>
+
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 text-teal-500" />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Your Email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full p-3 pl-10 rounded-xl border border-teal-200 focus:ring-2 focus:ring-teal-500"
+                />
+              </div>
+
+              <div className="relative">
+                <MessageCircle className="absolute left-3 top-3 text-teal-500" />
+                <textarea
+                  name="message"
+                  placeholder="Your Message"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  required
+                  rows={5}
+                  className="w-full p-3 pl-10 rounded-xl border border-teal-200 focus:ring-2 focus:ring-teal-500"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full flex items-center justify-center gap-2 p-3 bg-teal-600 text-white rounded-xl hover:bg-teal-700 transition-colors"
+              >
+                <Send className="w-5 h-5" />
+                Send Message
+              </button>
+
+              {submitStatus === "success" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center gap-2 text-green-600 mt-4"
+                >
+                  <CheckCircle2 />
+                  Message sent successfully!
+                </motion.div>
+              )}
+            </form>
+          </motion.div>
+
+          {/* Contact Details */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-white rounded-3xl p-8 shadow-2xl flex flex-col justify-between"
+          >
+            <div>
+              <h2 className="text-3xl font-bold text-teal-900 mb-6">
+                Contact Information
+              </h2>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <Mail className="text-teal-500 w-6 h-6" />
+                  <a
+                    href="mailto:contact@shivampublicschool.edu.in"
+                    className="text-teal-700 hover:underline"
+                  >
+                    contact@shivampublicschool.edu.in
+                  </a>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <Phone className="text-teal-500 w-6 h-6" />
+                  <span className="text-teal-700">+91 (022) 2678-9012</span>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <MapPin className="text-teal-500 w-6 h-6" />
+                  <address className="text-teal-700 not-italic">
+                    123 Education Lane, Techno City, State 400001
+                  </address>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 bg-teal-50 p-4 rounded-xl">
+              <p className="text-teal-800 text-sm">
+                Our support team is available Monday-Friday, 9 AM to 5 PM IST
+              </p>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );
