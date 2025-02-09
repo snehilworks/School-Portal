@@ -6,6 +6,7 @@ import Academics from "./pages/academics/Academics";
 import About from "./pages/About/About.jsx";
 import Contact from "./pages/contact/Contact";
 import { Landing } from "./components/Landing.jsx";
+import { Login } from "./pages/login/Login.jsx";
 //student imports
 // import Register from "./pages/Student/studentRegister/Register";
 import StPays from "./pages/Student/StPays/StPays";
@@ -40,6 +41,7 @@ const routes = [
   { path: "/academics", element: <Academics /> },
   { path: "/about", element: <About /> },
   { path: "/contact", element: <Contact /> },
+  { path: "/login", element: <Login /> },
 
   //Admin Routes
   {
