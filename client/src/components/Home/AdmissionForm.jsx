@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AdmissionForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,111 @@ const AdmissionForm = ({ onClose }) => {
 
   const [classesList, setClassesList] = useState([]);
   const [admissionFee, setAdmissionFee] = useState(0);
+  const [internalServerError, setInternalServerError] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmitAndPay = async (e) => {
+    e.preventDefault();
+    setInternalServerError("");
+    //creating order
+    //and sending axios.post from where order id is being created on backend
+
+    try {
+      const response = await axios.post(
+        `${process.env.API_URL}/api/home/admission-form`,
+        formData
+      );
+
+      if (response.status === 512) {
+        setInternalServerError(
+          "Internal Server Error. Please try again later."
+        );
+        return; // Exit early
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setInternalServerError("Internal Server Error. Please try again later.");
+      return; // Exit early
+    }
+
+    // Pay
+    const amount = admissionFee * 100;
+
+    try {
+      const response = await axios.post(
+        `${process.env.API_URL}/api/pay/order`,
+        { amount }
+      );
+      const order = response.data;
+      VerifyPayment(order);
+    } catch (error) {
+      console.error("Error creating payment order:", error);
+      setInternalServerError(
+        "Error creating payment order. Please try again later."
+      );
+    }
+  };
+
+  const VerifyPayment = async (data) => {
+    var options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY || "",
+      amount: data.amount,
+      currency: "INR",
+      name: "Shivam Public",
+      description: "Admission Fee",
+      image: "https://example.com/your_logo",
+      order_id: data.id,
+      handler: async function (response) {
+        // Verify the payment
+        console.log("handler triggered");
+        try {
+          const verifyResponse = await axios.post(
+            `${process.env.API_URL}/api/pay/verify-payment`,
+            {
+              orderId: data.id,
+              paymentId: response.razorpay_payment_id,
+              signature: response.razorpay_signature,
+              studentName: formData.studentName,
+              studentClass: formData.class,
+              amount: data.amount / 100, // Convert back to INR
+              paymentDate: new Date(),
+              fieldType: "ADMISSION",
+            }
+          );
+
+          if (verifyResponse.status === 201) {
+            alert("Payment verified and saved successfully!");
+            // Navigate to another page or show a success message
+            navigate("/student/payment-completion", {
+              state: { paymentId: response.razorpay_payment_id },
+            });
+          }
+        } catch (error) {
+          console.error("Error verifying payment:", error);
+          setInternalServerError(
+            "Payment verification failed. Please contact support."
+          );
+        }
+      },
+      prefill: {
+        name: formData.studentName,
+        email: formData.email,
+        contact: formData.fatherPhone,
+      },
+      notes: {
+        address: formData.address,
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+
+    var rzp1 = new window.Razorpay(options);
+    rzp1.on("payment.failed", function (response) {
+      alert(`Payment failed: ${response.error.description}`);
+    });
+    rzp1.open();
+  };
 
   const fetchClasses = async () => {
     try {
@@ -188,6 +294,7 @@ const AdmissionForm = ({ onClose }) => {
             <div className="text-center">
               <button
                 type="submit"
+                onClick={handleSubmitAndPay}
                 className="bg-gradient-to-r from-blue-600 to-sky-900 text-white px-10 py-3 rounded-full hover:from-blue-700 hover:to-sky-600 transition-all shadow-lg"
               >
                 Submit Admission Form
