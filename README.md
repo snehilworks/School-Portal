@@ -1,6 +1,7 @@
 # School Portal
 
-![schl-img](https://github.com/snehil-githubrepository/School-Portal/assets/69778988/4945a49c-5370-49ba-8360-ed6144076473)
+![image](https://github.com/user-attachments/assets/a02b48e9-393d-4ca6-b60e-5d020bd0d06e)
+
 
 ## Tech Stack
 
