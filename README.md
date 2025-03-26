@@ -33,17 +33,29 @@ The **School Portal** is a comprehensive platform designed to manage school oper
 ## 📦 Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/school-portal.git
+   git clone https://github.com/snehilworks/school-portal.git
    ```
 2. Navigate to the project folder:
    ```sh
    cd school-portal
    ```
-3. Install dependencies:
+3. Change Directory to API:
+   ```sh
+   cd API
+   ```
+4. Start the Server :
+   ```sh
+   npx tsc build && node dist/index.js
+   ```
+5. Cd over to Client:
+   ```sh
+   cd Client
+   ```
+6. Install dependencies:
    ```sh
    npm install
    ```
-4. Start the development server:
+7. Start the development server:
    ```sh
    npm run dev
    ```
@@ -73,7 +85,7 @@ We welcome contributions! To contribute:
 5. Submit a pull request.
 
 ## 📞 Contact
-For any issues or suggestions, feel free to open an issue or reach out at [coder.ss2910@gmail.com](mailto:cod3r.ss2910@gmail.com).
+For any issues or suggestions, feel free to open an issue or reach out at [cod3r.ss2910@gmail.com](mailto:cod3r.ss2910@gmail.com).
 
 ---
 
