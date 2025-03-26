@@ -311,10 +311,11 @@ export const Landing = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             <div>
               <h3 className="text-white font-bold mb-4">Contact Us</h3>
-              <p>123 Education Street</p>
-              <p>New Delhi, India</p>
-              <p>Phone: +91 123 456 7890</p>
-              <p>Email: info@shivamschool.com</p>
+              <p>Aarni Matrikundaya</p>
+              <p>Rashmi, Aarni</p>
+              <p>School Code : P17815</p>
+              <p>Phone: +91 7878764773</p>
+              <p>Email: shivamsecondaryschool@gmail.com</p>
             </div>
             <div>
               <h3 className="text-white font-bold mb-4">Quick Links</h3>

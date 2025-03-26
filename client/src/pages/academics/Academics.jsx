@@ -1,93 +1,159 @@
 import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Star, Calendar, Check } from "lucide-react";
+import {
+  Sparkles,
+  Star,
+  Calendar,
+  Check,
+  Image as ImageIcon,
+  Award,
+  Users,
+  X,
+} from "lucide-react";
 
 const AcademicsPage = () => {
-  const [activeTab, setActiveTab] = useState("Cultural");
+  const [activeTab, setActiveTab] = useState("Gallery");
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const activitiesRef = useRef(null);
 
-  const categories = [
-    {
-      name: "Cultural",
-      icon: <Sparkles className="w-6 h-6" />,
-      activities: [
+  const schoolEvents = {
+    Gallery: {
+      icon: <ImageIcon className="w-6 h-6" />,
+      events: [
         {
-          title: "Global Culture Summit",
-          description:
-            "International cultural exchange and performance showcase.",
-          date: "December 2025",
-          highlight: true,
-          tags: ["International", "Collaboration"],
+          title: "Science Fair Showcase",
+          description: "Students presenting innovative projects and research",
+          date: "March 2025",
+          images: [
+            "/api/placeholder/400/300",
+            "/api/placeholder/400/300",
+            "/api/placeholder/400/300",
+          ],
+          highlights: [
+            "AI-powered robotics project",
+            "Environmental sustainability research",
+            "Quantum computing model",
+          ],
         },
         {
-          title: "AI-Assisted Dance Workshop",
+          title: "Cultural Diversity Day",
           description:
-            "Advanced dance training using AI motion analysis and personalized feedback.",
-          date: "Every Saturday",
-          tags: ["Technology", "Innovation"],
-        },
-        {
-          title: "Immersive Music Experience",
-          description:
-            "Virtual reality and augmented reality music performance platform.",
-          date: "Bi-weekly",
-          tags: ["VR", "Music Tech"],
+            "Celebrating global cultures and international understanding",
+          date: "April 2025",
+          images: [
+            "/api/placeholder/400/300",
+            "/api/placeholder/400/300",
+            "/api/placeholder/400/300",
+          ],
+          highlights: [
+            "Traditional costume parade",
+            "International cuisine festival",
+            "Cultural performance showcase",
+          ],
         },
       ],
     },
-    // Other categories remain similar, with modern twists
-    {
-      name: "Sports",
+    Achievements: {
+      icon: <Award className="w-6 h-6" />,
+      events: [
+        {
+          title: "National Academic Olympiad",
+          description: "Top performers recognized for academic excellence",
+          date: "May 2025",
+          images: [
+            "/api/placeholder/400/300",
+            "/api/placeholder/400/300",
+            "/api/placeholder/400/300",
+          ],
+          achievements: [
+            {
+              name: "Mathematics Gold Medal",
+              student: "Emily Chang",
+              description: "Outstanding performance in advanced mathematics",
+            },
+            {
+              name: "Science Innovation Award",
+              student: "Michael Rodriguez",
+              description: "Groundbreaking research in renewable energy",
+            },
+            {
+              name: "Debate Championship",
+              team: "Senior Debate Team",
+              description: "Winning national-level debate competition",
+            },
+          ],
+        },
+      ],
+    },
+    Sports: {
       icon: <Star className="w-6 h-6" />,
-      activities: [
+      events: [
         {
-          title: "Cybernetic Sports Meet",
-          description:
-            "Advanced sports competition with wearable performance tracking.",
-          date: "January 2025",
-          highlight: true,
-          tags: ["Tech", "Performance"],
+          title: "Inter-School Sports Tournament",
+          description: "Showcasing athletic excellence and team spirit",
+          date: "February 2025",
+          images: [
+            "/api/placeholder/400/300",
+            "/api/placeholder/400/300",
+            "/api/placeholder/400/300",
+          ],
+          results: [
+            {
+              sport: "Basketball",
+              achievement: "1st Place",
+              description: "Undefeated championship performance",
+            },
+            {
+              sport: "Swimming",
+              achievement: "Regional Champions",
+              description: "Multiple record-breaking performances",
+            },
+            {
+              sport: "Track and Field",
+              achievement: "Multiple Gold Medals",
+              description: "Outstanding individual and team achievements",
+            },
+          ],
         },
       ],
     },
-    {
-      name: "Academic",
-      icon: <Check className="w-6 h-6" />,
-      activities: [
+    Community: {
+      icon: <Users className="w-6 h-6" />,
+      events: [
         {
-          title: "AI Research Symposium",
-          description:
-            "Student-led AI and machine learning research presentations.",
-          date: "November 2025",
-          highlight: true,
-          tags: ["Research", "Innovation"],
+          title: "Community Service Initiative",
+          description: "Students making a difference in local communities",
+          date: "Ongoing",
+          images: [
+            "/api/placeholder/400/300",
+            "/api/placeholder/400/300",
+            "/api/placeholder/400/300",
+          ],
+          projects: [
+            "Environmental cleanup drive",
+            "Teaching programs for underprivileged children",
+            "Senior citizen support workshops",
+          ],
         },
       ],
     },
-    {
-      name: "Community",
-      icon: <Calendar className="w-6 h-6" />,
-      activities: [
-        {
-          title: "Global Impact Challenge",
-          description:
-            "Collaborative community project solving real-world challenges.",
-          date: "Quarterly",
-          highlight: true,
-          tags: ["Social Impact", "Collaboration"],
-        },
-      ],
-    },
-  ];
+  };
 
-  const scrollToActivities = () => {
-    activitiesRef.current?.scrollIntoView({ behavior: "smooth" });
+  const categories = Object.keys(schoolEvents).map((key) => ({
+    name: key,
+    icon: schoolEvents[key].icon,
+  }));
+
+  const openEventModal = (event) => {
+    setSelectedEvent(event);
+  };
+
+  const closeEventModal = () => {
+    setSelectedEvent(null);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-emerald-100 to-emerald-500 py-20 my-10 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-emerald-100 to-emerald-200 opacity-10 animate-pulse"></div>
-
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200 py-20 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: -50 }}
@@ -95,22 +161,15 @@ const AcademicsPage = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h1 className="text-5xl font-extrabold text-emerald-900 mb-4 tracking-tight">
-            Future Learning Ecosystem
+          <h1 className="text-5xl font-extrabold text-blue-900 mb-4 tracking-tight">
+            School Life Panorama
           </h1>
-          <p className="text-xl text-emerald-700 max-w-2xl mx-auto">
-            Pioneering holistic education through technology, creativity, and
-            global collaboration
+          <p className="text-xl text-blue-700 max-w-2xl mx-auto">
+            Transparent insights into our students' vibrant educational journey
           </p>
-          <button
-            onClick={scrollToActivities}
-            className="mt-6 bg-emerald-600 text-white px-8 py-3 rounded-full hover:bg-emerald-700 transition-all shadow-lg hover:shadow-xl"
-          >
-            Explore Activities
-          </button>
         </motion.div>
 
-        {/* Category Tabs with Framer Motion */}
+        {/* Category Tabs */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -125,8 +184,8 @@ const AcademicsPage = () => {
               onClick={() => setActiveTab(category.name)}
               className={`flex items-center gap-3 px-6 py-3 rounded-full font-semibold transition-all ${
                 activeTab === category.name
-                  ? "bg-emerald-600 text-white shadow-2xl"
-                  : "bg-white text-emerald-800 hover:bg-emerald-50 hover:shadow-md"
+                  ? "bg-blue-600 text-white shadow-2xl"
+                  : "bg-white text-blue-800 hover:bg-blue-50 hover:shadow-md"
               }`}
             >
               {category.icon}
@@ -135,63 +194,169 @@ const AcademicsPage = () => {
           ))}
         </motion.div>
 
-        {/* Activities Grid with AnimatePresence */}
-        <div
-          ref={activitiesRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
+        {/* Event Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence>
-            {categories
-              .find((cat) => cat.name === activeTab)
-              ?.activities.map((activity, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -50 }}
-                  transition={{ duration: 0.3, delay: idx * 0.1 }}
-                  className={`relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all group ${
-                    activity.highlight ? "border-2 border-emerald-500" : ""
-                  }`}
-                >
-                  {activity.highlight && (
-                    <div className="absolute top-4 right-4 z-10">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 uppercase tracking-wider">
-                        Featured
-                      </span>
-                    </div>
-                  )}
-                  <div className="p-6 relative">
-                    <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition-all">
-                      {categories.find((cat) => cat.name === activeTab).icon}
-                    </div>
-                    <h3 className="text-xl font-bold text-emerald-900 mb-3 tracking-tight">
-                      {activity.title}
-                    </h3>
-                    <p className="text-gray-600 mb-4 line-clamp-3">
-                      {activity.description}
-                    </p>
-                    <div className="flex items-center justify-between mt-4">
-                      <div className="flex items-center text-sm text-gray-500">
-                        <Calendar className="w-4 h-4 mr-2 text-emerald-500" />
-                        {activity.date}
-                      </div>
-                      <div className="flex space-x-2">
-                        {activity.tags?.map((tag) => (
-                          <span
-                            key={tag}
-                            className="px-2 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+            {schoolEvents[activeTab].events.map((event, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -50 }}
+                transition={{ duration: 0.3, delay: idx * 0.1 }}
+                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all overflow-hidden"
+                onClick={() => openEventModal(event)}
+              >
+                {event.images && event.images.length > 0 && (
+                  <div className="h-48 overflow-hidden">
+                    <img
+                      src={event.images[0]}
+                      alt={event.title}
+                      className="w-full h-full object-cover hover:scale-110 transition-transform"
+                    />
                   </div>
-                </motion.div>
-              ))}
+                )}
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-blue-900 mb-3">
+                    {event.title}
+                  </h3>
+                  <p className="text-gray-600 mb-4">{event.description}</p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center text-sm text-gray-500">
+                      <Calendar className="w-4 h-4 mr-2 text-blue-500" />
+                      {event.date}
+                    </div>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-200"
+                    >
+                      View Details
+                    </motion.button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </AnimatePresence>
         </div>
+
+        {/* Event Modal */}
+        {selectedEvent && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            >
+              <div className="p-8">
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <h2 className="text-3xl font-bold text-blue-900">
+                      {selectedEvent.title}
+                    </h2>
+                    <p className="text-gray-600 mt-2">
+                      {selectedEvent.description}
+                    </p>
+                  </div>
+                  <button
+                    onClick={closeEventModal}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <X className="w-8 h-8" />
+                  </button>
+                </div>
+
+                {/* Image Gallery */}
+                {selectedEvent.images && (
+                  <div className="grid grid-cols-3 gap-4 mb-6">
+                    {selectedEvent.images.map((img, idx) => (
+                      <img
+                        key={idx}
+                        src={img}
+                        alt={`${selectedEvent.title} - Image ${idx + 1}`}
+                        className="w-full h-48 object-cover rounded-lg"
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* Achievements Section */}
+                {activeTab === "Achievements" && selectedEvent.achievements && (
+                  <div className="bg-blue-50 p-6 rounded-lg">
+                    <h3 className="text-xl font-semibold text-blue-800 mb-4">
+                      Notable Achievements
+                    </h3>
+                    {selectedEvent.achievements.map((achievement, idx) => (
+                      <div
+                        key={idx}
+                        className="flex justify-between items-center py-3 border-b last:border-b-0 border-blue-100"
+                      >
+                        <div>
+                          <span className="font-medium text-blue-900">
+                            {achievement.name}
+                          </span>
+                          <span className="block text-sm text-gray-600">
+                            {achievement.student || achievement.team}
+                          </span>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {achievement.description}
+                          </p>
+                        </div>
+                        <Award className="w-6 h-6 text-blue-500" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Sports Results Section */}
+                {activeTab === "Sports" && selectedEvent.results && (
+                  <div className="bg-blue-50 p-6 rounded-lg">
+                    <h3 className="text-xl font-semibold text-blue-800 mb-4">
+                      Tournament Results
+                    </h3>
+                    {selectedEvent.results.map((result, idx) => (
+                      <div
+                        key={idx}
+                        className="flex justify-between items-center py-3 border-b last:border-b-0 border-blue-100"
+                      >
+                        <div>
+                          <span className="font-medium text-blue-900">
+                            {result.sport}
+                          </span>
+                          <span className="block text-sm text-gray-600">
+                            {result.achievement}
+                          </span>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {result.description}
+                          </p>
+                        </div>
+                        <Star className="w-6 h-6 text-blue-500" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Community Projects Section */}
+                {activeTab === "Community" && selectedEvent.projects && (
+                  <div className="bg-blue-50 p-6 rounded-lg">
+                    <h3 className="text-xl font-semibold text-blue-800 mb-4">
+                      Community Impact Projects
+                    </h3>
+                    {selectedEvent.projects.map((project, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center py-3 border-b last:border-b-0 border-blue-100"
+                      >
+                        <Users className="w-6 h-6 text-blue-500 mr-4" />
+                        <span className="text-blue-900">{project}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
       </div>
     </div>
   );

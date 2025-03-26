@@ -49,8 +49,10 @@ function Appbar() {
     { path: "/academics", label: "Academics", icon: GraduationCap },
     { path: "/admissions", label: "Admissions", icon: ScrollText },
     { path: "/contact", label: "Contact", icon: Phone },
-    { path: "/login", label: "Login", icon: LogIn },
   ];
+
+  // Add login only if no token is present
+  const loginItem = { path: "/login", label: "Login", icon: LogIn };
 
   useEffect(() => {
     const studentToken = localStorage.getItem("studentToken");
@@ -89,7 +91,7 @@ function Appbar() {
             whileTap={{ scale: 0.95 }}
           >
             <h1 className="text-2xl font-bold text-white tracking-wide">
-              Shivam Public
+              Shivam Public School
             </h1>
           </motion.div>
 
@@ -104,7 +106,14 @@ function Appbar() {
               />
             ))}
 
-            {auth.isAuthenticated && (
+            {/* Conditionally render Login or Logout */}
+            {!auth.isAuthenticated ? (
+              <NavItem
+                {...loginItem}
+                isActive={location.pathname === loginItem.path}
+                onClick={() => navigate(loginItem.path)}
+              />
+            ) : (
               <motion.button
                 className="ml-4 bg-red-600/20 text-red-300 hover:bg-red-600/40 px-4 py-2 rounded-lg flex items-center space-x-2"
                 onClick={handleLogout}
@@ -164,7 +173,30 @@ function Appbar() {
                 </motion.div>
               ))}
 
-              {auth.isAuthenticated && (
+              {/* Conditionally render Login or Logout for mobile */}
+              {!auth.isAuthenticated ? (
+                <motion.div
+                  key={loginItem.path}
+                  className={`
+                    flex items-center space-x-3 
+                    px-3 py-3 rounded-lg 
+                    cursor-pointer 
+                    ${
+                      location.pathname === loginItem.path
+                        ? "bg-white/10 text-white"
+                        : "text-white/70 hover:bg-white/5 hover:text-white"
+                    }
+                  `}
+                  onClick={() => {
+                    navigate(loginItem.path);
+                    toggleMobileMenu();
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <LogIn size={20} strokeWidth={1.5} />
+                  <span className="text-sm font-medium">{loginItem.label}</span>
+                </motion.div>
+              ) : (
                 <motion.div
                   className="flex items-center space-x-3 px-3 py-3 rounded-lg bg-red-600/10 text-red-300 hover:bg-red-600/20 cursor-pointer"
                   onClick={() => {

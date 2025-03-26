@@ -1,6 +1,20 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Copy, Check, Home, Share2, MessageCircle } from "lucide-react";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { format } from "date-fns";
+import {
+  Copy,
+  Check,
+  Home,
+  Share2,
+  MessageCircle,
+  Download,
+  Printer,
+  ArrowRight,
+  Shield,
+} from "lucide-react";
+import downloadReceipt from "../../components/DownloadReceipt";
 
 const PaymentCompletion = () => {
   const navigate = useNavigate();
@@ -10,8 +24,14 @@ const PaymentCompletion = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
-  const handleGoBackHome = () => {
-    navigate("/");
+  // Mock data - in real app would come from payment response
+  const paymentDetails = {
+    amount: "₹20,000",
+    date: new Date().toLocaleDateString(),
+    time: new Date().toLocaleTimeString(),
+    type: "Hostel Fees",
+    status: "Success",
+    method: "Online Payment",
   };
 
   const showNotification = (message) => {
@@ -25,188 +45,199 @@ const PaymentCompletion = () => {
       try {
         await navigator.clipboard.writeText(paymentId);
         setCopied(true);
-        showNotification(
-          "✅ Payment ID copied! Keep it safe for your records."
-        );
+        showNotification("Payment ID copied successfully!");
         setTimeout(() => setCopied(false), 2000);
       } catch (err) {
-        showNotification("Failed to copy to clipboard");
+        showNotification("Failed to copy payment ID");
       }
     }
   };
 
   const shareToWhatsApp = () => {
-    const shareText = `Hello Teacher,\n\nI've completed my school fee payment. Here's my payment confirmation:\n\nPayment ID: ${paymentId}\n\nPlease let me know if you need any additional information.`;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-    window.open(whatsappUrl, "_blank");
+    const shareText = `Hello,\n\nI've completed my hostel fee payment.\n\nAmount: ${paymentDetails.amount}\nPayment ID: ${paymentId}\nDate: ${paymentDetails.date}\n\nThank you.`;
+    window.open(
+      `https://wa.me/?text=${encodeURIComponent(shareText)}`,
+      "_blank"
+    );
   };
 
-  const sharePaymentId = async () => {
-    const shareText = `Payment ID: ${paymentId}\n\nThis is my payment confirmation for school fees.`;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "Payment Confirmation",
-          text: shareText,
-        });
-      } catch (err) {
-        if (err.name !== "AbortError") {
-          await navigator.clipboard.writeText(shareText);
-          showNotification(
-            "Text copied! You can now paste it in your preferred app"
-          );
-        }
-      }
-    } else {
-      await navigator.clipboard.writeText(shareText);
-      showNotification(
-        "Text copied! You can now paste it in your preferred app"
-      );
+  const handleDownloadReceipt = () => {
+    try {
+      const fileName = downloadReceipt(paymentDetails, paymentId);
+      showNotification(`Receipt downloaded: ${fileName}`);
+    } catch (error) {
+      console.error("Error generating receipt:", error);
+      showNotification("Failed to download receipt. Please try again.");
     }
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-teal-400 to-teal-700">
-      <div className="absolute inset-0 overflow-y-auto pt-20 pb-16">
-        <div className="flex min-h-full flex-col items-center justify-center px-4">
-          <div className="w-full max-w-3xl text-center text-white">
-            {/* Success Animation */}
-            <div className="mb-8 flex items-center justify-center">
-              <div className="h-24 w-24 rounded-full bg-white shadow-lg sm:h-28 sm:w-28 flex items-center justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="h-14 w-14 text-teal-600 sm:h-16 sm:w-16"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  />
-                </svg>
-              </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Success Banner */}
+      <div className="bg-teal-500 text-white py-16 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="mb-6 inline-block bg-white rounded-full p-4">
+            <Check className="h-12 w-12 text-teal-500" />
+          </div>
+          <h1 className="text-4xl font-bold mb-4">Payment Successful!</h1>
+          <p className="text-xl opacity-90">
+            Your hostel registration is now complete
+          </p>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-4xl mx-auto px-4 -mt-8">
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+          {/* Payment Summary */}
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-gray-50 rounded-lg p-4">
+              <p className="text-sm text-gray-600 mb-1">Amount Paid</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {paymentDetails.amount}
+              </p>
             </div>
-
-            {/* Main Content */}
-            <h1 className="mb-4 text-3xl font-extrabold sm:text-4xl">
-              Payment Successful! 🎉
-            </h1>
-            <p className="mb-6 text-base sm:text-lg">
-              Great job! Your school fee payment has been processed
-              successfully.
-            </p>
-
-            <div className="flex flex-col lg:flex-row lg:gap-3">
-              <div className="flex-1">
-                {/* Important Instructions */}
-                <div className="mb-6 rounded-xl bg-white bg-opacity-20 p-4 text-left backdrop-blur-sm">
-                  <h2 className="mb-2 text-lg font-bold">
-                    📝 Important Steps:
-                  </h2>
-                  <ol className="list-decimal list-inside space-y-2 text-sm">
-                    <li>
-                      Copy your Payment ID (you'll need this for reference)
-                    </li>
-                    <li>
-                      Share it with your teacher via WhatsApp or other apps
-                    </li>
-                    <li>Keep the ID safe for your records</li>
-                  </ol>
-                </div>
-
-                {/* Payment ID Card */}
-                {paymentId && (
-                  <div className="mb-8 transform rounded-xl border-2 border-white border-opacity-20 bg-white bg-opacity-10 p-4 backdrop-blur-sm transition-transform hover:scale-105 sm:p-6">
-                    <div className="mb-4 flex items-center justify-center gap-2">
-                      <div className="h-2 w-2 animate-pulse rounded-full bg-yellow-400"></div>
-                      <p className="text-sm font-semibold text-yellow-400">
-                        IMPORTANT: Save this Payment ID
-                      </p>
-                    </div>
-                    <div className="flex flex-col gap-3">
-                      <code className="break-all rounded-lg bg-white bg-opacity-20 px-4 py-3 text-base font-mono sm:px-6 sm:text-lg">
-                        {paymentId}
-                      </code>
-                      <button
-                        onClick={copyToClipboard}
-                        className="flex w-full items-center justify-center gap-2 rounded-lg bg-white py-3 font-semibold text-teal-600 transition-colors hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-white"
-                      >
-                        {copied ? (
-                          <>
-                            <Check className="h-5 w-5" />
-                            Copied!
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="h-5 w-5" />
-                            Copy Payment ID
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* Back to Home */}
-                <button
-                  onClick={handleGoBackHome}
-                  className="mx-auto flex items-center gap-2 rounded-full bg-teal-600 px-6 py-3 font-semibold text-white shadow-lg transition-all hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-white"
-                >
-                  <Home className="h-5 w-5" />
-                  Back to Home
-                </button>
-              </div>
-
-              {/* Sharing Options - Right Side on Desktop */}
-              <div className="top-20 bottom-20">
-                <div className="sticky top-24 mt-8 space-y-4 lg:mt-0">
-                  <h3 className="text-sm font-semibold">
-                    Share with your teacher via:
-                  </h3>
-                  <div className="flex flex-col gap-3">
-                    <button
-                      onClick={shareToWhatsApp}
-                      className="flex w-full items-center justify-center gap-2 rounded-full bg-green-500 px-6 py-3 font-semibold text-white shadow-lg transition-all hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-white"
-                    >
-                      <MessageCircle className="h-5 w-5" />
-                      Share on WhatsApp
-                    </button>
-                    <button
-                      onClick={sharePaymentId}
-                      className="flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-teal-600 shadow-lg transition-all hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-white"
-                    >
-                      <Share2 className="h-5 w-5" />
-                      Share via Other Apps
-                    </button>
-                  </div>
-                </div>
+            <div className="bg-gray-50 rounded-lg p-4">
+              <p className="text-sm text-gray-600 mb-1">Payment Date</p>
+              <p className="text-lg font-medium text-gray-900">
+                {paymentDetails.date}
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-4">
+              <p className="text-sm text-gray-600 mb-1">Payment Status</p>
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-2 h-2 bg-green-500 rounded-full"></span>
+                <p className="text-lg font-medium text-gray-900">Successful</p>
               </div>
             </div>
           </div>
+
+          {/* Payment ID Section */}
+          <div className="border-t border-b py-6 mb-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <p className="text-sm text-gray-600 mb-2">
+                  Payment ID (Save for reference)
+                </p>
+                <code className="text-lg font-mono bg-gray-50 px-4 py-2 rounded">
+                  {paymentId}
+                </code>
+              </div>
+              <button
+                onClick={copyToClipboard}
+                className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors"
+              >
+                {copied ? (
+                  <Check className="h-5 w-5" />
+                ) : (
+                  <Copy className="h-5 w-5" />
+                )}
+                {copied ? "Copied!" : "Copy ID"}
+              </button>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <button
+                onClick={handleDownloadReceipt}
+                className="w-full flex items-center justify-center gap-2 bg-teal-500 text-white px-6 py-3 rounded-lg hover:bg-teal-600 transition-colors"
+              >
+                <Download className="h-5 w-5" />
+                Download Receipt
+              </button>
+              <button
+                onClick={() => window.print()}
+                className="w-full flex items-center justify-center gap-2 bg-white border-2 border-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <Printer className="h-5 w-5" />
+                Print Receipt
+              </button>
+            </div>
+            <div className="space-y-4">
+              <button
+                onClick={shareToWhatsApp}
+                className="w-full flex items-center justify-center gap-2 bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition-colors"
+              >
+                <MessageCircle className="h-5 w-5" />
+                Share via WhatsApp
+              </button>
+              <button
+                onClick={() => navigate("/")}
+                className="w-full flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                <Home className="h-5 w-5" />
+                Back to Home
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Information */}
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+          <h2 className="text-lg font-semibold mb-4">Next Steps</h2>
+          <div className="space-y-4">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
+                <span className="text-teal-600 font-medium">1</span>
+              </div>
+              <div>
+                <h3 className="font-medium">Save Payment ID</h3>
+                <p className="text-gray-600">
+                  Keep your payment ID safe for future reference
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
+                <span className="text-teal-600 font-medium">2</span>
+              </div>
+              <div>
+                <h3 className="font-medium">Share Confirmation</h3>
+                <p className="text-gray-600">
+                  Share payment confirmation with your teacher
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
+                <span className="text-teal-600 font-medium">3</span>
+              </div>
+              <div>
+                <h3 className="font-medium">Download Receipt</h3>
+                <p className="text-gray-600">
+                  Download or print the receipt for your records
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Support Section */}
+        <div className="bg-gray-50 rounded-xl p-6 mb-8 flex items-center justify-between">
+          <div>
+            <h3 className="font-medium mb-1">Need Help?</h3>
+            <p className="text-gray-600">
+              Contact our support team for assistance
+            </p>
+          </div>
+          <a
+            href="mailto:support@example.com"
+            className="flex items-center gap-2 text-teal-600 hover:text-teal-700"
+          >
+            Contact Support
+            <ArrowRight className="h-4 w-4" />
+          </a>
         </div>
       </div>
 
       {/* Toast Notification */}
       {showToast && (
-        <div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 transform rounded-full bg-white px-6 py-3 text-teal-800 shadow-xl">
+        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg">
           {toastMessage}
         </div>
       )}
-
-      {/* Footer */}
-      <div className="fixed bottom-4 left-0 right-0 text-center text-sm text-teal-100">
-        Need help? Contact our{" "}
-        <a
-          href="mailto:support@example.com"
-          className="underline transition-colors hover:text-white"
-        >
-          support team
-        </a>
-      </div>
     </div>
   );
 };
