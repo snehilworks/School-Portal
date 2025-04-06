@@ -384,11 +384,11 @@ export const Landing = () => {
       </footer>
 
       {/* Fixed Contact Button */}
-      <div className="fixed bottom-8 right-8 z-50">
+      {/* <div className="fixed bottom-8 right-8 z-50">
         <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-shadow">
           <MessageCircle className="w-6 h-6" />
         </button>
-      </div>
+      </div> */}
 
       {/* Add some custom styles for gradients and animations */}
       <style jsx>{`

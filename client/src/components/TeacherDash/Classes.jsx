@@ -16,7 +16,7 @@ const ClassesContent = () => {
         }
 
         const meResponse = await axiosInstance.get(`/api/teacher/me`);
-        const teacherId = meResponse.data.teacherId;
+        const teacherId = meResponse.data._id;
 
         // Get the teacher's details using the retrieved teacher ID
         const teacherResponse = await axiosInstance.get(

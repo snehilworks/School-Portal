@@ -181,7 +181,7 @@ export const Login = () => {
 
         {/* Footer */}
         <div className="mt-8 text-center text-gray-600">
-          <p>© 2025 SchoolName. All rights reserved.</p>
+          <p>© 2025 Shivam Public School. All rights reserved.</p>
         </div>
       </div>
 

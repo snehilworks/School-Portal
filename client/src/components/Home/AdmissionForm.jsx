@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const AdmissionForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -33,6 +34,10 @@ const AdmissionForm = ({ onClose }) => {
         formData
       );
 
+      if (response.status !== 200 && response.status !== 201) {
+        toast.error("Unexpected response from server. Please try again.");
+        return;
+      }
       if (response.status === 512) {
         setInternalServerError(
           "Internal Server Error. Please try again later."
@@ -41,7 +46,21 @@ const AdmissionForm = ({ onClose }) => {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      setInternalServerError("Internal Server Error. Please try again later.");
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 422) {
+          toast.error(
+            "Please check the form values. Some fields are incorrect."
+          );
+        } else if (status === 512) {
+          toast.error("Internal Server Error. Please try again later.");
+        } else {
+          toast.error("Something went wrong. Please try again.");
+        }
+      } else {
+        toast.error("Network error. Please check your internet connection.");
+      }
       return; // Exit early
     }
 
@@ -57,9 +76,7 @@ const AdmissionForm = ({ onClose }) => {
       VerifyPayment(order);
     } catch (error) {
       console.error("Error creating payment order:", error);
-      setInternalServerError(
-        "Error creating payment order. Please try again later."
-      );
+      toast.error("Error creating payment order. Please try again later.");
     }
   };
 
@@ -68,7 +85,7 @@ const AdmissionForm = ({ onClose }) => {
       key: import.meta.env.VITE_RAZORPAY_KEY || "",
       amount: data.amount,
       currency: "INR",
-      name: "Shivam Public",
+      name: "University",
       description: "Admission Fee",
       image: "https://example.com/your_logo",
       order_id: data.id,
