@@ -9,6 +9,7 @@ import {
   User,
   MessageCircle,
 } from "lucide-react";
+import axios from "axios";
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -27,14 +28,19 @@ const ContactPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Simulated API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setSubmitStatus("success");
-      setFormData({ name: "", email: "", message: "" });
-
-      // Auto-reset success message
-      setTimeout(() => setSubmitStatus(null), 3000);
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/home/contact`,
+        formData
+      );
+      if (res.status === 200 || res.status === 201) {
+        setSubmitStatus("success");
+        setFormData({ name: "", email: "", message: "" });
+        setTimeout(() => setSubmitStatus(null), 3000);
+      } else {
+        throw new Error("Submission failed");
+      }
     } catch (error) {
+      console.error("Error submitting form:", error);
       setSubmitStatus("error");
     }
   };

@@ -77,7 +77,7 @@ const PaymentDetailsPopup = ({ payment, onClose }) => {
             </div>
           ))}
         </div>
-        <div className="mt-6 flex justify-end">
+        {/* <div className="mt-6 flex justify-end">
           <PrimaryButton
             onClick={onClose}
             color="logout"
@@ -85,7 +85,7 @@ const PaymentDetailsPopup = ({ payment, onClose }) => {
           >
             Close
           </PrimaryButton>
-        </div>
+        </div> */}
       </div>
     </div>
   );
