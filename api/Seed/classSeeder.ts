@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 import mongoose from "mongoose";
 import ClassModel, { Class } from "../models/classModel";
 
@@ -27,35 +27,38 @@ const classData: Partial<Class>[] = [
   { className: "7th-Hindi", classTeacher: null, seatsAvailable: null },
   { className: "8th-English", classTeacher: null, seatsAvailable: null },
   { className: "8th-Hindi", classTeacher: null, seatsAvailable: null },
-  { className: "9th", classTeacher: null, seatsAvailable: null },
-  { className: "10th", classTeacher: null, seatsAvailable: null },
+  { className: "9th-English", classTeacher: null, seatsAvailable: null },
+  { className: "9th-Hindi", classTeacher: null, seatsAvailable: null },
+  { className: "10th-English", classTeacher: null, seatsAvailable: null },
+  { className: "10th-Hindi", classTeacher: null, seatsAvailable: null },
   { className: "11-Science", classTeacher: null, seatsAvailable: null },
   { className: "11-Arts", classTeacher: null, seatsAvailable: null },
+  { className: "11-Commerce", classTeacher: null, seatsAvailable: null },
   { className: "12-Science", classTeacher: null, seatsAvailable: null },
   { className: "12-Arts", classTeacher: null, seatsAvailable: null },
+  { className: "12-Commerce", classTeacher: null, seatsAvailable: null },
 ];
 
 async function seedClassesData() {
   try {
-      await mongoose.connect(`${process.env.DATABASE_URL}`, {
-        dbName: "Shivam-Public"
-      });
+    await mongoose.connect(`${process.env.DATABASE_URL}`, {
+      dbName: "Shivam-Public",
+    });
 
-      console.log("MongoDB connected successfully");
+    console.log("MongoDB connected successfully");
 
-      // Clear existing data from the classes collection
-      await ClassModel.deleteMany({});
+    await ClassModel.deleteMany({});
 
-      for (const classEntry of classData) {
-        await ClassModel.create(classEntry);
-      }
+    for (const classEntry of classData) {
+      await ClassModel.create(classEntry);
+    }
 
-      console.log("Class seed data inserted successfully.");
+    console.log("Class seed data inserted successfully.");
 
-      await mongoose.disconnect();
-      console.log("MongoDB disconnected successfully");
+    await mongoose.disconnect();
+    console.log("MongoDB disconnected successfully");
   } catch (error) {
-      console.error("Error seeding classes data:", error);
+    console.error("Error seeding classes data:", error);
   }
 }
 

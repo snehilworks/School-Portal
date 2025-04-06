@@ -1,5 +1,5 @@
 import express from "express";
-import * as RazorPayController from "./../controller/RazorPayController";
+import * as RazorPayController from "../controller/RazorPayController";
 
 const router = express.Router();
 
@@ -12,14 +12,17 @@ const router = express.Router();
 
 router.post("/order", RazorPayController.CreateOrder);
 router.get("/orders", RazorPayController.FetchOrderList);
-router.get('/order/:id', RazorPayController.FetchSpecificOrder);
+router.get("/order/:id", RazorPayController.FetchSpecificOrder);
 
 //saving to database the payment details
-router.post('/verify-payment', RazorPayController.HandleVerifyPayment);
+router.post("/verify-payment", RazorPayController.HandleVerifyPayment);
 
-router.get('/payments', RazorPayController.FetchAllPayments);
-router.post('/capture-payment',RazorPayController.CapturePayment);
-router.get('/payment-details/:paymentId', RazorPayController.FetchPaymentDetails);
-router.get('/paid-payments', RazorPayController.FetchPaidPayments);
+router.get("/payments", RazorPayController.FetchAllPayments);
+router.post("/capture-payment", RazorPayController.CapturePayment);
+router.get(
+  "/payment-details/:paymentId",
+  RazorPayController.FetchPaymentDetails
+);
+router.get("/paid-payments", RazorPayController.FetchPaidPayments);
 
 export default router;

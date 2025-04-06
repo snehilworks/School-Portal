@@ -1,5 +1,5 @@
 import express from "express";
-import * as teacherController from "./../controller/teacherController";
+import * as teacherController from "../controller/teacherController";
 
 const router = express.Router();
 
@@ -25,9 +25,9 @@ router.get("/class/:id", teacherController.getClassDetails);
 router.get("/students", teacherController.getStudents);
 router.get("/student/:id", teacherController.getStudentDetails);
 
-router.get('/me', teacherController.getMeApi);
+router.get("/me", teacherController.getMeApi);
 
-router.get('/:id', teacherController.getTeacher);
+router.get("/:id", teacherController.getTeacher);
 
 // Record and view attendance
 // router.get("/attendance", teacherController.getAttendance);

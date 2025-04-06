@@ -54,14 +54,26 @@ export const getMeApi = async (
   res: Response
 ): Promise<Response> => {
   try {
-    if (!req.user) {
-      return res.status(404).json({ message: "User not found" });
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      return res.status(403).json({ message: "UnAuthorized!" });
     }
 
-    const teacherId = req.user.id;
-    return res.status(200).json({ teacherId });
-  } catch (error: any) {
-    console.error("Error getting 'me' API:", error);
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    const teacherId = decoded.id;
+
+    if (!mongoose.Types.ObjectId.isValid(teacherId)) {
+      return res.status(422).json({ message: "Invalid teacher ID" });
+    }
+    const studentDetail = await Teacher.findById(teacherId);
+    if (!studentDetail) {
+      return res.status(422).json({ message: "Teacher not found" });
+    }
+
+    return res.status(200).json(studentDetail);
+  } catch (error) {
+    console.error("Error getting me api Teacher:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };

@@ -451,6 +451,22 @@ export const getAllClasses = async (req: Request, res: Response) => {
   }
 };
 
+export const getDashboardDetails = async (req: Request, res: Response) => {
+  try {
+    const totalStudents = await Student.countDocuments();
+    const totalTeachers = await Teacher.countDocuments();
+
+    const FinalResponse = {
+      totalTeachers: totalTeachers,
+      totalStudents: totalStudents,
+    };
+    res.status(201).json(FinalResponse);
+  } catch (error) {
+    console.error("Error getting all Dashboard Details", error);
+    res.status(512).json({ message: "Internal Server Error" });
+  }
+};
+
 //update in class model
 export const updateAdmissionSeats = async (req: Request, res: Response) => {
   const { id } = req.params;
