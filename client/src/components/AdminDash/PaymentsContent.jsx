@@ -10,6 +10,7 @@ import {
   FaAngleRight,
 } from "react-icons/fa";
 import useDebounce from "../../hooks/useDebounce";
+import PaymentDetailsModal from "./PaymentDetails";
 
 // Custom Button Component
 const Button = ({
@@ -66,128 +67,6 @@ const Badge = ({ children, variant = "default" }) => {
     >
       {children}
     </span>
-  );
-};
-
-// Payment Details Modal Component
-const PaymentDetailsModal = ({ payment, onClose }) => {
-  if (!payment) return null;
-
-  return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-auto animate-fadeIn">
-        <div className="sticky top-0 bg-blue-600 text-white px-6 py-4 flex justify-between items-center rounded-t-xl">
-          <h3 className="text-xl font-bold">Payment Details</h3>
-          <button
-            onClick={onClose}
-            className="text-white hover:text-red-200 transition-colors"
-          >
-            <FaTimes size={24} />
-          </button>
-        </div>
-
-        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-blue-50 p-4 rounded-lg col-span-full">
-            <h4 className="text-lg font-semibold text-blue-800 mb-2">
-              Payment Information
-            </h4>
-            <div className="flex flex-col gap-2">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Payment ID:</span>
-                <span className="font-semibold">{payment.paymentId}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Amount:</span>
-                <span className="font-semibold">
-                  ₹{payment.amount.toLocaleString()}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Status:</span>
-                <Badge variant="success">Paid</Badge>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Field Type:</span>
-                <span className="font-semibold">{payment.fieldType}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Fee Type:</span>
-                <span className="font-semibold">
-                  {payment.feeType || "N/A"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Payment Date:</span>
-                <span className="font-semibold">
-                  {new Date(payment.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-green-50 p-4 rounded-lg">
-            <h4 className="text-lg font-semibold text-green-800 mb-2">
-              Student Information
-            </h4>
-            <div className="flex flex-col gap-2">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Name:</span>
-                <span className="font-semibold">{payment.studentName}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Class:</span>
-                <span className="font-semibold">
-                  {payment.studentClass.className}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Student ID:</span>
-                <span className="font-semibold">
-                  {payment.studentId || "N/A"}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-yellow-50 p-4 rounded-lg">
-            <h4 className="text-lg font-semibold text-yellow-800 mb-2">
-              Razorpay Details
-            </h4>
-            <div className="flex flex-col gap-2">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Razorpay ID:</span>
-                <span className="font-semibold">
-                  {payment.razorpayPaymentId || "N/A"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Order ID:</span>
-                <span className="font-semibold">
-                  {payment.razorpayOrderId || "N/A"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Payment Method:</span>
-                <span className="font-semibold">
-                  {payment.paymentMethod || "N/A"}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-span-full">
-            <Button
-              variant="success"
-              className="w-full"
-              disabled={payment.review}
-              onClick={onClose}
-            >
-              {payment.review ? "Already Reviewed" : "Mark as Reviewed"}
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 };
 
