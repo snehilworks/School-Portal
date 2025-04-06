@@ -283,7 +283,13 @@ export const HandleVerifyPayment = async (req: Request, res: Response) => {
 
 export const GetAllPaidPayments = async (req: Request, res: Response) => {
   try {
-    const { page = 1, limit = 20, search = "", fieldType = "" } = req.query;
+    const {
+      page = 1,
+      limit = 20,
+      search = "",
+      fieldType = "",
+      review = "",
+    } = req.query;
 
     // Calculate the number of payments to skip
     const skip = (Number(page) - 1) * Number(limit);
@@ -299,6 +305,10 @@ export const GetAllPaidPayments = async (req: Request, res: Response) => {
 
     if (fieldType) {
       searchQuery.fieldType = fieldType;
+    }
+
+    if (review === "true" || review === "false") {
+      searchQuery.review = review === "true";
     }
 
     // Retrieve payments with pagination

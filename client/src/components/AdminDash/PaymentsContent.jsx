@@ -8,6 +8,8 @@ import {
   FaFilter,
   FaAngleLeft,
   FaAngleRight,
+  FaFileDownload,
+  FaChartLine,
 } from "react-icons/fa";
 import useDebounce from "../../hooks/useDebounce";
 import PaymentDetailsModal from "./PaymentDetails";
@@ -43,7 +45,7 @@ const Button = ({
       disabled={disabled}
       className={`${baseClasses} ${
         disabled ? variants.disabled : variants[variant]
-      } ${sizeClasses}`}
+      } ${sizeClasses} ${className}`}
       {...props}
     >
       {children}
@@ -89,11 +91,12 @@ const PaymentsPage = () => {
     totalAmount: 0,
     pendingReview: 0,
   });
+  const [reviewStatusFilter, setReviewStatusFilter] = useState("");
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   const fetchPayments = useCallback(
-    async (page, query = "", fieldType = "") => {
+    async (page, query = "", fieldType = "", reviewStatus = "") => {
       setLoading(true);
       try {
         const response = await axiosInstance.get("/api/admin/paid-payments", {
@@ -102,6 +105,7 @@ const PaymentsPage = () => {
             limit: 20,
             search: query,
             fieldType: fieldType,
+            review: reviewStatus,
             startDate: dateRange.start || undefined,
             endDate: dateRange.end || undefined,
           },
@@ -138,13 +142,24 @@ const PaymentsPage = () => {
   );
 
   useEffect(() => {
-    fetchPayments(currentPage, debouncedSearchQuery, fieldTypeFilter);
-  }, [currentPage, debouncedSearchQuery, fieldTypeFilter, fetchPayments]);
+    fetchPayments(
+      currentPage,
+      debouncedSearchQuery,
+      fieldTypeFilter,
+      reviewStatusFilter
+    );
+  }, [
+    currentPage,
+    debouncedSearchQuery,
+    fieldTypeFilter,
+    reviewStatusFilter,
+    fetchPayments,
+  ]);
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     setCurrentPage(1); // Reset to first page when searching
-    fetchPayments(1, searchQuery, fieldTypeFilter);
+    fetchPayments(1, searchQuery, fieldTypeFilter, reviewStatusFilter);
   };
 
   const handleSearchChange = (event) => {
@@ -160,6 +175,11 @@ const PaymentsPage = () => {
     setCurrentPage(1); // Reset to first page when filtering
   };
 
+  const handleReviewStatusChange = (event) => {
+    setReviewStatusFilter(event.target.value);
+    setCurrentPage(1); // Reset to first page when filtering
+  };
+
   const handleDateRangeChange = (event) => {
     const { name, value } = event.target;
     setDateRange((prev) => ({ ...prev, [name]: value }));
@@ -167,16 +187,17 @@ const PaymentsPage = () => {
 
   const applyFilters = () => {
     setCurrentPage(1);
-    fetchPayments(1, searchQuery, fieldTypeFilter);
+    fetchPayments(1, searchQuery, fieldTypeFilter, reviewStatusFilter);
     setShowFilters(false);
   };
 
   const resetFilters = () => {
     setFieldTypeFilter("");
+    setReviewStatusFilter("");
     setDateRange({ start: "", end: "" });
     setSearchQuery("");
     setCurrentPage(1);
-    fetchPayments(1, "", "");
+    fetchPayments(1, "", "", "");
     setShowFilters(false);
   };
 
@@ -231,7 +252,7 @@ const PaymentsPage = () => {
   // Loading state with better UI
   if (loading && payments.length === 0) {
     return (
-      <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-r from-gray-50 via-gray-100 to-gray-200">
+      <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50">
         <div className="w-16 h-16 border-4 border-t-4 border-blue-600 border-solid rounded-full animate-spin mb-4"></div>
         <p className="text-xl text-gray-700 font-medium">
           Loading payments data...
@@ -241,39 +262,57 @@ const PaymentsPage = () => {
   }
 
   return (
-    <div className="p-4 md:p-8 bg-gradient-to-r from-gray-50 via-gray-100 to-gray-200 min-h-screen">
+    <div className="p-4 md:p-8 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 min-h-screen">
       {/* Header with summary stats */}
       <div className="mb-8">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
           Paid Payments Dashboard
         </h2>
+        <p className="text-gray-600 mb-6">
+          Manage and monitor all payment transactions
+        </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white rounded-xl shadow-md p-4 border-l-4 border-blue-500">
-            <p className="text-gray-500 text-sm">Total Payments</p>
-            <p className="text-3xl font-bold text-gray-800">
-              {summaryStats.totalPayments}
-            </p>
+          <div className="bg-white rounded-xl shadow-md p-5 border-l-4 border-blue-500 hover:shadow-lg transition-all duration-300 flex items-center">
+            <div className="bg-blue-100 p-3 rounded-full mr-4">
+              <FaChartLine className="text-blue-600 text-xl" />
+            </div>
+            <div>
+              <p className="text-gray-500 text-sm">Total Payments</p>
+              <p className="text-3xl font-bold text-gray-800">
+                {summaryStats.totalPayments.toLocaleString()}
+              </p>
+            </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-md p-4 border-l-4 border-green-500">
-            <p className="text-gray-500 text-sm">Total Amount</p>
-            <p className="text-3xl font-bold text-gray-800">
-              ₹{summaryStats.totalAmount.toLocaleString()}
-            </p>
+          <div className="bg-white rounded-xl shadow-md p-5 border-l-4 border-green-500 hover:shadow-lg transition-all duration-300 flex items-center">
+            <div className="bg-green-100 p-3 rounded-full mr-4">
+              <FaFileDownload className="text-green-600 text-xl" />
+            </div>
+            <div>
+              <p className="text-gray-500 text-sm">Total Amount</p>
+              <p className="text-3xl font-bold text-gray-800">
+                ₹{summaryStats.totalAmount.toLocaleString()}
+              </p>
+            </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-md p-4 border-l-4 border-yellow-500">
-            <p className="text-gray-500 text-sm">Pending Review</p>
-            <p className="text-3xl font-bold text-gray-800">
-              {summaryStats.pendingReview}
-            </p>
+          <div className="bg-white rounded-xl shadow-md p-5 border-l-4 border-yellow-500 hover:shadow-lg transition-all duration-300 flex items-center">
+            <div className="bg-yellow-100 p-3 rounded-full mr-4">
+              <FaCheckCircle className="text-yellow-600 text-xl" />
+            </div>
+            <div>
+              <p className="text-gray-500 text-sm">Pending Review</p>
+              <p className="text-3xl font-bold text-gray-800">
+                {summaryStats.pendingReview.toLocaleString()}
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Filters and search */}
-      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+      <div className="bg-white rounded-xl shadow-md p-6 mb-6">
         <div className="flex flex-col md:flex-row gap-4 justify-between items-center mb-4">
           <div className="w-full">
             <form onSubmit={handleSearchSubmit} className="relative w-full">
@@ -329,7 +368,7 @@ const PaymentsPage = () => {
 
         {/* Advanced Filters */}
         {showFilters && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 animate-fadeIn">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 animate-fadeIn">
             <div className="mb-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Payment Type
@@ -345,6 +384,22 @@ const PaymentsPage = () => {
                     {type}
                   </option>
                 ))}
+              </select>
+            </div>
+
+            {/* New Review Status Filter */}
+            <div className="mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Review Status
+              </label>
+              <select
+                value={reviewStatusFilter}
+                onChange={handleReviewStatusChange}
+                className="block w-full py-2.5 px-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+              >
+                <option value="">All Statuses</option>
+                <option value="false">Pending Review</option>
+                <option value="true">Reviewed</option>
               </select>
             </div>
 
@@ -374,7 +429,7 @@ const PaymentsPage = () => {
               />
             </div>
 
-            <div className="md:col-span-3 flex justify-end">
+            <div className="md:col-span-4 flex justify-end">
               <Button
                 variant="primary"
                 onClick={applyFilters}
@@ -417,7 +472,9 @@ const PaymentsPage = () => {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Amount</p>
-                  <p className="text-sm font-medium">₹{payment.amount}</p>
+                  <p className="text-sm font-medium">
+                    ₹{payment.amount.toLocaleString()}
+                  </p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">Class</p>
@@ -465,7 +522,7 @@ const PaymentsPage = () => {
       <div className="hidden md:block overflow-x-auto mb-6">
         <table className="w-full bg-white rounded-xl shadow-md overflow-hidden">
           <thead>
-            <tr className="bg-gray-800 text-white">
+            <tr className="bg-gradient-to-r from-blue-700 to-indigo-800 text-white">
               <th className="p-4 text-left">Payment ID</th>
               <th className="p-4 text-left">Student Name</th>
               <th className="p-4 text-left">Class</th>
@@ -482,8 +539,8 @@ const PaymentsPage = () => {
                 <tr
                   key={payment._id}
                   className={`${
-                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                  } hover:bg-blue-50 transition-colors border-b border-gray-200`}
+                    index % 2 === 0 ? "bg-white" : "bg-blue-50"
+                  } hover:bg-blue-100 transition-colors border-b border-gray-200`}
                 >
                   <td className="p-4 text-gray-700 font-medium">
                     {payment.paymentId}
@@ -583,7 +640,9 @@ const PaymentsPage = () => {
                     variant={currentPage === page ? "primary" : "neutral"}
                     size="sm"
                     onClick={() => handlePageChange(page)}
-                    className="w-8 h-8 p-0"
+                    className={`w-8 h-8 p-0 ${
+                      currentPage === page ? "transform scale-110" : ""
+                    }`}
                   >
                     {page}
                   </Button>

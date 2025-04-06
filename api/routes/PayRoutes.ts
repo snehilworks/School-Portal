@@ -23,6 +23,5 @@ router.get(
   "/payment-details/:paymentId",
   RazorPayController.FetchPaymentDetails
 );
-router.get("/paid-payments", RazorPayController.FetchPaidPayments);
 
 export default router;
