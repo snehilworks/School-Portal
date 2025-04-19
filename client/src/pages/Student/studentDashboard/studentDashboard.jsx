@@ -1,109 +1,175 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Grade, Event, Home, Payment, Today } from "@mui/icons-material";
-import PrimaryButton from "../../../components/ui/PrimaryButton";
+import { motion } from "framer-motion";
+import {
+  GraduationCap,
+  Calendar,
+  Home,
+  CreditCard,
+  CalendarCheck,
+} from "lucide-react";
+
+const DashboardCard = ({ to, icon: Icon, title, buttonText, color }) => (
+  <motion.div
+    whileHover={{ scale: 1.02 }}
+    whileTap={{ scale: 0.98 }}
+    className="h-full"
+  >
+    <Link to={to} className="block h-full">
+      <div className="h-full flex flex-col items-center p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <div className={`p-4 rounded-full ${color} mb-4`}>
+          <Icon size={32} className="text-white" strokeWidth={1.5} />
+        </div>
+        <h3 className="text-xl md:text-2xl font-semibold text-gray-800 text-center mb-4">
+          {title}
+        </h3>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="mt-auto px-6 py-2 bg-teal-600 text-white rounded-full font-medium hover:bg-teal-700 transition-colors duration-300"
+        >
+          {buttonText}
+        </motion.button>
+      </div>
+    </Link>
+  </motion.div>
+);
 
 function StudentDash() {
+  const dashboardItems = [
+    {
+      to: "/student/grades",
+      icon: GraduationCap,
+      title: "Academic Grades",
+      buttonText: "View Grades",
+      color: "bg-blue-500",
+      span: "lg:col-span-2",
+    },
+    {
+      to: "/student/attendance",
+      icon: CalendarCheck,
+      title: "Attendance Record",
+      buttonText: "Check Attendance",
+      color: "bg-green-500",
+      span: "lg:col-span-2",
+    },
+    {
+      to: "/student/events",
+      icon: Calendar,
+      title: "School Events",
+      buttonText: "View Events",
+      color: "bg-yellow-500",
+      span: "lg:col-span-2",
+    },
+    {
+      to: "/student/hostel",
+      icon: Home,
+      title: "Hostel Information",
+      buttonText: "View Details",
+      color: "bg-purple-500",
+      span: "lg:col-span-3",
+    },
+    {
+      to: "/student/payment",
+      icon: CreditCard,
+      title: "Fee Payment",
+      buttonText: "Pay Now",
+      color: "bg-red-500",
+      span: "lg:col-span-3",
+    },
+  ];
+
   return (
-    <div className="bg-gradient-to-br from-emerald-100 via-white to-emerald-300 min-h-screen mt-12 md:mt-0 flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl w-full space-y-12">
-        {/* Header Section */}
-        <div className="text-center">
-          <h2 className="text-5xl font-extrabold text-gray-900">
+    <div className="min-h-screen pt-16 bg-gradient-to-br from-emerald-50 via-white to-emerald-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        {/* Header Section with Animation */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             Student Dashboard
-          </h2>
-          <p className="mt-2 text-lg text-gray-700">
-            <i>Access your student information and manage your activities</i>
+          </h1>
+          <p className="text-lg md:text-xl text-gray-600 italic">
+            Welcome back! Manage your academic journey
           </p>
-        </div>
+        </motion.div>
 
-        {/* Dashboard Options */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8">
-          {/* Grades Card */}
-          <Link
-            to="/student/grades"
-            className="block lg:col-span-2"
-            aria-label="View Grades"
-          >
-            <div className="flex flex-col items-center p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transform transition hover:scale-105">
-              <Grade className="text-6xl text-blue-500 mb-4" />
-              <h3 className="text-2xl font-mono font-semibold text-gray-800">
-                Grades
-              </h3>
-              <PrimaryButton color="student" className="mt-4 font-poppins">
-                View
-              </PrimaryButton>
-            </div>
-          </Link>
+        {/* Quick Stats Section */}
+        {/* <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
+        > */}
+          {/* Example stats - you can customize these based on actual data */}
+          {/* <div className="bg-white/50 backdrop-blur-sm p-4 rounded-lg text-center">
+            <p className="text-sm text-gray-600">Attendance</p>
+            <p className="text-2xl font-bold text-teal-600">92%</p>
+          </div>
+          <div className="bg-white/50 backdrop-blur-sm p-4 rounded-lg text-center">
+            <p className="text-sm text-gray-600">GPA</p>
+            <p className="text-2xl font-bold text-teal-600">3.8</p>
+          </div>
+          <div className="bg-white/50 backdrop-blur-sm p-4 rounded-lg text-center">
+            <p className="text-sm text-gray-600">Due Fees</p>
+            <p className="text-2xl font-bold text-teal-600">₹2000</p>
+          </div>
+          <div className="bg-white/50 backdrop-blur-sm p-4 rounded-lg text-center">
+            <p className="text-sm text-gray-600">Next Exam</p>
+            <p className="text-2xl font-bold text-teal-600">5d</p>
+          </div>
+        </motion.div> */}
 
-          {/* Attendance Card */}
-          <Link
-            to="/student/attendance"
-            className="block lg:col-span-2"
-            aria-label="View Attendance"
-          >
-            <div className="flex flex-col items-center p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transform transition hover:scale-105">
-              <Today className="text-6xl text-green-500 mb-4" />
-              <h3 className="text-2xl font-mono font-semibold text-gray-800">
-                Attendance
-              </h3>
-              <PrimaryButton color="student" className="mt-4 font-poppins">
-                View
-              </PrimaryButton>
-            </div>
-          </Link>
+        {/* Dashboard Cards Grid */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6"
+        >
+          {dashboardItems.map((item, index) => (
+            <motion.div
+              key={item.to}
+              className={item.span}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 * (index + 1) }}
+            >
+              <DashboardCard {...item} />
+            </motion.div>
+          ))}
+        </motion.div>
 
-          {/* Events Card */}
-          <Link
-            to="/student/events"
-            className="block lg:col-span-2"
-            aria-label="View Events"
-          >
-            <div className="flex flex-col items-center p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transform transition hover:scale-105">
-              <Event className="text-6xl text-yellow-500 mb-4" />
-              <h3 className="text-2xl font-mono font-semibold text-gray-800">
-                Events
-              </h3>
-              <PrimaryButton color="student" className="mt-4 font-poppins">
-                View
-              </PrimaryButton>
-            </div>
-          </Link>
-
-          {/* Hostel Details Card */}
-          <Link
-            to="/student/hostel"
-            className="block lg:col-span-3"
-            aria-label="View Hostel Details"
-          >
-            <div className="flex flex-col items-center p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transform transition hover:scale-105">
-              <Home className="text-6xl text-purple-500 mb-4" />
-              <h3 className="text-2xl font-mono font-semibold text-gray-800">
-                Hostel Details
-              </h3>
-              <PrimaryButton color="student" className="mt-4 font-poppins">
-                View
-              </PrimaryButton>
-            </div>
-          </Link>
-
-          {/* Payment Gateway Card */}
-          <Link
-            to="/student/payment"
-            className="block lg:col-span-3"
-            aria-label="Go to Payment Gateway"
-          >
-            <div className="flex flex-col items-center p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transform transition hover:scale-105">
-              <Payment className="text-6xl text-red-500 mb-4" />
-              <h3 className="text-2xl font-mono font-semibold text-gray-800">
-                Payment Gateway
-              </h3>
-              <PrimaryButton color="student" className="mt-4 font-poppins">
-                Pay Now
-              </PrimaryButton>
-            </div>
-          </Link>
-        </div>
+        {/* Recent Activity Section */}
+        {/* <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-12 bg-white rounded-xl p-6 shadow-lg"
+        >
+          <h2 className="text-2xl font-semibold mb-4">Recent Activity</h2>
+          <div className="space-y-3">
+            <div className="flex items-center text-sm text-gray-600">
+              <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+              <p>Attendance marked for today</p>
+              <span className="ml-auto">2m ago</span>
+            </div> */}
+            {/* <div className="flex items-center text-sm text-gray-600">
+              <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+              <p>Math test score published</p>
+              <span className="ml-auto">2h ago</span> */}
+            {/* </div>
+            <div className="flex items-center text-sm text-gray-600">
+              <div className="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
+              <p>New event announcement: Annual Day</p>
+              <span className="ml-auto">1d ago</span> */}
+            {/* </div>
+          </div>
+        </motion.div> */}
+      
       </div>
     </div>
   );
